@@ -1,0 +1,83 @@
+import useTelegramUser from "@/hooks/useTelegramUser";
+import { getCleanUsername } from "@/utils/getCleanUsername";
+
+export default function UserInfoBlock({ cunaTokenBalance }) {
+  const { userId, username, userAvatarUrl } = useTelegramUser();
+
+  const setUserNameProfile = (name) => {
+    let fontSize;
+
+    if (name.length <= 15) {
+      fontSize = 30;
+    } else if (name.length < 19) {
+      fontSize = 24;
+    } else {
+      name = name.slice(0, -2) + "...";
+      fontSize = 23;
+    }
+
+    const username = getCleanUsername(name);
+    return { username, fontSize };
+  };
+
+  return (
+    <div className="block profile-block-user">
+      <div className="logo-userid-block">
+        <div
+          className="profile-logo"
+          style={{ backgroundImage: `url('${userAvatarUrl}')` }}
+        ></div>
+        <div className="profile-userid">User ID: {userId}</div>
+      </div>
+      <div className="nickname-balance-block">
+        <div
+          className="profile-nickname"
+          style={{ fontSize: setUserNameProfile(username).fontSize }}
+        >
+          {setUserNameProfile(username).username}
+        </div>
+        <div className="profile-balance-info-block">
+          <div className="profile-balance-block">
+            <div className="profile-balance-block-text">
+              {Number.isInteger(cunaTokenBalance)
+                ? cunaTokenBalance.toString()
+                : cunaTokenBalance.toFixed(2)}
+            </div>
+            <div className="profile-balance-block-logo"></div>
+          </div>
+          <div className="profile-balance-block-info" id="pop">
+            <svg
+              style={{
+                WebkitTapHighlightColor: "transparent",
+                color: "var(--theme-button-hint-icon-text-color)",
+              }}
+              id="popu"
+              width="16"
+              height="16"
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.30005 6.28583C6.30005 6.10018 6.3738 5.92214 6.50507 5.79086C6.63635 5.65959 6.81439 5.58584 7.00004 5.58584C7.18569 5.58584 7.36374 5.65959 7.49501 5.79086C7.62628 5.92214 7.70003 6.10018 7.70003 6.28583V10.4858C7.70003 10.6714 7.62628 10.8495 7.49501 10.9808C7.36374 11.112 7.18569 11.1858 7.00004 11.1858C6.81439 11.1858 6.63635 11.112 6.50507 10.9808C6.3738 10.8495 6.30005 10.6714 6.30005 10.4858V6.28583ZM7.00004 2.83557C6.81439 2.83557 6.63635 2.90932 6.50507 3.04059C6.3738 3.17187 6.30005 3.34991 6.30005 3.53556C6.30005 3.72121 6.3738 3.89926 6.50507 4.03053C6.63635 4.16181 6.81439 4.23555 7.00004 4.23555C7.18569 4.23555 7.36374 4.16181 7.49501 4.03053C7.62628 3.89926 7.70003 3.72121 7.70003 3.53556C7.70003 3.34991 7.62628 3.17187 7.49501 3.04059C7.36374 2.90932 7.18569 2.83557 7.00004 2.83557Z"
+                fill="currentColor"
+              />
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M6.99992 0C3.13386 0 0 3.13386 0 6.99992C0 10.866 3.13386 13.9998 6.99992 13.9998C10.866 13.9998 13.9998 10.866 13.9998 6.99992C13.9998 3.13386 10.866 0 6.99992 0ZM1.39998 6.99992C1.39998 8.48511 1.98998 9.90948 3.04017 10.9597C4.09036 12.0099 5.51472 12.5999 6.99992 12.5999C8.48511 12.5999 9.90948 12.0099 10.9597 10.9597C12.0099 9.90948 12.5999 8.48511 12.5999 6.99992C12.5999 5.51472 12.0099 4.09036 10.9597 3.04017C9.90948 1.98998 8.48511 1.39998 6.99992 1.39998C5.51472 1.39998 4.09036 1.98998 3.04017 3.04017C1.98998 4.09036 1.39998 5.51472 1.39998 6.99992Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <div className="popup">
+            <div className="popup-text">
+              Накапливай CUNA-токены за прохождение курсов! Покажи другим,
+              насколько ты крут
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

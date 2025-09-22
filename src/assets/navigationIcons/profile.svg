@@ -1,0 +1,30 @@
+<svg
+          class="tab-icon"
+          width="28"
+          height="28"
+          viewBox="0 0 29 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M14.875 1C7.69529 1 1.875 6.82029 1.875 14C1.875 21.1796 7.69529 27 14.875 27C22.0546 27 27.875 21.1796 27.875 14C27.875 6.82029 22.0546 1 14.875 1Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M4.82739 22.2493C4.82739 22.2493 7.72512 18.5499 14.8751 18.5499C22.0251 18.5499 24.9229 22.2493 24.9229 22.2493"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M14.8749 14.0001C17.0288 14.0001 18.7749 12.254 18.7749 10.1001C18.7749 7.94617 17.0288 6.20007 14.8749 6.20007C12.7209 6.20007 10.9749 7.94617 10.9749 10.1001C10.9749 12.254 12.7209 14.0001 14.8749 14.0001Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>

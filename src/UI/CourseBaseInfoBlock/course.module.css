@@ -1,0 +1,91 @@
+.coursesBlock {
+  flex-direction: row;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  border-radius: 15px;
+}
+
+.text {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  height: 100px;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.favorite {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-top: -5px;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  width: 25px;
+  height: 25px;
+  background-color: var(--theme-bg-hint-color);
+  border-radius: 50%;
+  will-change: width, background-color;
+}
+
+.favoriteIcon {
+  place-self: center;
+  color: var(--theme-button-hint-icon-text-color);
+}
+
+.name {
+  display: flex;
+  font: 700 16px/1 Inter, sans-serif;
+  text-align: left;
+  text-decoration: none;
+  color: var(--theme-text-color);
+}
+
+.description {
+  font: 400 13px Inter, sans-serif;
+  line-height: 16px;
+  text-align: left;
+  text-decoration: none;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--theme-text-hint-color);
+}
+
+.authorRating {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  bottom: 0;
+}
+
+.author {
+  margin-right: auto;
+  font: 400 11px Inter, sans-serif;
+  color: var(--theme-text-hint-color);
+}
+
+.rating {
+  font: 400 12px Inter, sans-serif;
+  color: var(--theme-text-hint-color);
+}
+
+.ratingStar {
+  margin-left: 2px;
+}

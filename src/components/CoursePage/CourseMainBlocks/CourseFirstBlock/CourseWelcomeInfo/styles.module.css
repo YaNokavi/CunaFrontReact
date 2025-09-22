@@ -1,0 +1,32 @@
+.media {
+  float: left;
+  padding-right: 10px;
+  height: 120px;
+}
+
+.logo {
+  height: 100px;
+  width: 100px;
+  border-radius: 15px;
+}
+
+.author {
+  display: block;
+  font: 400 11px Inter, sans-serif;
+  color: var(--theme-text-hint-color);
+  text-underline-offset: 3px;
+}
+
+.name {
+  margin-bottom: 5px;
+  font: 700 17px Inter, sans-serif;
+  color: var(--theme-text-color);
+  text-align: left;
+}
+
+.description {
+  font: 400 14px Inter, sans-serif;
+  line-height: 18px;
+  color: var(--theme-text-hint-color);
+  text-align: left;
+}

@@ -1,0 +1,23 @@
+<svg
+          class="tab-icon"
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2.95825 3.5H9.95825C11.1959 3.5 12.3829 3.99167 13.2581 4.86683C14.1333 5.742 14.6249 6.92899 14.6249 8.16667V24.5C14.6249 23.5717 14.2562 22.6815 13.5998 22.0251C12.9434 21.3687 12.0532 21 11.1249 21H2.95825V3.5Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M26.2917 3.5H19.2917C18.054 3.5 16.867 3.99167 15.9918 4.86683C15.1167 5.742 14.625 6.92899 14.625 8.16667V24.5C14.625 23.5717 14.9937 22.6815 15.6501 22.0251C16.3065 21.3687 17.1967 21 18.125 21H26.2917V3.5Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>

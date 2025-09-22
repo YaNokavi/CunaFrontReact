@@ -1,0 +1,33 @@
+.frame {
+  display: flex;
+  width: 250px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar {
+  display: flex;
+  position: relative;
+  width: 200px;
+  height: 5px;
+  background: var(--theme-progress-bg-color);
+  border-radius: 10px;
+}
+
+.progress {
+  position: absolute;
+  height: 5px;
+  left: 0;
+  top: 0;
+  width: 0%;
+  background: var(--theme-progress-color);
+  border-radius: 10px;
+}
+
+.percent {
+  font: 600 15px Inter, sans-serif;
+  line-height: 19px;
+  align-items: center;
+  color: var(--theme-progress-color);
+}

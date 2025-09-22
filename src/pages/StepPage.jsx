@@ -1,0 +1,255 @@
+import { useCallback, useEffect, useState } from "react";
+import { stepService } from "../services/step.service";
+import useTelegramUser from "../hooks/useTelegramUser";
+import { Link, matchPath, useLocation, useParams } from "react-router-dom";
+import Loader from "../UI/Loader/Loader";
+import parse from "html-react-parser";
+
+const SvgActive = () => (
+  <svg
+    className="active-svg"
+    width="9"
+    height="19"
+    viewBox="0 0 9 19"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M7.6177 10.063L3.37495 14.5414L2.31445 13.422L6.02695 9.50325L2.31445 5.5845L3.37495 4.46509L7.6177 8.94355C7.75831 9.09201 7.83729 9.29333 7.83729 9.50325C7.83729 9.71318 7.75831 9.9145 7.6177 10.063Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+export default function StepPage() {
+  const [stepsData, setStepsData] = useState([]);
+  const [currentStep, setCurrentStep] = useState(null);
+
+  const [stepContent, setStepContent] = useState("");
+
+  const [isLoading, setIsLoading] = useState(true);
+  const { courseId, submoduleId, stepNumber } = useParams();
+
+  const paths = ["/favorite", "/catalog"];
+  const { pathname } = useLocation();
+  const path = paths.find((path) => {
+    return matchPath({ path, end: false }, pathname);
+  });
+
+  const [navStepBlockView, setNavStepBlockView] = useState("disable");
+
+  const { userId } = useTelegramUser();
+
+  const getStepContent = useCallback(async (contentUrl) => {
+    // const isTest = currentStep?.test;
+    // const isComplete = currentStep?.completed;
+    // const stepId = currentStep?.id;
+    const stepContent = await stepService.getCourseContent(contentUrl);
+
+    setStepContent(stepContent);
+  }, []);
+
+  const getStepsData = useCallback(async () => {
+    setIsLoading(true);
+    const stepsData = await stepService.getSteps(submoduleId, userId);
+    console.log(stepsData);
+    const currentStep = stepsData.steps.find(
+      (step) => step.number == stepNumber
+    );
+    setCurrentStep(currentStep);
+    setStepsData(stepsData.steps);
+    getStepContent(currentStep?.contentUrl);
+    setIsLoading(false);
+  }, [userId, submoduleId, stepNumber, getStepContent]);
+
+  useEffect(() => {
+    getStepsData();
+  }, [getStepsData]);
+
+  const getNavigationStepClass = (completed, number) => {
+    let stepClass = "";
+    if (completed) stepClass = "complete";
+    if (number === Number(stepNumber)) {
+      stepClass += " active";
+    }
+
+    return stepClass;
+  };
+
+  const toggleNavClass = () => {
+    if (navStepBlockView === "disable") setNavStepBlockView("move-right");
+    if (navStepBlockView === "move-right") setNavStepBlockView("disable");
+  };
+
+  return (
+    <>
+      {isLoading && <Loader />}
+      {!isLoading && stepsData && (
+        <>
+          <div
+            className={`navigation-block ${navStepBlockView}`}
+            id="navigation"
+          >
+            <ul className="navigation-list">
+              {stepsData.map((step) => (
+                <li>
+                  <Link
+                    to={`${path}/${courseId}/syllabus/${submoduleId}/step/${step.number}`}
+                    className={getNavigationStepClass(
+                      step.completed,
+                      step.number
+                    )}
+                  >
+                    {step.number === Number(stepNumber) && <SvgActive />}
+                    {step.test && "?"}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="block step-block-switching" id="switc">
+            <a className="button-navigation-block" id="button-back">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 13 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.03409 12.4467L0.178267 6.59091L6.03409 0.735085L7.2777 1.96662L3.55291 5.69141H12.6023V7.49041H3.55291L7.2777 11.2092L6.03409 12.4467Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+            <div className="steps-number">
+              <button
+                className="button-navigation-block activate-menu"
+                id="button-navigation"
+                onClick={() => toggleNavClass()}
+              >
+                <svg
+                  style={{ color: "var(--theme-button-hint-icon-text-color)" }}
+                  width="20"
+                  height="20"
+                  viewBox="0 0 28 28"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.875 14H24.875"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M3.875 7H24.875"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M3.875 21H24.875"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <span id="steps-count">
+                {stepNumber} из {stepsData.length}
+              </span>
+            </div>
+
+            <a className="button-navigation-block" id="button-forward">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 13 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.19318 12.4467L5.94957 11.2152L9.67436 7.49041H0.625V5.69141H9.67436L5.94957 1.97266L7.19318 0.735085L13.049 6.59091L7.19318 12.4467Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+          </div>
+
+          <div className="block step-block-content" id="blockContent">
+            <div className="step-block-content-media">{parse(stepContent)}</div>
+            <div
+              className="step-block-content-media"
+              id="test"
+              style={{ display: "none" }}
+            ></div>
+            <button
+              id="submit-button"
+              className="step-block-button disabled"
+              disabled
+            >
+              Проверить
+            </button>
+            <a id="next-button" className="step-block-button">
+              Следующий шаг
+            </a>
+            <button id="retry-button" className="step-block-button">
+              Попробовать снова
+            </button>
+            <div className="result">
+              <div id="result-container"></div>
+              <svg
+                id="result-svg-correct"
+                style={{ display: "none" }}
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 0.25C7.26942 0.25 5.57769 0.763179 4.13876 1.72464C2.69983 2.6861 1.57832 4.05267 0.916058 5.65152C0.253791 7.25037 0.0805121 9.00971 0.418133 10.707C0.755753 12.4044 1.58911 13.9635 2.81282 15.1872C4.03653 16.4109 5.59563 17.2443 7.29296 17.5819C8.9903 17.9195 10.7496 17.7462 12.3485 17.0839C13.9473 16.4217 15.3139 15.3002 16.2754 13.8612C17.2368 12.4223 17.75 10.7306 17.75 9C17.75 6.67936 16.8281 4.45376 15.1872 2.81282C13.5462 1.17187 11.3206 0.25 9 0.25ZM7.75 12.4938L4.625 9.36875L5.61875 8.375L7.75 10.5062L12.3813 5.875L13.3788 6.86625L7.75 12.4938Z"
+                  fill="#43A047"
+                />
+              </svg>
+              <svg
+                id="result-svg-incorrect"
+                style={{ display: "none" }}
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M2.63604 2.63604C0.948212 4.32387 0 6.61305 0 9C0 11.3869 0.948212 13.6761 2.63604 15.364C4.32387 17.0518 6.61305 18 9 18C11.3869 18 13.6761 17.0518 15.364 15.364C17.0518 13.6761 18 11.3869 18 9C18 6.61305 17.0518 4.32387 15.364 2.63604C13.6761 0.948212 11.3869 0 9 0C6.61305 0 4.32387 0.948212 2.63604 2.63604ZM3.54888 3.54888C4.99461 2.10316 6.95543 1.29096 9 1.29096C11.0446 1.29096 13.0054 2.10316 14.4511 3.54888C15.8968 4.99461 16.709 6.95543 16.709 9C16.709 11.0446 15.8968 13.0054 14.4511 14.4511C13.0054 15.8968 11.0446 16.709 9 16.709C6.95543 16.709 4.99461 15.8968 3.54888 14.4511C2.10316 13.0054 1.29096 11.0446 1.29096 9C1.29096 6.95543 2.10316 4.99461 3.54888 3.54888Z"
+                  fill="#E53232"
+                />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M9 1.29096C6.95543 1.29096 4.99461 2.10316 3.54888 3.54888C2.10316 4.99461 1.29096 6.95543 1.29096 9C1.29096 11.0446 2.10316 13.0054 3.54888 14.4511C4.99461 15.8968 6.95543 16.709 9 16.709C11.0446 16.709 13.0054 15.8968 14.4511 14.4511C15.8968 13.0054 16.709 11.0446 16.709 9C16.709 6.95543 15.8968 4.99461 14.4511 3.54888C13.0054 2.10316 11.0446 1.29096 9 1.29096ZM12.3978 6.28288C12.3978 6.10271 12.3262 5.92992 12.1989 5.80251C12.1357 5.73923 12.0608 5.68767 11.9782 5.65342C11.8957 5.61916 11.8072 5.60153 11.7178 5.60153C11.6284 5.60153 11.5399 5.61916 11.4574 5.65342C11.3748 5.68767 11.2999 5.73787 11.2368 5.80115L9 8.03926L6.76325 5.80115C6.63567 5.67357 6.46263 5.60189 6.2822 5.60189C6.10177 5.60189 5.92873 5.67357 5.80115 5.80115C5.67357 5.92873 5.60189 6.10177 5.60189 6.2822C5.60189 6.46263 5.67357 6.63567 5.80115 6.76325L8.03926 9L5.80115 11.2368C5.73798 11.2999 5.68786 11.3749 5.65367 11.4575C5.61949 11.54 5.60189 11.6285 5.60189 11.7178C5.60189 11.8071 5.61949 11.8956 5.65367 11.9781C5.68786 12.0607 5.73798 12.1357 5.80115 12.1989C5.86432 12.262 5.93932 12.3121 6.02186 12.3463C6.10439 12.3805 6.19286 12.3981 6.2822 12.3981C6.37154 12.3981 6.46 12.3805 6.54254 12.3463C6.62508 12.3121 6.70008 12.262 6.76325 12.1989L9 9.96074L11.2368 12.1989C11.3643 12.3264 11.5374 12.3981 11.7178 12.3981C11.8982 12.3981 12.0713 12.3264 12.1989 12.1989C12.3264 12.0713 12.3981 11.8982 12.3981 11.7178C12.3981 11.5374 12.3264 11.3643 12.1989 11.2368L9.96074 9L12.1989 6.76325C12.3262 6.63583 12.3978 6.46304 12.3978 6.28288Z"
+                  fill="#E53232"
+                />
+              </svg>
+            </div>
+
+            <a className="step-block-button" id="button-next-step">
+              {" "}
+              Дальше{" "}
+            </a>
+          </div>
+        </>
+      )}
+    </>
+  );
+}

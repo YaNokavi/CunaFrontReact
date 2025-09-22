@@ -1,0 +1,24 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  background-color: var(--theme-bg-color);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animation {
+  border: 5px solid var(--theme-block-color);
+  border-top-color: var(--theme-button-color);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  to {
+    transform: rotate(1turn);
+  }
+}
