@@ -14,7 +14,7 @@ export default function InfoModal() {
         <InfoIcon />
       </button>
       <CustomModal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        {pathname.startsWith("/experts") ? (
+        {pathname.startsWith("/experts") && (
           <span>
             Данный топ формируется на основе заработанных CUNA-токенов за
             прохождение курсов! Топ сбрасывается каждые две недели и после
@@ -24,7 +24,8 @@ export default function InfoModal() {
             Чтобы иметь возможность получить наградру, необходимо получить
             минимум 150 CUNA-токенов!
           </span>
-        ) : (
+        )}
+        {pathname.startsWith("/friends") && (
           <span>
             Данный топ формируется на основе заработанных CUNA-токенов вашими
             рефералами! Топ сбрасывается каждые четыре недели, и после награды

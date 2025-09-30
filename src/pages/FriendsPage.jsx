@@ -2,13 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import useTelegramUser from "../hooks/useTelegramUser";
 import { friendsService } from "../services/frends.service";
 import Loader from "../UI/Loader/Loader";
-
 import EmptyReferrals from "../components/FriendsPage/EmptyReferrals";
 import HaveReferrals from "../components/FriendsPage/HaveReferrals";
-
 import UsersRacesRating from "../UI/UsersRacesRating/UsersRacesRating";
 import SliderButtons from "../components/FriendsPage/Buttons/SliderButtons";
-
+//TODO Думать над состояниями
 export default function FriendsPage() {
   const [referralsData, setReferralsData] = useState(null);
   const [currentUserData, setCurrentUserData] = useState(null);

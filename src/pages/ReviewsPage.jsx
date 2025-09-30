@@ -3,18 +3,39 @@ import { reviewsService } from "../services/reviews.service";
 import { useParams } from "react-router-dom";
 import useTelegramUser from "../hooks/useTelegramUser";
 import Loader from "../UI/Loader/Loader";
-import ReviewGeneralBlock from "../components/ReviewsPage/ReviewGeneralBlock";
-import ListUserReview from "../components/ReviewsPage/ListUserReview";
+import ListUserReview from "../components/ReviewsPage/ListUserReview/ListUserReview";
+import UserReviewBlock from "../components/ReviewsPage/UserReviewBlock/UserReviewBlock";
+import SortingBlockButtons from "../components/ReviewsPage/SortingBlockButtons/SortingBlockButtons";
 
 export default function ReviewsPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [reviewsData, setReviewsData] = useState(null);
+  const [reviewsData, setReviewsData] = useState([]);
   const [ratingInfo, setRatingInfo] = useState(null);
   const [currentUserReview, setCurrentUserReview] = useState(null);
+  //TODO нужно ли этот стейт
+  const [isNeedReset, setIsNeedReset] = useState(false);
+
+  const [reviewsLoading, setReviewsLoading] = useState(false);
 
   const { userId } = useTelegramUser();
 
   const { courseId } = useParams();
+
+  const refreshReviewsList = async (sortType = "NEW_FIRST", filter = false) => {
+    if (!filter) {
+      setIsNeedReset(true);
+    }
+    setReviewsLoading(true);
+    const reviewsData = await reviewsService.getReviews(
+      userId,
+      courseId,
+      sortType
+    );
+    setReviewsData(reviewsData.courseReviews);
+    setRatingInfo(reviewsData.courseRatingInfo);
+    setCurrentUserReview(reviewsData.currentUserReview);
+    setReviewsLoading(false);
+  };
 
   const getReviews = useCallback(async () => {
     setIsLoading(true);
@@ -36,29 +57,27 @@ export default function ReviewsPage() {
       {isLoading && <Loader />}
       {!isLoading && reviewsData && (
         <>
-          <ReviewGeneralBlock
+          <UserReviewBlock
             currentUserReview={currentUserReview}
             ratingInfo={ratingInfo}
+            refreshReviews={refreshReviewsList}
           />
+          {/* TODO сделать локальный лоадер */}
+          {/* {reviewsLoading && <Loader />} */}
           {reviewsData.length > 0 && (
+            <SortingBlockButtons
+              refreshReviews={refreshReviewsList}
+              isNeedReset={isNeedReset}
+              setIsNeedReset={setIsNeedReset}
+            />
+          )}
+          {!reviewsLoading && reviewsData.length > 0 && (
             <>
-              <div className="sorting-block-swipes" id="buttons-block">
-                <div className="widget-button active" id="widget-button-first">
-                  Новые
-                </div>
-                <div className="widget-button" id="widget-button-second">
-                  Хорошие
-                </div>
-                <div className="widget-button" id="widget-button-third">
-                  Плохие
-                </div>
-                <div className="widget-button" id="widget-button-fourth">
-                  Полезные
-                </div>
-              </div>
               <div className="comment-list">
                 {reviewsData.map((review) => {
-                  return <ListUserReview review={review} />;
+                  return (
+                    <ListUserReview key={review.reviewId} review={review} />
+                  );
                 })}
               </div>
             </>

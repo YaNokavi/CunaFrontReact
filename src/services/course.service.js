@@ -8,7 +8,7 @@ class CourseService {
       const courseData = await fetchData(`course/${courseId}/info`, "GET", {
         "X-User-Id": userId,
       });
-
+      
       return courseData;
     } catch (error) {
       console.error("Ошибка при загрузке данных курса", error, error.status);

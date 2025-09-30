@@ -1,55 +1,13 @@
-import fetchData from "./CustomFetch";
-//TODO userId
+import fetchData from "../CustomFetch";
 
-//TODO сюда ли делать кошелек
-class ProfileService {
-  #URLUserInfo = "user/profile/info";
+class TasksService {
   #URLTasks = "task/all";
-
-  async getUserInfo(userId) {
-    try {
-      const userInfo = await fetchData(this.#URLUserInfo, "GET", {
-        "X-User-Id": userId,
-      });
-
-      // const formattedBalance = Number.isInteger(userInfo.cunaTokenBalance)
-      //   ? userInfo.cunaTokenBalance.toString()
-      //   : userInfo.cunaTokenBalance.toFixed(2);
-
-      // this.balanceText.innerText = formattedBalance;
-
-      // document.getElementById(
-      //   "balance-cuna"
-      // ).innerHTML = `${formattedBalance} CUNA`;
-
-      // if (userInfo.walletAddress) {
-      //   walletAddress = userInfo.walletAddress;
-      //   this.walletUI.displayBaseWalletInfo(walletAddress);
-      // }
-
-      // if (userInfo.coursesProgress.length != 0) {
-      //   this.profileUI.displayProgress(userInfo);
-      // } else {
-      //   this.profileUI.displayNotProgress();
-      // }
-      return userInfo;
-    } catch (error) {
-      console.log(
-        "Не удалось получить информацию о пользователе, попробуйте позже",
-        error
-      );
-      alert("Не удалось получить информацию о пользователе, попробуйте позже");
-    }
-  }
 
   async getTasks(userId) {
     try {
       const tasksInfo = await fetchData(this.#URLTasks, "GET", {
         "X-User-Id": userId,
       });
-      // tasksInfo.length !== 0
-      //   ? this.profileUI.displayTasks(tasksInfo)
-      //   : this.profileUI.displayNotTasks();
       return tasksInfo;
     } catch (error) {
       console.log("Не удалось получить задания, попробуйте позже", error);
@@ -57,19 +15,15 @@ class ProfileService {
     }
   }
 
-  async checkTask(task) {
+  async checkTask(userId, taskId) {
     try {
       const taskCheckInfo = await fetchData(
-        `task/${task.taskId}/completed`,
+        `task/${taskId}/completed`,
         "POST",
-        { "X-User-Id": this.userId }
+        { "X-User-Id": userId }
       );
-
-      //     const buttonTask = document.getElementById(`task${task.taskId}`);
-      //     if (taskCheckInfo) {
-      //       buttonTask.classList.remove("load-task-animation");
-      //       buttonTask.classList.remove("load-task");
-
+      return taskCheckInfo;
+      
       //       displayNotification(taskCheckInfo.reward, "REWARD");
       //       this.balanceText.innerText = taskCheckInfo.newBalance.toFixed(2);
       //       buttonTask.classList.add("complete-task");
@@ -97,4 +51,4 @@ class ProfileService {
   }
 }
 
-export const profileService = new ProfileService();
+export const tasksService = new TasksService();

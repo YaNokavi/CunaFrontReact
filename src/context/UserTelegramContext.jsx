@@ -10,7 +10,7 @@ const TelegramUserContext = createContext({
 export function TelegramUserContextProvider({ children }) {
   // const [userId, setUserId] = useState(535799793);
   const [userId, setUserId] = useState(1);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("Yan_Miracles");
   const [userAvatarUrl, setUserAvatarUrl] = useState("");
 
   useEffect(() => {

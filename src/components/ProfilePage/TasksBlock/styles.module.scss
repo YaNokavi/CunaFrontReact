@@ -20,15 +20,26 @@
   padding-bottom: 10px;
   gap: 10px;
   border-bottom: 1px solid var(--theme-block-border-color);
-  button {
+
+  .buttonBlock {
+    display: flex;
+    width: 90px;
+    min-width: 90px;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+
+  .button {
     display: flex;
     justify-content: center;
     align-items: center;
     -webkit-tap-highlight-color: transparent;
     cursor: pointer;
-    margin-left: auto;
-    width: 90px;
-    min-width: 90px;
+    // margin-left: auto;
+    // width: 90px;
+    // min-width: 90px;
+    width: 100%;
     padding: 0 8px;
     height: 30px;
     background-color: var(--theme-button-color);
@@ -80,7 +91,7 @@
   color: var(--theme-text-hint-color);
 }
 
-.load-task {
+.loadTask {
   cursor: default;
   pointer-events: none;
   background-color: var(--theme-block-color);
@@ -90,11 +101,17 @@
   padding: 0;
 }
 
-.load-task-animation {
+.loadTaskAnimation {
   border: 2.5px solid var(--theme-block-color);
   border-top-color: var(--theme-button-color);
   border-radius: 50%;
   animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 .complete-task {

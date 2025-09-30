@@ -1,6 +1,4 @@
 import fetchData from "./CustomFetch";
-//TODO userId
-
 //TODO куда девать обработку тестов и изображений (отдельный сервис)
 class StepService {
   async getSteps(submoduleId, userId) {
@@ -17,15 +15,11 @@ class StepService {
         "X-User-Id": userId,
       });
 
-      // stepsData.currentSubmoduleId = this.submoduleId;
-      // stepsData.storedTime = Date.now();
-      // localStorage.setItem("stepsData", JSON.stringify(stepsData));
+      stepsData.currentSubmoduleId = this.submoduleId;
+      stepsData.storedTime = Date.now();
+      localStorage.setItem("stepsData", JSON.stringify(stepsData));
     }
 
-    // this.stepUI.displayStepInfo(stepsData.steps.length);
-    // this.stepUI.createNavigationMenu(stepsData.steps);
-    // this.getCourseContent(stepsData.steps);
-    // setButtonHref(buttonsArray, stepsData);
     return stepsData;
   }
 
@@ -40,10 +34,65 @@ class StepService {
       const content = await response.text();
 
       return content;
-      // this.stepUI.displayContent(content, stepId, isTest, isComplete);
     } catch (error) {
       console.error(`Ошибка в getCourseContent: ${error.message}`);
       alert("Произошла ошибка при загрузке шага. Попробуйте позже.");
+    }
+  }
+
+  changeStorage(stepId) {
+    const storedData = JSON.parse(localStorage.getItem("stepsData"));
+    const stepsArray = storedData.steps;
+    const step = stepsArray.find((step) => step.id === stepId);
+    if (step) {
+      step.completed = true;
+    } else {
+      console.warn(`Шаг с id=${stepId} не найден`);
+    }
+    storedData.steps = stepsArray;
+
+    localStorage.setItem("stepsData", JSON.stringify(storedData));
+  }
+
+  async sendProgressText(userId, stepId) {
+    try {
+      const response = await fetchData(
+        `submodule-step/${stepId}/user-completed-step`,
+        "POST",
+        { "X-User-Id": userId },
+        null,
+        false
+      );
+      if (response !== 200) {
+        throw Error;
+      } else {
+        this.changeStorage(stepId);
+      }
+    } catch (error) {
+      console.error("Ошибка отправки прогресса:", error, error.status);
+    }
+  }
+
+  async sendProgressTest(userId, stepId, sendTest) {
+    try {
+      const response = await fetchData(
+        `submodule-step/${stepId}/user-completed-test`,
+        "POST",
+        { "X-User-Id": userId },
+        sendTest
+      );
+
+      if (response) {
+        //TODO уведы
+        // this.stepUI.displayNotification(response);
+        this.changeStorage(stepId);
+        return { response: response, status: 200 };
+      } else {
+        throw Error;
+      }
+    } catch (error) {
+      console.error(error, error.status);
+      return error.status;
     }
   }
 }

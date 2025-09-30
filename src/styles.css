@@ -37,13 +37,18 @@
   place-content: center;
   gap: 10px;
   margin-bottom: 30px;
+  overflow: hidden;
 }
 
 .profile-nickname {
-  display: flex;
+  display: block;
   text-align: left;
   font: 700 30px Inter, sans-serif;
   color: var(--theme-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .profile-balance-info-block {
@@ -891,6 +896,7 @@ textarea {
   text-decoration: none;
   width: 30px;
   height: 30px;
+  padding: 0;
   margin-left: -40px;
   background-color: var(--theme-button-hint-color);
   border-radius: 50%;
@@ -905,9 +911,14 @@ textarea {
   flex-direction: row;
   width: 100%;
   height: 30px;
+  min-height: 30px;
   background: var(--theme-block-color);
   border: 1px solid var(--theme-block-border-color);
   border-radius: 15px;
+}
+
+.sorting-block-swipes button {
+  padding: 0;
 }
 
 .sorting-block-swipes::before {
@@ -997,7 +1008,17 @@ textarea {
   align-self: stretch;
 }
 
+.comment-username-date {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+}
+
 .comment-username {
+  display: flex;
   font: 700 15px Inter, sans-serif;
   color: var(--theme-text-color);
 }
@@ -1059,19 +1080,20 @@ textarea {
   gap: 10px;
 }
 
-.button-expand-description {
+button.button-expand-description {
   box-sizing: border-box;
-  display: none;
+  display: flex;
   flex-direction: row;
   border-bottom: 1px solid var(--theme-text-color);
   margin-top: 4px;
-  padding-bottom: 2px;
+  padding: 0 0 2px;
   gap: 5px;
   align-items: center;
   color: var(--theme-text-color);
   font: 400 12px Inter, sans-serif;
   transition: transform 0.3s ease;
   cursor: pointer;
+  background: none;
 }
 
 .button-expand-description.hidden {
@@ -1431,27 +1453,18 @@ textarea {
   color: var(--theme-button-icon-text-color);
 }
 
-#submit-button {
-  display: none;
+.step-block-button:disabled {
+  transition: opacity 0.3s ease;
+  opacity: 0.6;
 }
 
 #button-next-step {
   align-self: flex-end;
 }
 
-#next-button {
-  display: none;
-}
-
 #retry-button {
-  display: none;
   background: var(--theme-button-hint-color);
   color: var(--theme-button-hint-icon-text-color);
-}
-
-.disabled {
-  transition: opacity 0.3s ease;
-  opacity: 0.6;
 }
 
 .result {
@@ -1843,12 +1856,6 @@ main::-webkit-scrollbar {
 
   to {
     opacity: 0;
-  }
-}
-
-@keyframes rotation {
-  to {
-    transform: rotate(1turn);
   }
 }
 

@@ -8,26 +8,26 @@ export const tabs = [
   {
     title: "Друзья",
     path: "/friends",
-    icon: <FriendsIcon className="tab-icon" />,
+    icon: <FriendsIcon />,
   },
   {
     title: "Знатоки",
     path: "/experts",
-    icon: <ExpertsIcon className="tab-icon" />,
+    icon: <ExpertsIcon />,
   },
   {
     title: "Каталог",
     path: "/catalog",
-    icon: <CatalogIcon className="tab-icon" />,
+    icon: <CatalogIcon />,
   },
   {
     title: "Мои курсы",
     path: "/favorite",
-    icon: <FavoriteIcon className="tab-icon" />,
+    icon: <FavoriteIcon />,
   },
   {
     title: "Профиль",
     path: "/profile",
-    icon: <ProfileIcon className="tab-icon" />,
+    icon: <ProfileIcon />,
   },
 ];

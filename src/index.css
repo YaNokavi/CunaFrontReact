@@ -77,7 +77,7 @@ h3 {
 }
 
 button {
-  border: none ;
+  border: none;
 }
 
 /*** Заголовок страницы ***/
@@ -147,11 +147,6 @@ nav > .tab-item {
   margin: 0 auto;
   gap: 5px;
   color: var(--theme-tab-icon-text-color);
-}
-
-.tab-icon {
-  width: 28px;
-  height: 28px;
 }
 
 .tab-label {

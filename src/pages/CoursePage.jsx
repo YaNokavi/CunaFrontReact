@@ -4,11 +4,10 @@ import useTelegramUser from "../hooks/useTelegramUser";
 import { useParams } from "react-router-dom";
 import Loader from "../UI/Loader/Loader";
 import CourseInfo from "../components/CoursePage/CourseInfo";
-
+//TODO Подумать над стейтами
 export default function CoursePage() {
   const [courseData, setCourseData] = useState([]);
   const [openModules, setOpenModules] = useState({});
-  const [isFavorive, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const { courseId } = useParams();
@@ -19,7 +18,6 @@ export default function CoursePage() {
     setIsLoading(true);
     const courseData = await courseService.getCourse(userId, courseId);
     setCourseData(courseData);
-    setIsFavorite(courseData.favorite);
     setOpenModules(
       courseData.courseModulesInfo.reduce((acc, _, index) => {
         acc[index] = true;
@@ -41,8 +39,6 @@ export default function CoursePage() {
           courseData={courseData}
           openModules={openModules}
           setOpenModules={setOpenModules}
-          isFavorive={isFavorive}
-          setIsFavorite={setIsFavorite}
         />
       )}
     </>

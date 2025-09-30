@@ -7,7 +7,7 @@ export default function IsNotFavoriteButton({ setIsFavorite }) {
   const { userId } = useTelegramUser();
 
   const { courseId } = useParams();
-
+//TODO Откат UI
   const addCourse = useCallback(async () => {
     const responce = await courseService.addCourse(userId, courseId);
     console.log(responce);
@@ -22,7 +22,6 @@ export default function IsNotFavoriteButton({ setIsFavorite }) {
 
       <svg
         className="course-block-button-icon"
-        id="star1"
         width="22"
         height="22"
         viewBox="0 0 25 24"

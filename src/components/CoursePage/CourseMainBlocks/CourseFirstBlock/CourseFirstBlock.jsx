@@ -4,8 +4,8 @@ import IsNotFavoriteButton from "./Buttons/isNotFavoriteButton";
 
 export default function CourseFirstBlock({
   courseData,
-  setIsFavorite,
   isFavorive,
+  setIsFavorite,
 }) {
   return (
     <div className="block course-block">
@@ -13,7 +13,7 @@ export default function CourseFirstBlock({
       {isFavorive ? (
         <IsFavoriteButtons setIsFavorite={setIsFavorite} />
       ) : (
-        <IsNotFavoriteButton setIsFavorite={setIsFavorite}/>
+        <IsNotFavoriteButton setIsFavorite={setIsFavorite} />
       )}
     </div>
   );

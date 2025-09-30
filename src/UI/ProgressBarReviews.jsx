@@ -1,3 +1,5 @@
+import getReviewsWord from "./gerReviewsWord";
+//TODO декомпозиция
 export default function ProgressBarReviews({ ratingInfo }) {
   const { rating, reviewsTotalNumber, detailedRatingTotalNumber } = ratingInfo;
 
@@ -9,16 +11,6 @@ export default function ProgressBarReviews({ ratingInfo }) {
     : rating.toFixed(1);
 
   const total = values.reduce((acc, val) => acc + val, 0);
-
-  function getReviewWord(count) {
-    count = Math.abs(count) % 100;
-    const lastDigit = count % 10;
-
-    if (count > 10 && count < 20) return "отзывов";
-    if (lastDigit > 1 && lastDigit < 5) return "отзыва";
-    if (lastDigit === 1) return "отзыв";
-    return "отзывов";
-  }
 
   return (
     <div className="mark-progress-block">
@@ -40,7 +32,7 @@ export default function ProgressBarReviews({ ratingInfo }) {
           </svg>
         </div>
         <div className="mark-text-amount-comments">
-          {reviewsTotalNumber} {getReviewWord(reviewsTotalNumber)}
+          {reviewsTotalNumber} {getReviewsWord(reviewsTotalNumber)}
         </div>
       </div>
       <div className="progress-block">
