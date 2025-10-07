@@ -1,23 +1,25 @@
-import { useCallback, useState } from "react";
-import { courseService } from "@/services/course.service";
+import { useState } from "react";
 import useTelegramUser from "@/hooks/useTelegramUser";
 import { Link, useParams } from "react-router-dom";
 import CustomModal from "@/UI/Modal/CustomModal";
 import IconLeave from "./IconLeave";
+import { useCourseStore } from "../../../store";
+import useLeaveCourse from "../../../../../hooks/queries/CoursePage/useLeaveCourse";
 
-export default function IsFavoriteButtons({ setIsFavorite }) {
+export default function IsFavoriteButtons() {
   const { userId } = useTelegramUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const favorite = useCourseStore((state) => state.favorite);
+
   const { courseId } = useParams();
-//TODO Откат UI
-  const leaveCourse = useCallback(async () => {
-    const responce = await courseService.leaveCourse(userId, courseId);
-    console.log(responce);
-    if (responce === 200) {
-      setIsFavorite(false);
-    }
-  }, [userId, courseId, setIsFavorite]);
+
+  const mutation = useLeaveCourse(userId, courseId);
+
+  const leaveCourse = () => {
+    mutation.mutate(!favorite);
+    setIsModalOpen(false);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>

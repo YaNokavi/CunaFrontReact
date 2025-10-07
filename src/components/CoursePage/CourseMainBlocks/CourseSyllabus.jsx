@@ -1,11 +1,11 @@
 import { Fragment } from "react";
-import IconToggle from "./IconToggle"
+import IconToggle from "./IconToggle";
+import { useCourseStore } from "../store";
 
-export default function CourseSyllabus({
-  openModules,
-  setOpenModules,
-  courseModulesInfo,
-}) {
+export default function CourseSyllabus({ courseModulesInfo }) {
+  const openModules = useCourseStore((state) => state.openModules);
+  const toggleModuleOpen = useCourseStore((state) => state.toggleModuleOpen);
+
   return (
     <div className="block course-block">
       <div className="course-block-header">Содержание</div>
@@ -16,12 +16,7 @@ export default function CourseSyllabus({
             <Fragment key={index}>
               <div
                 className="syllabus-text-course-main toggle"
-                onClick={() => {
-                  setOpenModules((prev) => ({
-                    ...prev,
-                    [index]: !prev[index],
-                  }));
-                }}
+                onClick={() => toggleModuleOpen(index)}
               >
                 {module.name}
                 <IconToggle isOpen={isOpen} />

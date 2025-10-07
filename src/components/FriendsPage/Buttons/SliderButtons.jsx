@@ -1,10 +1,7 @@
-import { useCallback, useRef } from "react";
-
-export default function SliderButtons({
-  activeIndex,
-  setActiveIndex,
-  contentSliderRef,
-}) {
+import { useCallback, useRef, useState } from "react";
+//TODO drag
+export default function SliderButtons({ contentSliderRef }) {
+  const [activeIndex, setActiveIndex] = useState(0);
   const widgetBlockRef = useRef(null);
 
   const setActivePosition = useCallback(

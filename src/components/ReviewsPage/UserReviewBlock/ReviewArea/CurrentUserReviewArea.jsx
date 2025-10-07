@@ -1,42 +1,25 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Loader from "../../../../UI/Loader/Loader";
 import TextArea from "./TextArea";
 import CommentButtons from "./CommentButtons";
+import { useReviewAreaStore } from "../../store";
 
-export default function CurrentUserReviewArea({
-  currentUserReview,
-  setIsWriting,
-  refreshReviews,
-}) {
-  const [isSending, setIsSending] = useState(false);
-
+export default function CurrentUserReviewArea({ currentUserReview }) {
   const { rating = 0, message = "" } = currentUserReview || {};
-  const [comment, setComment] = useState(message || "");
-  const [userRating, setUserRating] = useState(rating || 0);
+  const setComment = useReviewAreaStore((state) => state.setComment);
+  const setUserRating = useReviewAreaStore((state) => state.setUserRating);
 
   useEffect(() => {
     setComment(message);
     setUserRating(rating);
-  }, [message, rating]);
+  }, [message, rating, setComment, setUserRating]);
 
   return (
     <>
       {/* TODO Отображение загрузки и тестирование на низкой производительности*/}
-      {isSending && <Loader />}
-      <TextArea
-        comment={comment}
-        setComment={setComment}
-        userRating={userRating}
-        setUserRating={setUserRating}
-      />
-      <CommentButtons
-        currentUserReview={currentUserReview}
-        comment={comment}
-        userRating={userRating}
-        setIsWriting={setIsWriting}
-        refreshReviews={refreshReviews}
-        setIsSending={setIsSending}
-      />
+      {/* {isSending && <Loader />} */}
+      <TextArea />
+      <CommentButtons currentUserReview={currentUserReview} />
     </>
   );
 }

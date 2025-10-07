@@ -1,25 +1,25 @@
 import { useState } from "react";
-import { reviewsService } from "../../../../services/reviews.service";
 import CustomModal from "@/UI/Modal/CustomModal";
 import { useParams } from "react-router-dom";
+import { TrashIcon } from "./TrashIcon";
+import { useReviewAreaStore } from "../../store";
+import useDeleteReview from "../../../../hooks/queries/ReviewsPage/UserReview/useDeleteReview";
+import useTelegramUser from "../../../../hooks/useTelegramUser";
 
-export default function DeleteModal({
-  reviewId,
-  refreshReviews,
-  setIsSending,
-  setIsWriting,
-}) {
+export default function DeleteModal({ reviewId }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const setIsWriting = useReviewAreaStore((state) => state.setIsWriting);
 
   const { courseId } = useParams();
 
+  const { userId } = useTelegramUser();
+
+  const { mutate, isPending } = useDeleteReview();
+
   const handleConfirmDelete = async () => {
-    setIsSending(true);
-    const responce = await reviewsService.deleteComment(reviewId, courseId);
-    console.log(responce);
+    console.log(isPending);
+    mutate({ reviewId, courseId, userId });
     setIsWriting(false);
-    await refreshReviews();
-    setIsSending(false);
   };
   return (
     <>

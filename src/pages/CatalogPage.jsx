@@ -1,31 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
-import { catalogService } from "../services/catalog.service";
 import useTelegramUser from "../hooks/useTelegramUser";
 import Loader from "../UI/Loader/Loader";
 import CourseBaseInfoBlock from "../UI/CourseBaseInfoBlock/CourseBaseInfoBlock";
-
+import useCoursesCatalog from "../hooks/queries/CatalogPage/useCoursesCatalog";
+//TODO Подумать над отображением загрузки
 export default function CatalogPage() {
-  const [coursesData, setCoursesData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
   const { userId } = useTelegramUser();
 
-  const getCourses = useCallback(async () => {
-    setIsLoading(true);
-    const courses = await catalogService.getCourses(userId);
-    setCoursesData(courses);
-    setIsLoading(false);
-  }, [userId]);
-
-  useEffect(() => {
-    getCourses();
-  }, [getCourses]);
+  const { data, isPending, isFetching } = useCoursesCatalog(userId);
 
   return (
     <>
-      {isLoading && <Loader />}
-      {!isLoading && coursesData && coursesData.length > 0 ? (
-        coursesData.map((course) => (
+      {(isPending || isFetching) && <Loader />}
+      {!isPending && !isFetching && data && data.length > 0 ? (
+        data.map((course) => (
           <CourseBaseInfoBlock key={course.id} course={course} />
         ))
       ) : (

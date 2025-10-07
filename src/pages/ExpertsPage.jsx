@@ -1,37 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
-import { expertsService } from "../services/experts.service";
 import useTelegramUser from "../hooks/useTelegramUser";
 import Loader from "../UI/Loader/Loader";
 import UsersRacesRating from "../UI/UsersRacesRating/UsersRacesRating";
+import useTopUsers from "../hooks/queries/ExpertsPage/useTopUsers";
 
 export default function ExpertsPage() {
-  const [topUsersData, setTopUsersData] = useState(null);
-  const [currentUserData, setCurrentUserData] = useState(null);
-  const [eventEndDate, setEventEndDate] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
   const { userId } = useTelegramUser();
 
-  const getUsers = useCallback(async () => {
-    setIsLoading(true);
-    const users = await expertsService.getTopUsers(userId);
-    setTopUsersData(users.userRatingList);
-    setCurrentUserData(users.currentUserInfo);
-    setEventEndDate(users.eventEndDate);
-    setIsLoading(false);
-  }, [userId]);
+  const { data, isPending } = useTopUsers(userId);
 
-  useEffect(() => {
-    getUsers();
-  }, [getUsers]);
+  const { currentUserInfo, eventEndDate, userRatingList } = data || {};
 
   return (
     <>
-      {isLoading && <Loader />}
-      {!isLoading && topUsersData && currentUserData && eventEndDate && (
+      {isPending && <Loader />}
+      {!isPending && currentUserInfo && userRatingList && eventEndDate && (
         <UsersRacesRating
-          currentUserData={currentUserData}
-          topUsersData={topUsersData}
+          currentUserData={currentUserInfo}
+          topUsersData={userRatingList}
           eventEndDate={eventEndDate}
         />
       )}

@@ -3,13 +3,8 @@ import CourseLearnings from "./CourseMainBlocks/CourseLearnings";
 import CourseSyllabus from "./CourseMainBlocks/CourseSyllabus";
 import LastStep from "./CourseMainBlocks/LastStep";
 import CourseReviews from "./CourseMainBlocks/CourseReviews";
-import { useEffect, useState } from "react";
 
-export default function CourseInfo({
-  courseData,
-  openModules,
-  setOpenModules,
-}) {
+export default function CourseInfo({ courseData }) {
   const {
     lastCompletedStep,
     learningOutcomes,
@@ -18,22 +13,12 @@ export default function CourseInfo({
     favorite,
   } = courseData;
 
-  const [isFavorive, setIsFavorite] = useState(false);
-
-  useEffect(() => {
-    setIsFavorite(favorite);
-  }, [favorite]);
-
   return (
     <>
       {courseData && (
-        <CourseFirstBlock
-          courseData={courseData}
-          isFavorive={isFavorive}
-          setIsFavorite={setIsFavorite}
-        />
+        <CourseFirstBlock courseData={courseData} isFavorite={favorite} />
       )}
-      {isFavorive && lastCompletedStep && (
+      {favorite && lastCompletedStep && (
         <LastStep lastCompletedStep={lastCompletedStep} />
       )}
 
@@ -42,11 +27,7 @@ export default function CourseInfo({
       )}
 
       {courseModulesInfo && (
-        <CourseSyllabus
-          openModules={openModules}
-          setOpenModules={setOpenModules}
-          courseModulesInfo={courseModulesInfo}
-        />
+        <CourseSyllabus courseModulesInfo={courseModulesInfo} />
       )}
 
       {ratingInfo && <CourseReviews ratingInfo={ratingInfo} />}

@@ -2,7 +2,7 @@ import fetchData from "./CustomFetch";
 
 //TODO контроллеры для отправки коммента и реакций пользователя
 class ReviewsService {
-  async getReviews(userId, courseId, sortType = "NEW_FIRST") {
+  async getReviews(userId, courseId, sortType) {
     try {
       const reviewsData = await fetchData(
         `course/${courseId}/reviews?sort=${sortType}`,
@@ -10,7 +10,6 @@ class ReviewsService {
         { "X-User-Id": userId }
       );
       return reviewsData;
-
     } catch (error) {
       console.error("Не удалось получить отзывы", error, error.status);
       alert("Не удалось получиться отзывы");

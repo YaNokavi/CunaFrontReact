@@ -1,21 +1,18 @@
 import { memo, useEffect, useRef, useState } from "react";
 
-function SortingBlockButtons({ refreshReviews, isNeedReset, setIsNeedReset }) {
+function SortingBlockButtons({ sortType, setSortType }) {
   const sortingBlockRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
 
-  // const reviewTypes = [
-  //   "NEW_FIRST",
-  //   "POSITIVE_FIRST",
-  //   "NEGATIVE_FIRST",
-  //   "USEFUL_FIRST",
-  // ];
   const reviewTypes = [
     { type: "NEW_FIRST", name: "Новые", index: 0 },
     { type: "POSITIVE_FIRST", name: "Хорошие", index: 1 },
     { type: "NEGATIVE_FIRST", name: "Плохие", index: 2 },
     { type: "USEFUL_FIRST", name: "Полезные", index: 3 },
   ];
+
+  const [activeIndex, setActiveIndex] = useState(
+    reviewTypes.find((type) => type.type === sortType).index
+  );
 
   const getActiveClass = (index) => (activeIndex === index ? "active" : "");
 
@@ -28,19 +25,10 @@ function SortingBlockButtons({ refreshReviews, isNeedReset, setIsNeedReset }) {
     }
   }, [activeIndex]);
 
-  useEffect(() => {
-    //TODO очень подумать над этим моментом
-    if (isNeedReset) {
-      setActiveIndex(0);
-      setIsNeedReset(false);
-    }
-  }, [isNeedReset, setIsNeedReset]);
-
-  const handleClickSortingButton = async (index) => {
+  const handleClickSortingButton = (index) => {
     if (activeIndex === index) return;
     setActiveIndex(index);
-
-    await refreshReviews(reviewTypes[index].type, true);
+    setSortType(reviewTypes[index].type);
   };
 
   return (

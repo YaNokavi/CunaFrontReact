@@ -1,7 +1,7 @@
 import styles from "./styles.module.css";
 
 export default function CourseWelcomeInfoBlock({ courseData }) {
-  const { iconUrl, author, name, description } = courseData;
+  const { iconUrl, author, name, description } = courseData || {};
 
   const getAuthor = (author) => {
     if (author?.length) {

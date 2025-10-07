@@ -1,22 +1,23 @@
 import { useEffect, useRef } from "react";
 import StarsRating from "./StarsRating";
 import DOMPurify from "dompurify";
+import { useReviewAreaStore } from "../../store";
 
-export default function TextArea({
-  comment,
-  setComment,
-  userRating,
-  setUserRating,
-}) {
+export default function TextArea() {
   const maxLength = 2000;
 
   const commentTextarea = useRef(null);
+  const comment = useReviewAreaStore((state) => state.comment);
+  const setComment = useReviewAreaStore((state) => state.setComment);
 
   useEffect(() => {
     if (commentTextarea.current) {
       commentTextarea.current.style.height = "auto";
       commentTextarea.current.style.height =
         commentTextarea.current.scrollHeight + "px";
+      commentTextarea.current.focus();
+      const length = commentTextarea.current.value.length;
+      commentTextarea.current.setSelectionRange(length, length);
     }
   }, [comment]);
 
@@ -38,7 +39,7 @@ export default function TextArea({
         placeholder="Напишите здесь ваш комментарий..."
         rows="4"
       ></textarea>
-      <StarsRating userRating={userRating} setUserRating={setUserRating} />
+      <StarsRating />
     </div>
   );
 }

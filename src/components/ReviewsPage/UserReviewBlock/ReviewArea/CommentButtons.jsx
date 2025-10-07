@@ -1,25 +1,25 @@
 import { useParams } from "react-router-dom";
-import useTelegramUser from "../../../../hooks/useTelegramUser";
-
-import { reviewsService } from "../../../../services/reviews.service";
-
+import useTelegramUser from "@/hooks/useTelegramUser";
 import DOMPurify from "dompurify";
 import CancelModal from "./CancelModal";
 import DeleteModal from "./DeleteModal";
+import { useReviewAreaStore } from "../../store";
+import useChangeReview from "../../../../hooks/queries/ReviewsPage/UserReview/useChangeReview";
+import useAddReview from "../../../../hooks/queries/ReviewsPage/UserReview/useAddReview";
 
-export default function CommentButtons({
-  currentUserReview,
-  comment,
-  userRating,
-  setIsSending,
-  setIsWriting,
-  refreshReviews,
-}) {
+export default function CommentButtons({ currentUserReview }) {
   const { courseId } = useParams();
 
   const { userId } = useTelegramUser();
 
+  const comment = useReviewAreaStore((state) => state.comment);
+  const userRating = useReviewAreaStore((state) => state.userRating);
+  const setIsWriting = useReviewAreaStore((state) => state.setIsWriting);
+
   const { reviewId = null, rating = 0, message = "" } = currentUserReview || {};
+
+  const mutationAdd = useAddReview();
+  const mutationChange = useChangeReview();
 
   const handleSend = async () => {
     if (comment === message && rating === userRating) {
@@ -27,27 +27,24 @@ export default function CommentButtons({
       return;
     }
 
-    setIsSending(true);
     if (!reviewId) {
-      const responce = await reviewsService.sendComment(
-        DOMPurify.sanitize(comment),
+      //TODO загрузки
+      mutationAdd.mutate({
+        comment: DOMPurify.sanitize(comment),
         userRating,
         courseId,
-        userId
-      );
-      console.log(responce, "post");
+        userId,
+      });
     } else {
-      const responce = await reviewsService.changeComment(
+      mutationChange.mutate({
         reviewId,
-        DOMPurify.sanitize(comment),
+        comment: DOMPurify.sanitize(comment),
         userRating,
-        courseId
-      );
-      console.log(responce, "put");
+        courseId,
+        userId,
+      });
     }
     setIsWriting(false);
-    await refreshReviews();
-    setIsSending(false);
   };
 
   return (
@@ -55,19 +52,8 @@ export default function CommentButtons({
       <button className="course-block-button" onClick={handleSend}>
         <span>Отправить</span>
       </button>
-      <CancelModal
-        comment={comment}
-        userRating={userRating}
-        setIsWriting={setIsWriting}
-      />
-      {currentUserReview && (
-        <DeleteModal
-          reviewId={reviewId}
-          setIsSending={setIsSending}
-          setIsWriting={setIsWriting}
-          refreshReviews={refreshReviews}
-        />
-      )}
+      <CancelModal currentUserReview={currentUserReview} />
+      {currentUserReview && <DeleteModal reviewId={reviewId} />}
     </div>
   );
 }

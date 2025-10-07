@@ -1,20 +1,20 @@
-import { useCallback } from "react";
-import { courseService } from "@/services/course.service";
 import useTelegramUser from "@/hooks/useTelegramUser";
 import { useParams } from "react-router-dom";
+import { useCourseStore } from "../../../store";
+import useAddCourse from "../../../../../hooks/queries/CoursePage/useAddCourse";
 
-export default function IsNotFavoriteButton({ setIsFavorite }) {
+export default function IsNotFavoriteButton() {
   const { userId } = useTelegramUser();
 
   const { courseId } = useParams();
-//TODO Откат UI
-  const addCourse = useCallback(async () => {
-    const responce = await courseService.addCourse(userId, courseId);
-    console.log(responce);
-    if (responce === 200) {
-      setIsFavorite(true);
-    }
-  }, [userId, courseId, setIsFavorite]);
+
+  const favorite = useCourseStore((state) => state.favorite);
+
+  const mutation = useAddCourse(userId, courseId);
+
+  const addCourse = () => {
+    mutation.mutate(!favorite);
+  };
 
   return (
     <button className="course-block-button" onClick={() => addCourse()}>

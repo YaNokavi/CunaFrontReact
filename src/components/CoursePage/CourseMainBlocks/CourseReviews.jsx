@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import ProgressBarReviews from "@/UI/ProgressBarReviews";
+import ProgressBarReviews from "@/UI/ProgressBarReviews/ProgressBarReviews";
 
 export default function CourseReviews({ ratingInfo }) {
   return (

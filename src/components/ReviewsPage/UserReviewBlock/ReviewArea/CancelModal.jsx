@@ -1,15 +1,15 @@
 import CustomModal from "@/UI/Modal/CustomModal";
 import { useState } from "react";
+import { useReviewAreaStore } from "../../store";
 
-export default function CancelModal({
-  currentUserReview,
-  comment,
-  userRating,
-  setIsWriting,
-}) {
+export default function CancelModal({ currentUserReview }) {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const { rating = 0, message = "" } = currentUserReview || {};
+
+  const comment = useReviewAreaStore((state) => state.comment);
+  const userRating = useReviewAreaStore((state) => state.userRating);
+  const setIsWriting = useReviewAreaStore((state) => state.setIsWriting);
 
   const handleOpenModalCancel = () => {
     if (comment !== message || rating !== userRating) {

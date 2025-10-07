@@ -1,31 +1,35 @@
 import { useCallback, useState } from "react";
 import styles from "./styles.module.scss";
 import useTelegramUser from "@/hooks/useTelegramUser";
-import { tasksService } from "../../../services/ProfileService/tasks.service";
+import useCheckTask from "../../../hooks/queries/ProfilePage/useCheckTask";
 
 export default function Task({ task }) {
-  const { taskId, iconUrl, header, reward, taskUrl } = task;
-  const [isLoadTask, setIsLoadTask] = useState(false);
+  const { taskId, iconUrl, header, reward, taskUrl } = task || {};
   const [buttonMode, setButtonMode] = useState(taskUrl ? "execute" : "check");
 
   const { userId } = useTelegramUser();
 
+  const mutation = useCheckTask(userId, taskId);
+
   const checkTask = useCallback(async () => {
-    if (isLoadTask) return;
+    if (mutation.isPending) return;
 
     if (buttonMode === "execute") {
       window.open(taskUrl, "_blank");
       setButtonMode("check");
     } else if (buttonMode === "check") {
-      setIsLoadTask(true);
-      const taskCheckInfo = await tasksService.checkTask(userId, taskId);
-      console.log(taskCheckInfo);
-      if (!taskCheckInfo && taskUrl) {
-        setButtonMode("execute");
+      try {
+        const data = await mutation.mutateAsync();
+        if (data) {
+          setButtonMode("done"); //TODO выполненная таска
+        } else if (taskUrl) {
+          setButtonMode("execute");
+        }
+      } catch (error) {
+        console.error("Ошибка при проверке задачи", error);
       }
-      setIsLoadTask(false);
     }
-  }, [buttonMode, isLoadTask, userId, taskId, taskUrl]);
+  }, [buttonMode, taskUrl, mutation]);
 
   return (
     <div className={styles.item}>
@@ -37,13 +41,13 @@ export default function Task({ task }) {
       <div className={styles.buttonBlock}>
         <button
           className={
-            !isLoadTask
+            !mutation.isPending
               ? styles.button
               : `${styles.loadTask} ${styles.loadTaskAnimation}`
           }
           onClick={checkTask}
         >
-          {!isLoadTask
+          {!mutation.isPending
             ? buttonMode === "execute"
               ? "Выполнить"
               : "Проверить"

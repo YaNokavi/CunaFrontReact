@@ -1,46 +1,32 @@
-import { useCallback, useEffect, useState, Fragment } from "react";
-import { courseService } from "../services/course.service";
 import useTelegramUser from "../hooks/useTelegramUser";
 import { useParams } from "react-router-dom";
 import Loader from "../UI/Loader/Loader";
 import CourseInfo from "../components/CoursePage/CourseInfo";
-//TODO Подумать над стейтами
-export default function CoursePage() {
-  const [courseData, setCourseData] = useState([]);
-  const [openModules, setOpenModules] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+import useCourse from "../hooks/queries/CoursePage/useCourse";
+import { useCourseStore } from "../components/CoursePage/store";
+import { useEffect, useRef } from "react";
 
+export default function CoursePage() {
   const { courseId } = useParams();
 
   const { userId } = useTelegramUser();
 
-  const getCourse = useCallback(async () => {
-    setIsLoading(true);
-    const courseData = await courseService.getCourse(userId, courseId);
-    setCourseData(courseData);
-    setOpenModules(
-      courseData.courseModulesInfo.reduce((acc, _, index) => {
-        acc[index] = true;
-        return acc;
-      }, {})
-    );
-    setIsLoading(false);
-  }, [userId, courseId]);
+  const { data, isPending } = useCourse(userId, courseId);
+  const setAllModulesOpen = useCourseStore((state) => state.setAllModulesOpen);
+
+  const initialized = useRef(false);
 
   useEffect(() => {
-    getCourse();
-  }, [getCourse]);
+    if (data && !initialized.current) {
+      setAllModulesOpen(data.courseModulesInfo);
+      initialized.current = true;
+    }
+  }, [data, setAllModulesOpen]);
 
   return (
     <>
-      {isLoading && <Loader />}
-      {!isLoading && courseData && (
-        <CourseInfo
-          courseData={courseData}
-          openModules={openModules}
-          setOpenModules={setOpenModules}
-        />
-      )}
+      {isPending && <Loader />}
+      {!isPending && data && <CourseInfo courseData={data} />}
     </>
   );
 }

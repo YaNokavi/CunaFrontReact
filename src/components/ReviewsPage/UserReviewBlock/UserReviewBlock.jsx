@@ -1,13 +1,10 @@
-import { useState } from "react";
-import ProgressBarReviews from "@/UI/ProgressBarReviews.jsx";
+import ProgressBarReviews from "@/UI/ProgressBarReviews/ProgressBarReviews.jsx";
 import CurrentUserReviewArea from "./ReviewArea/CurrentUserReviewArea";
+import { useReviewAreaStore } from "../store";
 
-export default function UserReviewBlock({
-  ratingInfo,
-  currentUserReview,
-  refreshReviews,
-}) {
-  const [isWriting, setIsWriting] = useState(false);
+export default function UserReviewBlock({ ratingInfo, currentUserReview }) {
+  const isWriting = useReviewAreaStore((state) => state.isWriting);
+  const setIsWriting = useReviewAreaStore((state) => state.setIsWriting);
 
   const handleWriteCommentClick = () => {
     setIsWriting(true);
@@ -25,11 +22,7 @@ export default function UserReviewBlock({
     >
       <ProgressBarReviews ratingInfo={ratingInfo} />
       {isWriting && (
-        <CurrentUserReviewArea
-          currentUserReview={currentUserReview}
-          setIsWriting={setIsWriting}
-          refreshReviews={refreshReviews}
-        />
+        <CurrentUserReviewArea currentUserReview={currentUserReview} />
       )}
       {!isWriting && (
         <button
