@@ -2,7 +2,7 @@ import { useState } from "react";
 import CommentFooter from "./CommentFooter/CommentFooter";
 import CommentInfo from "./CommentInfo/CommentInfo";
 import { getCommentColor } from "../../../utils/ListUserReview/getCommentColor";
-import { ExpandContext } from "../../../context/ExpandContext";
+import { ExpandContext } from "@/context/ReviewPage/ExpandContext";
 
 export default function ListUserReview({ review }) {
   const [isNeedExpand, setIsNeedExpand] = useState(false);

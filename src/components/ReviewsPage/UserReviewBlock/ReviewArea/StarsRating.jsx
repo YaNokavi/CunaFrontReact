@@ -1,10 +1,10 @@
-import { useReviewAreaStore } from "../../store";
+import { useActions, useUserRating } from "../../store";
 
 export default function StarsRating() {
   const starsData = [1, 2, 3, 4, 5];
 
-  const userRating = useReviewAreaStore((state) => state.userRating);
-  const setUserRating = useReviewAreaStore((state) => state.setUserRating);
+  const userRating = useUserRating();
+  const { setUserRating } = useActions();
 
   const handleStarClick = (value) => {
     if (value === userRating) return;

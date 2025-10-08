@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
 import StarsRating from "./StarsRating";
 import DOMPurify from "dompurify";
-import { useReviewAreaStore } from "../../store";
+import { useActions, useComment } from "../../store";
 
 export default function TextArea() {
   const maxLength = 2000;
 
   const commentTextarea = useRef(null);
-  const comment = useReviewAreaStore((state) => state.comment);
-  const setComment = useReviewAreaStore((state) => state.setComment);
+  const comment = useComment();
+  const { setComment } = useActions();
 
   useEffect(() => {
     if (commentTextarea.current) {

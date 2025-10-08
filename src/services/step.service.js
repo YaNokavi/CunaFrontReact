@@ -2,28 +2,22 @@ import fetchData from "./CustomFetch";
 //TODO куда девать обработку тестов и изображений (отдельный сервис)
 class StepService {
   async getSteps(submoduleId, userId) {
-    let stepsData = null;
-    const storedData = JSON.parse(localStorage.getItem("stepsData")) || [];
-    if (
-      storedData &&
-      storedData.currentSubmoduleId === submoduleId &&
-      Date.now() - storedData.storedTime < 3_600_000
-    ) {
-      stepsData = storedData;
-    } else {
-      stepsData = await fetchData(`submodule/${submoduleId}/steps`, "GET", {
-        "X-User-Id": userId,
-      });
+    try {
+      const stepsData = await fetchData(
+        `submodule/${submoduleId}/steps`,
+        "GET",
+        {
+          "X-User-Id": userId,
+        }
+      );
 
-      stepsData.currentSubmoduleId = this.submoduleId;
-      stepsData.storedTime = Date.now();
-      localStorage.setItem("stepsData", JSON.stringify(stepsData));
+      return stepsData;
+    } catch (error) {
+      console.error(error);
     }
-
-    return stepsData;
   }
 
-  async getCourseContent(urlContent) {
+  async getStepContent(urlContent) {
     try {
       const response = await fetch(urlContent);
       if (!response.ok) {
@@ -40,20 +34,6 @@ class StepService {
     }
   }
 
-  changeStorage(stepId) {
-    const storedData = JSON.parse(localStorage.getItem("stepsData"));
-    const stepsArray = storedData.steps;
-    const step = stepsArray.find((step) => step.id === stepId);
-    if (step) {
-      step.completed = true;
-    } else {
-      console.warn(`Шаг с id=${stepId} не найден`);
-    }
-    storedData.steps = stepsArray;
-
-    localStorage.setItem("stepsData", JSON.stringify(storedData));
-  }
-
   async sendProgressText(userId, stepId) {
     try {
       const response = await fetchData(
@@ -65,8 +45,6 @@ class StepService {
       );
       if (response !== 200) {
         throw Error;
-      } else {
-        this.changeStorage(stepId);
       }
     } catch (error) {
       console.error("Ошибка отправки прогресса:", error, error.status);
@@ -85,7 +63,7 @@ class StepService {
       if (response) {
         //TODO уведы
         // this.stepUI.displayNotification(response);
-        this.changeStorage(stepId);
+
         return { response: response, status: 200 };
       } else {
         throw Error;

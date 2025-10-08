@@ -1,14 +1,10 @@
 import ProgressBarReviews from "@/UI/ProgressBarReviews/ProgressBarReviews.jsx";
 import CurrentUserReviewArea from "./ReviewArea/CurrentUserReviewArea";
-import { useReviewAreaStore } from "../store";
+import { useActions, useIsWriting } from "../store";
 
 export default function UserReviewBlock({ ratingInfo, currentUserReview }) {
-  const isWriting = useReviewAreaStore((state) => state.isWriting);
-  const setIsWriting = useReviewAreaStore((state) => state.setIsWriting);
-
-  const handleWriteCommentClick = () => {
-    setIsWriting(true);
-  };
+  const isWriting = useIsWriting();
+  const { setIsWriting } = useActions();
 
   return (
     <div
@@ -27,7 +23,7 @@ export default function UserReviewBlock({ ratingInfo, currentUserReview }) {
       {!isWriting && (
         <button
           className="course-block-button"
-          onClick={handleWriteCommentClick}
+          onClick={() => setIsWriting(true)}
         >
           <span>
             {!currentUserReview ? "Оставить отзыв" : "Изменить отзыв"}

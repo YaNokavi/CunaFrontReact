@@ -3,7 +3,7 @@ import useTelegramUser from "@/hooks/useTelegramUser";
 import DOMPurify from "dompurify";
 import CancelModal from "./CancelModal";
 import DeleteModal from "./DeleteModal";
-import { useReviewAreaStore } from "../../store";
+import { useActions, useComment, useUserRating } from "../../store";
 import useChangeReview from "../../../../hooks/queries/ReviewsPage/UserReview/useChangeReview";
 import useAddReview from "../../../../hooks/queries/ReviewsPage/UserReview/useAddReview";
 
@@ -12,9 +12,9 @@ export default function CommentButtons({ currentUserReview }) {
 
   const { userId } = useTelegramUser();
 
-  const comment = useReviewAreaStore((state) => state.comment);
-  const userRating = useReviewAreaStore((state) => state.userRating);
-  const setIsWriting = useReviewAreaStore((state) => state.setIsWriting);
+  const comment = useComment();
+  const userRating = useUserRating();
+  const { setIsWriting } = useActions();
 
   const { reviewId = null, rating = 0, message = "" } = currentUserReview || {};
 

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-
+//TODO best practise
 export const useCourseStore = create((set) => ({
   openModules: {},
   favorite: false,

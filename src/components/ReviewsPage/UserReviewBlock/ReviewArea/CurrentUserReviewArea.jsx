@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import Loader from "../../../../UI/Loader/Loader";
 import TextArea from "./TextArea";
 import CommentButtons from "./CommentButtons";
-import { useReviewAreaStore } from "../../store";
+import { useActions } from "../../store";
 
 export default function CurrentUserReviewArea({ currentUserReview }) {
   const { rating = 0, message = "" } = currentUserReview || {};
-  const setComment = useReviewAreaStore((state) => state.setComment);
-  const setUserRating = useReviewAreaStore((state) => state.setUserRating);
+  const { setComment, setUserRating } = useActions();
 
   useEffect(() => {
     setComment(message);
