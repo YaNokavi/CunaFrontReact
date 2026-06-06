@@ -1,13 +1,18 @@
 import { useCallback, useEffect, useRef } from "react";
 import CommentHeader from "./CommentHeader";
 import { useExpand } from "../../../../hooks/useExpand";
+import type { IReviewItem } from "../../../../types/CourseTypes/course.types";
 
-export default function CommentInfo({ review }) {
-  const messageRef = useRef(null);
+interface Props {
+  review: IReviewItem;
+}
+
+export default function CommentInfo({ review }: Props) {
+  const messageRef = useRef<HTMLDivElement>(null);
 
   const { setIsNeedExpand, toggleExpand } = useExpand();
 
-  function stripHtmlTags(input) {
+  function stripHtmlTags(input: string): string {
     return input.replace(/<\/?[^>]+(>|$)/g, "");
   }
 

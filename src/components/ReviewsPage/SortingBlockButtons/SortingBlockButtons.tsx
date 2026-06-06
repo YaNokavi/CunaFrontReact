@@ -1,9 +1,20 @@
 import { memo, useEffect, useRef, useState } from "react";
 
-function SortingBlockButtons({ sortType, setSortType }) {
-  const sortingBlockRef = useRef(null);
+interface ReviewType {
+  type: string;
+  name: string;
+  index: number;
+}
 
-  const reviewTypes = [
+interface Props {
+  sortType: string;
+  setSortType: (type: string) => void;
+}
+
+function SortingBlockButtons({ sortType, setSortType }: Props) {
+  const sortingBlockRef = useRef<HTMLDivElement>(null);
+
+  const reviewTypes: ReviewType[] = [
     { type: "NEW_FIRST", name: "Новые", index: 0 },
     { type: "POSITIVE_FIRST", name: "Хорошие", index: 1 },
     { type: "NEGATIVE_FIRST", name: "Плохие", index: 2 },
@@ -11,10 +22,10 @@ function SortingBlockButtons({ sortType, setSortType }) {
   ];
 
   const [activeIndex, setActiveIndex] = useState(
-    reviewTypes.find((type) => type.type === sortType).index
+    reviewTypes.find((type) => type.type === sortType)!.index
   );
 
-  const getActiveClass = (index) => (activeIndex === index ? "active" : "");
+  const getActiveClass = (index: number) => (activeIndex === index ? "active" : "");
 
   useEffect(() => {
     if (sortingBlockRef.current) {
@@ -25,7 +36,7 @@ function SortingBlockButtons({ sortType, setSortType }) {
     }
   }, [activeIndex]);
 
-  const handleClickSortingButton = (index) => {
+  const handleClickSortingButton = (index: number) => {
     if (activeIndex === index) return;
     setActiveIndex(index);
     setSortType(reviewTypes[index].type);

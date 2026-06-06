@@ -3,8 +3,13 @@ import CourseLearnings from "./CourseMainBlocks/CourseLearnings";
 import CourseSyllabus from "./CourseMainBlocks/CourseSyllabus";
 import LastStep from "./CourseMainBlocks/LastStep";
 import CourseReviews from "./CourseMainBlocks/CourseReviews";
+import type { ICourseDetails } from "../../types/CourseTypes/course.types";
 
-export default function CourseInfo({ courseData }) {
+interface Props {
+  courseData: ICourseDetails;
+}
+
+export default function CourseInfo({ courseData }: Props) {
   const {
     lastCompletedStep,
     learningOutcomes,

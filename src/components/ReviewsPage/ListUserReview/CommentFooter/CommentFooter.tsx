@@ -3,8 +3,13 @@ import ExpandButton from "./ExpandButton";
 import ReactionButton from "./ReactionButton";
 import useReactionHandler from "../../../../hooks/useReactionHandler";
 import { useExpand } from "../../../../hooks/useExpand";
+import type { IReviewItem } from "../../../../types/CourseTypes/course.types";
 
-export default function CommentFooter({ review }) {
+interface Props {
+  review: IReviewItem;
+}
+
+export default function CommentFooter({ review }: Props) {
   const { userId } = useTelegramUser();
 
   const { isNeedExpand } = useExpand();
@@ -19,8 +24,8 @@ export default function CommentFooter({ review }) {
     );
 
   const reactions = [
-    { type: "LIKE", count: likesCount },
-    { type: "DISLIKE", count: dislikesCount },
+    { type: "LIKE" as const, count: likesCount },
+    { type: "DISLIKE" as const, count: dislikesCount },
   ];
 
   return (

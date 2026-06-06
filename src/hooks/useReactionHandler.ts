@@ -2,15 +2,16 @@ import { useCallback, useState } from "react";
 import useAddReaction from "./queries/ReviewsPage/UserReaction/useAddReaction";
 import useUpdateReaction from "./queries/ReviewsPage/UserReaction/useUpdateReaction";
 import useDeleteReaction from "./queries/ReviewsPage/UserReaction/useDeleteReaction";
+import type { TUserReaction } from "../types/CourseTypes/course.types";
 
 export default function useReactionHandler(
-  userId,
-  reviewId,
-  initialReaction,
-  initialLikes,
-  initialDislikes
+  userId: number,
+  reviewId: number,
+  initialReaction: TUserReaction | null,
+  initialLikes: number,
+  initialDislikes: number
 ) {
-  const [userReaction, setUserReaction] = useState(initialReaction);
+  const [userReaction, setUserReaction] = useState<TUserReaction | null>(initialReaction);
   const [likesCount, setLikesCount] = useState(initialLikes);
   const [dislikesCount, setDislikesCount] = useState(initialDislikes);
 
@@ -19,7 +20,7 @@ export default function useReactionHandler(
   const mutationDelete = useDeleteReaction();
 
   const handleReactionClick = useCallback(
-    (reactionType) => {
+    (reactionType: TUserReaction) => {
       if (userReaction === reactionType) {
         mutationDelete.mutate({ userId, reviewId });
         setUserReaction(null);

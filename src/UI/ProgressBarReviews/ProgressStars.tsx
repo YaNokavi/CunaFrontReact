@@ -1,4 +1,8 @@
-export default function ProgressStars({ detailedRatingTotalNumber }) {
+interface Props {
+  detailedRatingTotalNumber: Record<string, number>;
+}
+
+export default function ProgressStars({ detailedRatingTotalNumber }: Props) {
   const starsCount = [5, 4, 3, 2, 1];
   const values = starsCount.map((num) => detailedRatingTotalNumber[num] || 0);
   const total = values.reduce((acc, val) => acc + val, 0);

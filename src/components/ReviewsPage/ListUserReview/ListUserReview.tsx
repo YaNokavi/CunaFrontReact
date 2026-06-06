@@ -3,8 +3,13 @@ import CommentFooter from "./CommentFooter/CommentFooter";
 import CommentInfo from "./CommentInfo/CommentInfo";
 import { getCommentColor } from "../../../utils/ListUserReview/getCommentColor";
 import { ExpandContext } from "@/context/ReviewPage/ExpandContext";
+import type { IReviewItem } from "../../../types/CourseTypes/course.types";
 
-export default function ListUserReview({ review }) {
+interface Props {
+  review: IReviewItem;
+}
+
+export default function ListUserReview({ review }: Props) {
   const [isNeedExpand, setIsNeedExpand] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 

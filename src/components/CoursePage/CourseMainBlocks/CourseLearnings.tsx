@@ -1,4 +1,8 @@
-export default function CourseLearnings({ learningOutcomes }) {
+interface Props {
+  learningOutcomes: string[];
+}
+
+export default function CourseLearnings({ learningOutcomes }: Props) {
   return (
     <div className="block course-block" id="learnings-block">
       <div className="course-block-header">Чему вы научитесь</div>

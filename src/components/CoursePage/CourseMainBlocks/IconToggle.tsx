@@ -1,4 +1,8 @@
-export default function IconToggle({ isOpen }) {
+interface Props {
+  isOpen: boolean;
+}
+
+export default function IconToggle({ isOpen }: Props) {
   return (
     <svg
       width="17"

@@ -1,8 +1,13 @@
 import getReviewsWord from "./gerReviewsWord";
 import IconStar from "./IconStar";
 import ProgressStars from "./ProgressStars";
+import type { ICourseRatingInfo } from "../../types/CourseTypes/course.types";
 
-export default function ProgressBarReviews({ ratingInfo }) {
+interface Props {
+  ratingInfo: ICourseRatingInfo;
+}
+
+export default function ProgressBarReviews({ ratingInfo }: Props) {
   const { rating, reviewsTotalNumber, detailedRatingTotalNumber } = ratingInfo;
 
   const formattedRating = Number.isInteger(rating)

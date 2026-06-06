@@ -1,6 +1,11 @@
 import calculateDate from "../../../../utils/ListUserReview/calculateData";
+import type { IReviewItem } from "../../../../types/CourseTypes/course.types";
 
-export default function CommentHeader({ review }) {
+interface Props {
+  review: IReviewItem;
+}
+
+export default function CommentHeader({ review }: Props) {
   return (
     <div className="comment-header">
       <div className="comment-username-date">

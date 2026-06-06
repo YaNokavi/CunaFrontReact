@@ -1,8 +1,20 @@
-import ProgressBarReviews from "@/UI/ProgressBarReviews/ProgressBarReviews.tsx";
+import ProgressBarReviews from "@/UI/ProgressBarReviews/ProgressBarReviews";
 import CurrentUserReviewArea from "./ReviewArea/CurrentUserReviewArea";
 import { useActions, useIsWriting } from "../store";
+import type { ICourseRatingInfo } from "../../../types/CourseTypes/course.types";
 
-export default function UserReviewBlock({ ratingInfo, currentUserReview }) {
+interface CurrentUserReview {
+  reviewId: number;
+  rating: number;
+  message: string;
+}
+
+interface Props {
+  ratingInfo: ICourseRatingInfo;
+  currentUserReview: CurrentUserReview | null;
+}
+
+export default function UserReviewBlock({ ratingInfo, currentUserReview }: Props) {
   const isWriting = useIsWriting();
   const { setIsWriting } = useActions();
 
@@ -12,7 +24,7 @@ export default function UserReviewBlock({ ratingInfo, currentUserReview }) {
       style={{
         WebkitUserSelect: "none",
         MozUserSelect: "none",
-        MsUserSelect: "none",
+        msUserSelect: "none",
         userSelect: "none",
       }}
     >

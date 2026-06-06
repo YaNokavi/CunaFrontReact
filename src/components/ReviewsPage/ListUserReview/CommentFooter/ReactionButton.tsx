@@ -1,8 +1,21 @@
+import type { TUserReaction } from "../../../../types/CourseTypes/course.types";
+
+interface Reaction {
+  type: TUserReaction;
+  count: number;
+}
+
+interface Props {
+  reaction: Reaction;
+  userReaction: TUserReaction | null;
+  handleReactionClick: (type: TUserReaction) => void;
+}
+
 export default function ReactionButton({
   reaction,
   userReaction,
   handleReactionClick,
-}) {
+}: Props) {
   return (
     <div key={reaction.type} className="user-mark">
       <svg

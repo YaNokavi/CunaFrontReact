@@ -1,6 +1,17 @@
 import { create } from "zustand";
 
-const useReviewAreaStore = create((set) => ({
+interface ReviewAreaStore {
+  isWriting: boolean;
+  comment: string;
+  userRating: number;
+  actions: {
+    setIsWriting: (isWriting: boolean) => void;
+    setComment: (comment: string) => void;
+    setUserRating: (userRating: number) => void;
+  };
+}
+
+const useReviewAreaStore = create<ReviewAreaStore>((set) => ({
   isWriting: false,
 
   comment: "",

@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import type { ILastCompletedStep } from "../../../types/CourseTypes/course.types";
 
-export default function LastStep({ lastCompletedStep }) {
+interface Props {
+  lastCompletedStep: ILastCompletedStep;
+}
+
+export default function LastStep({ lastCompletedStep }: Props) {
   const { submoduleId, number, submoduleName } = lastCompletedStep;
   return (
     <div className="block course-block">

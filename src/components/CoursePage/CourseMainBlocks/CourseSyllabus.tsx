@@ -1,8 +1,13 @@
 import { Fragment } from "react";
 import IconToggle from "./IconToggle";
 import { useCourseStore } from "../store";
+import type { ICourseModulesInfo } from "../../../types/CourseTypes/course.types";
 
-export default function CourseSyllabus({ courseModulesInfo }) {
+interface Props {
+  courseModulesInfo: ICourseModulesInfo[];
+}
+
+export default function CourseSyllabus({ courseModulesInfo }: Props) {
   const openModules = useCourseStore((state) => state.openModules);
   const toggleModuleOpen = useCourseStore((state) => state.toggleModuleOpen);
 
