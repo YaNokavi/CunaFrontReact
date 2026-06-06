@@ -1,7 +1,7 @@
 import CourseProgressBar from "./ProgressBars/ProgressBars";
 import styles from "./styles.module.css";
 
-export default function ProgressBlock({ coursesProgress }) {
+export default function ProgressBlock({ coursesProgress }: any) {
   return (
     <div className="block" style={{ flexDirection: "column" }}>
       <div className={styles.header}>Прогресс</div>

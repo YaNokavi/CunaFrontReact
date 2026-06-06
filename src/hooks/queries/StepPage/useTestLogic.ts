@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
-import useProgressTest from "../../../hooks/queries/StepPage/useProgressTest";
+import useProgressTest from "./useProgressTest";
 import { useParams } from "react-router-dom";
-import useTelegramUser from "../../../hooks/useTelegramUser";
+import useTelegramUser from "../../useTelegramUser";
 import {
   useActions,
   useSelectedOptions,

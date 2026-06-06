@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 
-export default function CourseProgressBar({ progress }) {
+export default function CourseProgressBar({ progress }: any) {
   const progressBarRef = useRef(null);
 
   useEffect(() => {
