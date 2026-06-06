@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)), // теперь @ указывает на /src
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
 });

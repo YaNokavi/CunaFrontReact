@@ -120,46 +120,6 @@ main {
   padding-top: calc(var(--inset-top) + 10px);
 }
 
-/*** Кнопки снизу ***/
-nav {
-  display: flex;
-  position: fixed;
-  height: var(--tab-bar-height);
-  flex-direction: row;
-  padding-top: var(--tab-bar-padding);
-  background-color: var(--theme-header-tab-color);
-  align-items: flex-start;
-  justify-content: space-between;
-  z-index: 9999;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-}
-
-nav > .tab-item {
-  display: flex;
-  -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
-  flex-direction: column;
-  text-decoration: none;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  gap: 5px;
-  color: var(--theme-tab-icon-text-color);
-}
-
-.tab-label {
-  text-align: center;
-  width: 60px;
-  font: 500 10px Inter, sans-serif;
-}
-
-.tab-item.active {
-  color: var(--theme-header-text-color);
-  cursor: default;
-}
-
 .block {
   box-sizing: border-box;
   animation: ani 0.4s forwards;

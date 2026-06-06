@@ -1,7 +1,8 @@
 import useTelegramUser from "../hooks/useTelegramUser";
-import Loader from "../UI/Loader/Loader";
-import CourseBaseInfoBlock from "../UI/CourseBaseInfoBlock/CourseBaseInfoBlock";
+import Loader from "../UI/Loader/Loader.tsx";
+import CourseBaseInfoBlock from "../UI/CourseBaseInfoBlock/CourseBaseInfoBlock.tsx";
 import useCoursesCatalog from "../hooks/queries/CatalogPage/useCoursesCatalog";
+
 //TODO Подумать над отображением загрузки
 export default function CatalogPage() {
   const { userId } = useTelegramUser();

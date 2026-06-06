@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import { getCleanUsername } from "../utils/getCleanUsername";
+import { createContext, useEffect, useState, type ReactNode } from "react";
+import { getCleanUsername } from "../utils/getCleanUsername.ts";
 
 const TelegramUserContext = createContext({
   userId: 1,
@@ -7,14 +7,18 @@ const TelegramUserContext = createContext({
   userAvatarUrl: "",
 });
 
-export function TelegramUserContextProvider({ children }) {
+export function TelegramUserContextProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   // const [userId, setUserId] = useState(535799793);
   const [userId, setUserId] = useState(1);
   const [username, setUsername] = useState("Yan_Miracles");
   const [userAvatarUrl, setUserAvatarUrl] = useState("");
 
   useEffect(() => {
-    const tg = window.Telegram.WebApp;
+    const tg = window?.Telegram?.WebApp;
     if (!tg) return;
     tg.ready();
     if (tg.initDataUnsafe?.user) {

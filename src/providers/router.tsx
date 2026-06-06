@@ -26,7 +26,10 @@ export const router = createBrowserRouter(
       <Route path="catalog/:courseId" element={<CoursePage />} />
       <Route path="catalog/:courseId/rating" element={<ReviewsPage />} />
       <Route path="catalog/:courseId/syllabus" element={<SyllabusPage />} />
-      <Route path="catalog/:courseId/syllabus/:submoduleId/step/:stepNumber" element={<StepPage />} />
+      <Route
+        path="catalog/:courseId/syllabus/:submoduleId/step/:stepNumber"
+        element={<StepPage />}
+      />
       <Route path="favorite" element={<FavoritePage />} />
       <Route path="favorite/:courseId" element={<CoursePage />} />
       <Route path="favorite/:courseId/rating" element={<ReviewsPage />} />
@@ -36,6 +39,6 @@ export const router = createBrowserRouter(
         element={<StepPage />}
       />
       <Route path="profile" element={<ProfilePage />} />
-    </Route>
-  )
+    </Route>,
+  ),
 );

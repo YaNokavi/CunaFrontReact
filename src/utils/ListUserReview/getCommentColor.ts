@@ -1,10 +1,10 @@
-export function getCommentColor(rating) {
-  let commentColor = null;
+export function getCommentColor(rating: number): string {
+  let commentColor: string;
   if (rating >= 4) {
     commentColor = "good";
   } else if (rating === 3) {
     commentColor = "medium";
-  } else if (rating <= 2) {
+  } else {
     commentColor = "bad";
   }
   return commentColor;

@@ -1,9 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import styles from "./course.module.css";
-import IconRatingStar from "./IconRatingStar";
-import IconFavoriteCourse from "./IconFavoriteCourse";
+import IconRatingStar from "./IconRatingStar.tsx";
+import IconFavoriteCourse from "./IconFavoriteCourse.tsx";
+import type { ICourseBase } from "../../types/CourseTypes/course.types.ts";
 
-export default function CourseBaseInfoBlock({ course }) {
+interface Props {
+  course: ICourseBase;
+}
+
+export default function CourseBaseInfoBlock({ course }: Props) {
   const { pathname } = useLocation();
 
   const rating = course.rating;

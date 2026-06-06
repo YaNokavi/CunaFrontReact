@@ -1,4 +1,4 @@
-export const getRacePlaceClass = (place) => {
+export const getRacePlaceClass = (place: number): string => {
   let placeClass = "";
   if (place === 1) {
     placeClass = "first";

@@ -1,11 +1,12 @@
+import type { ICourseBase } from "../types/CourseTypes/course.types";
 import fetchData from "./CustomFetch";
 
 class CatalogService {
-  #URLCourses = "course/all";
+  private readonly URLCourses = "course/all";
 
-  async getCourses(userId) {
+  async getCourses(userId: number): Promise<ICourseBase[] | undefined> {
     try {
-      const coursesData = await fetchData(this.#URLCourses, "GET", {
+      const coursesData = await fetchData(this.URLCourses, "GET", {
         "X-User-Id": userId,
       });
       return coursesData;

@@ -1,4 +1,4 @@
-function declOfNum(number, titles) {
+function declOfNum(number: number, titles: string[]): string {
   const cases = [2, 0, 1, 1, 1, 2];
   return titles[
     number % 100 > 4 && number % 100 < 20
@@ -7,11 +7,11 @@ function declOfNum(number, titles) {
   ];
 }
 
-export default function calculateDate(createTime) {
+export default function calculateDate(createTime: string): string {
   const now = new Date();
   const past = new Date(createTime);
 
-  const diffMs = now - past;
+  const diffMs = now.getTime() - past.getTime();
   if (diffMs < 0) return "только что";
 
   const seconds = Math.floor(diffMs / 1000);
