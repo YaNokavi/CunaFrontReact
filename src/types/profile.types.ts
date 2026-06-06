@@ -4,7 +4,5 @@ export interface ICoursesProgress {
 }
 
 export interface IProfileInfo {
-  walletAddress: string | null;
-  cunaTokenBalance: number;
   coursesProgress: ICoursesProgress[];
 }

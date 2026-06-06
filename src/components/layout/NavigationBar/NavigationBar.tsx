@@ -26,16 +26,16 @@
 //   );
 // }
 
-// NavigationBar.jsx
+// NavigationBar.tsx
 
 import { Link, useLocation } from "react-router-dom";
-import { tabs } from "./tabs.data";
+import { tabs } from "./tabs.data.ts";
 import styles from "./styles.module.scss";
 
 export default function NavigationBar() {
   const location = useLocation();
 
-  function getItemClassName(path) {
+  function getItemClassName(path: any) {
     const isActive = location.pathname.startsWith(path);
     const activeStyle = isActive ? styles.tabItemActive : "";
     return `${activeStyle}`;

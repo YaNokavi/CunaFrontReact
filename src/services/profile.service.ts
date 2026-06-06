@@ -1,4 +1,4 @@
-import fetchData from "../CustomFetch";
+import fetchData from "./CustomFetch";
 
 //TODO сюда ли делать кошелек
 class ProfileService {
@@ -34,7 +34,7 @@ class ProfileService {
     } catch (error) {
       console.log(
         "Не удалось получить информацию о пользователе, попробуйте позже",
-        error
+        error,
       );
       alert("Не удалось получить информацию о пользователе, попробуйте позже");
     }

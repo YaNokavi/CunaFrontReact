@@ -1,7 +1,6 @@
 import useTelegramUser from "@/hooks/useTelegramUser";
-import PopUp from "./PopUp";
 
-export default function UserInfoBlock({ cunaTokenBalance }) {
+export default function UserInfoBlock() {
   const { userId, username, userAvatarUrl } = useTelegramUser();
 
   return (
@@ -15,17 +14,6 @@ export default function UserInfoBlock({ cunaTokenBalance }) {
       </div>
       <div className="nickname-balance-block">
         <div className="profile-nickname">{username}</div>
-        <div className="profile-balance-info-block">
-          <div className="profile-balance-block">
-            <div className="profile-balance-block-text">
-              {Number.isInteger(cunaTokenBalance)
-                ? cunaTokenBalance.toString()
-                : cunaTokenBalance.toFixed(2)}
-            </div>
-            <div className="profile-balance-block-logo"></div>
-          </div>
-          <PopUp />
-        </div>
       </div>
     </div>
   );

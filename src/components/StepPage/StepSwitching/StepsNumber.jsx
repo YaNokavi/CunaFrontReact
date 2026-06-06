@@ -6,7 +6,7 @@ export default function StepsNumber({ stepsLength, setNavStepBlockView }) {
 
   const toggleNavClass = () => {
     setNavStepBlockView((prev) =>
-      prev === "disable" ? "move-right" : "disable"
+      prev === "disable" ? "move-right" : "disable",
     );
   };
 

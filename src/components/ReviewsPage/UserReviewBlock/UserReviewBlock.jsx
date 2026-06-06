@@ -1,4 +1,4 @@
-import ProgressBarReviews from "@/UI/ProgressBarReviews/ProgressBarReviews.jsx";
+import ProgressBarReviews from "@/UI/ProgressBarReviews/ProgressBarReviews.tsx";
 import CurrentUserReviewArea from "./ReviewArea/CurrentUserReviewArea";
 import { useActions, useIsWriting } from "../store";
 

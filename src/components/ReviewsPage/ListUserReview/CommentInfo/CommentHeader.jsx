@@ -1,6 +1,6 @@
 import calculateDate from "../../../../utils/ListUserReview/calculateData";
 
-export default function CommentHeader({review}) {
+export default function CommentHeader({ review }) {
   return (
     <div className="comment-header">
       <div className="comment-username-date">
