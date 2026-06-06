@@ -29,13 +29,13 @@
 // NavigationBar.tsx
 
 import { Link, useLocation } from "react-router-dom";
-import { tabs } from "./tabs.data.ts";
+import { tabs } from "./tabs.data.tsx";
 import styles from "./styles.module.scss";
 
 export default function NavigationBar() {
   const location = useLocation();
 
-  function getItemClassName(path: any) {
+  function getItemClassName(path: string) {
     const isActive = location.pathname.startsWith(path);
     const activeStyle = isActive ? styles.tabItemActive : "";
     return `${activeStyle}`;
