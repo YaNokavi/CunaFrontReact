@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import NavigationStepBar from "./NavigationStepBar";
-import useStepButtonLinks from "@/hooks/useStepButtonLink";
+import useStepButtonLink from "@/hooks/useStepButtonLink";
 import StepsNumber from "./StepsNumber";
 import { IconArrow } from "./IconArrow";
 
 export default function StepSwitching({ stepsData }) {
   const [navStepBlockView, setNavStepBlockView] = useState("disable");
 
-  const { backLink, nextLink } = useStepButtonLinks(
+  const { backLink, nextLink } = useStepButtonLink(
     stepsData.steps.length,
     stepsData.nextSubmoduleId,
     stepsData.previousSubmoduleId,

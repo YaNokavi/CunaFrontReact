@@ -8,7 +8,7 @@ import useTelegramUser from "../../hooks/useTelegramUser";
 export default function StepContent({ stepsData, currentStep, stepContent }) {
   const { nextLink } = useStepButtonLink(
     stepsData.steps.length,
-    stepsData.nextSubmoduleId
+    stepsData.nextSubmoduleId,
   );
 
   const { submoduleId } = useParams();
