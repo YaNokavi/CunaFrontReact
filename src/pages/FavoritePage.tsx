@@ -23,7 +23,7 @@ export default function FavoritePage() {
 
   // Проверяем flagFirstJoin при монтировании
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || initDone) return;
 
     const flagFirstJoin = JSON.parse(
       localStorage.getItem("flagFirstJoin") ?? "false",
@@ -37,7 +37,12 @@ export default function FavoritePage() {
         referrerId && referrerId !== userId ? referrerId : null;
 
       sendUserInfo(
-        { userId, username, avatarUrl: userAvatarUrl, referrerId: safeReferrerId },
+        {
+          userId,
+          username,
+          avatarUrl: userAvatarUrl,
+          referrerId: safeReferrerId,
+        },
         {
           onSuccess: (data) => {
             if (data?.contentUrl && data?.testStartDate) {
@@ -58,6 +63,10 @@ export default function FavoritePage() {
     } else {
       setInitDone(true);
     }
+  }, [userId, initDone]);
+
+  useEffect(() => {
+    setInitDone(false); // сбросить при смене userId
   }, [userId]);
 
   const { data, isPending, isFetching } = useCoursesFavorite(
@@ -86,9 +95,9 @@ export default function FavoritePage() {
         !dailyTest &&
         data &&
         data.length > 0 &&
-        (data as Array<{ id: number; [key: string]: unknown }>).map((course) => (
-          <CourseBaseInfoBlock key={course.id} course={course} />
-        ))}
+        (data as Array<{ id: number; [key: string]: unknown }>).map(
+          (course) => <CourseBaseInfoBlock key={course.id} course={course} />,
+        )}
     </>
   );
 }
