@@ -10,20 +10,14 @@ interface Props {
 }
 
 export default function CourseInfo({ courseData }: Props) {
-  const {
-    lastCompletedStep,
-    learningOutcomes,
-    courseModulesInfo,
-    ratingInfo,
-    favorite,
-  } = courseData;
+  const { lastCompletedStep, learningOutcomes, courseModulesInfo, ratingInfo } =
+    courseData;
 
   return (
     <>
-      {courseData && (
-        <CourseFirstBlock courseData={courseData} isFavorite={favorite} />
-      )}
-      {favorite && lastCompletedStep && (
+      {courseData && <CourseFirstBlock courseData={courseData} />}
+
+      {lastCompletedStep && (
         <LastStep lastCompletedStep={lastCompletedStep} />
       )}
 
