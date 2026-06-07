@@ -23,7 +23,7 @@ export default function FavoritePage() {
 
   // Проверяем flagFirstJoin при монтировании
   useEffect(() => {
-    if (!userId || initDone) return;
+    if (!userId) return;
 
     const flagFirstJoin = JSON.parse(
       localStorage.getItem("flagFirstJoin") ?? "false",
@@ -63,10 +63,6 @@ export default function FavoritePage() {
     } else {
       setInitDone(true);
     }
-  }, [userId, initDone]);
-
-  useEffect(() => {
-    setInitDone(false); // сбросить при смене userId
   }, [userId]);
 
   const { data, isPending, isFetching } = useCoursesFavorite(
