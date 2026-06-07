@@ -1,59 +1,53 @@
 import fetchData from "./CustomFetch";
 
+export interface LoginAndDailyTestResponse {
+  contentUrl?: string;
+  testStartDate?: string;
+  history?: string | null;
+  firstEntryToday?: boolean;
+}
+
 class FavoriteService {
-  #URLFavoriteCourses = "user/favorite-courses";
-  #URLUserInfo = "user/login-and-reward";
-//TODO подумать над отправкой данных юзера
-  async sendUserInfo(body) {
-    // let referallId = JSON.parse(localStorage.getItem("referallId"));
+  #URLAllCourses = "course/all";
+  #URLLoginAndDailyTest = "user/login-and-daily-test";
 
-    // if (referallId && referallId === userId) {
-    //   referallId = null;
-    // }
+  async sendUserInfo(
+    userId: number,
+    username: string,
+    avatarUrl: string,
+    referrerId: number | null,
+  ): Promise<LoginAndDailyTestResponse | undefined> {
+    const body = {
+      username,
+      avatarUrl,
+      referrerId,
+    };
 
-    // let body = {};
-
-    // body = {
-    //   username: username,
-    //   avatarUrl: avatarUrl,
-    //   referrerId: referallId,
-    // };
     try {
-      const rewards = await fetchData(
-        this.#URLUserInfo,
+      const response = await fetchData(
+        this.#URLLoginAndDailyTest,
         "POST",
-        { "X-User-Id": this.userId },
-        body
+        {
+          "X-User-Id": userId,
+          "X-User-Ip": "111",
+          "X-User-Device-Id": "111",
+        },
+        body,
       );
 
-      // if (rewards.history !== null) {
-      //   localStorage.setItem("storiesType", rewards.history);
-      //   document.getElementById("page").style.display = "flex";
-
-      //   const event = new Event("storiesReady");
-      //   window.dispatchEvent(event);
-      // }
-
-      // if (rewards.firstEntryToday === true) {
-      //   this.modalManager.createListRewards(rewards);
-      // }
-
-      // localStorage.setItem("flagFirstJoin", false);
-      // this.tabManager.enableTabs();
-      this.getFavoriteCourses();
+      return response as LoginAndDailyTestResponse;
     } catch (error) {
       console.error(
         "Не удалось получить информацию о пользователе",
         error,
-        error.status
       );
       alert("Не удалось получить информацию о пользователе, попробуйте позже");
     }
   }
 
-  async getFavoriteCourses(userId) {
+  async getAllCourses(userId: number) {
     try {
-      const coursesData = await fetchData(this.#URLFavoriteCourses, "GET", {
+      const coursesData = await fetchData(this.#URLAllCourses, "GET", {
         "X-User-Id": userId,
       });
 
@@ -62,7 +56,6 @@ class FavoriteService {
       console.error(
         "Не удалось получить информацию о курсах",
         error,
-        error.status
       );
       alert("Не удалось получить информацию о курсах, попробуйте позже");
     }
