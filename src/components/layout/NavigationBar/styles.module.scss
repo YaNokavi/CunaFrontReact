@@ -1,45 +1,10 @@
-// .navigationBar {
-//   display: flex;
-//   position: fixed;
-//   height: var(--tab-bar-height);
-//   flex-direction: row;
-//   padding-top: var(--tab-bar-padding);
-//   background-color: var(--theme-header-tab-color);
-//   align-items: flex-start;
-//   justify-content: space-between;
-//   z-index: 9999;
-//   left: 0;
-//   bottom: 0;
-//   width: 100%;
-
-//   .tabItem {
-//     display: flex;
-//     -webkit-tap-highlight-color: transparent;
-//     cursor: pointer;
-//     flex-direction: column;
-//     text-decoration: none;
-//     align-items: center;
-//     justify-content: center;
-//     margin: 0 auto;
-//     gap: 5px;
-//     color: var(--theme-tab-icon-text-color);
-//     font: 500 10px Inter, sans-serif;
-//     width: 60px;
-
-//     &.active {
-//       color: var(--theme-header-text-color);
-//       cursor: default;
-//     }
-//   }
-// }
-
 .tabbar {
   background-color: var(--theme-header-tab-color);
   z-index: 9999;
   height: var(--tab-bar-height);
   display: flex;
   position: fixed;
-  align-items: flex-start;
+  align-items: center;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -49,34 +14,21 @@
     position: relative;
     margin: 0 auto;
     justify-content: center;
-    transition: all 0.3s;
     background-color: var(--theme-header-tab-color);
     -webkit-tap-highlight-color: transparent;
     color: var(--theme-tab-icon-text-color);
-    text-decoration: none; // Убираем подчеркивание у Link
+    text-decoration: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 5px;
     font: 500 10px Inter, sans-serif;
     cursor: pointer;
-  }
-}
-
-.tabStyle2 {
-  a {
-    border-top-left-radius: 100%;
-    border-top-right-radius: 100%;
-    top: 1px;
-    left: 0;
     width: 60px;
-    height: 45px;
   }
 
   .tabItemActive {
-    width: 60px;
-    height: 60px;
-    top: -25px;
     color: var(--theme-header-text-color);
+    cursor: default;
   }
 }
