@@ -1,0 +1,181 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--theme-bg-color);
+  border: 1px solid var(--theme-block-border-color);
+  border-radius: 15px;
+  padding: 15px;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font: 600 18px Inter, sans-serif;
+  color: var(--theme-text-color);
+}
+
+.timer {
+  font: 600 14px Inter, sans-serif;
+  color: var(--theme-text-color);
+  transition: color 0.3s;
+
+  &.blink {
+    color: #e53232;
+    animation: blink 0.5s ease-in-out infinite alternate;
+  }
+}
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  background: var(--theme-block-border-color);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--theme-button-color);
+  border-radius: 2px;
+  transition: width 0.1s linear, background 0.3s;
+
+  &.danger {
+    background: #e53232;
+  }
+}
+
+// Скелетон
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeletonBlock {
+  background: linear-gradient(
+    90deg,
+    var(--theme-bg-step-color) 25%,
+    var(--theme-section-header-background) 50%,
+    var(--theme-bg-step-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+.skeletonTitle {
+  height: 28px;
+  width: 100%;
+}
+
+.skeletonOption {
+  height: 30px;
+  width: 100%;
+}
+
+.skeletonBtn {
+  height: 36px;
+  width: 120px;
+  align-self: center;
+  margin-top: 8px;
+}
+
+// Контент теста
+.testContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question {
+  margin: 0;
+  font: 600 18px Inter, sans-serif;
+  color: var(--theme-text-color);
+  line-height: 26px;
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.hint {
+  margin: 0;
+  font: 400 13px Inter, sans-serif;
+  color: var(--theme-text-hint-color);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 400 14px Inter, sans-serif;
+  color: var(--theme-text-color);
+  cursor: pointer;
+
+  input {
+    cursor: pointer;
+    accent-color: var(--theme-button-color);
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+}
+
+.submitRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+// Результат
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 0;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0.4; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
