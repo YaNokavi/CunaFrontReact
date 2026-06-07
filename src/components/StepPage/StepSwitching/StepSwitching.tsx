@@ -1,7 +1,6 @@
 import { useState } from "react";
-import NavigationStepBar from "./NavigationStepBar";
 import { Link } from "react-router-dom";
-
+import NavigationStepBar from "./NavigationStepBar";
 import useStepButtonLinks from "@/hooks/useStepButtonLink";
 import StepsNumber from "./StepsNumber";
 import { IconArrow } from "./IconArrow";
@@ -12,7 +11,7 @@ export default function StepSwitching({ stepsData }) {
   const { backLink, nextLink } = useStepButtonLinks(
     stepsData.steps.length,
     stepsData.nextSubmoduleId,
-    stepsData.previousSubmoduleId
+    stepsData.previousSubmoduleId,
   );
 
   return (
@@ -23,9 +22,16 @@ export default function StepSwitching({ stepsData }) {
       />
 
       <div className="block step-block-switching" id="switc">
-        <Link to={backLink} className="button-navigation-block">
-          <IconArrow />
-        </Link>
+        {backLink ? (
+          <Link to={backLink} className="button-navigation-block">
+            <IconArrow />
+          </Link>
+        ) : (
+          <span className="button-navigation-block button-navigation-block--disabled">
+            <IconArrow />
+          </span>
+        )}
+
         <StepsNumber
           stepsLength={stepsData.steps.length}
           setNavStepBlockView={setNavStepBlockView}
