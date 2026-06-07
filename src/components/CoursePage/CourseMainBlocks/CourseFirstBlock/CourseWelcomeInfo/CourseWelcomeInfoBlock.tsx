@@ -1,9 +1,15 @@
+import { memo } from "react";
 import styles from "./styles.module.css";
+import type { ICourseDetails } from "../../../../../types/CourseTypes/course.types";
 
-export default function CourseWelcomeInfoBlock({ courseData }) {
+interface Props {
+  courseData: ICourseDetails;
+}
+
+function CourseWelcomeInfoBlock({ courseData }: Props) {
   const { iconUrl, author, name, description } = courseData || {};
 
-  const getAuthor = (author) => {
+  const getAuthor = (author: string) => {
     if (author?.length) {
       return author.length > 15 ? author.slice(0, 15) + "..." : author;
     } else {
@@ -26,3 +32,4 @@ export default function CourseWelcomeInfoBlock({ courseData }) {
     </div>
   );
 }
+export default memo(CourseWelcomeInfoBlock);
