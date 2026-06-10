@@ -23,14 +23,21 @@ export function TelegramUserContextProvider({
       // локальная разработка без Telegram
       setUserId(535799793);
       setUsername("DevUser");
+      localStorage.setItem("flagFirstJoin", "true");
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const referallId = urlParams.get("tgWebAppStartParam") || "";
+      localStorage.setItem("referallId", referallId);
       return;
     }
     tg.ready();
 
     // Устанавливаем flagFirstJoin и referallId при каждом запуске из Telegram
-    const startParam = tg.initDataUnsafe?.start_param ?? null;
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const referallId = urlParams.get("tgWebAppStartParam") || "";
+    localStorage.setItem("referallId", referallId);
     localStorage.setItem("flagFirstJoin", "true");
-    localStorage.setItem("referallId", JSON.stringify(startParam));
 
     if (tg.initDataUnsafe?.user) {
       setUserAvatarUrl(tg.initDataUnsafe.user.photo_url || "");
