@@ -23,8 +23,9 @@
   --theme-bg-notification-color: #2c2c2b;
   --theme-bg-step-color: rgb(114 114 114 / 70%);
   --theme-step-text-color: #b0b0b0;
-  --theme-loader-wallet-color: rgb(100 100 100 / 100%) 25%,
-    rgb(125 125 125 / 100%) 50%, rgb(100 100 100 / 100%) 75%;
+  --theme-loader-wallet-color:
+    rgb(100 100 100 / 100%) 25%, rgb(125 125 125 / 100%) 50%,
+    rgb(100 100 100 / 100%) 75%;
 }
 
 #root {
@@ -32,6 +33,7 @@
   flex-direction: column;
   height: 100dvh;
   width: 100%;
+  background-color: var(--theme-bg-color);
 }
 
 body {

@@ -21,7 +21,7 @@ export function TelegramUserContextProvider({
     const tg = window?.Telegram?.WebApp;
     if (!tg) {
       // локальная разработка без Telegram
-      setUserId(6);
+      setUserId(10);
       setUsername("DevUser");
       localStorage.setItem("flagFirstJoin", "true");
       const queryString = window.location.search;
