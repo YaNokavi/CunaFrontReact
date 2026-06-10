@@ -17,14 +17,9 @@ export default function StepContent({ stepsData, currentStep, stepContent }) {
 
   useSendProgressText(currentStep, userId, +submoduleId);
 
-  // Запоминаем значение completed на момент входа на шаг.
-  // Если шаг уже был completed=true до монтирования — показываем надпись.
-  // Если completed стал true только что (onMutate) — не показываем.
   const wasCompletedOnMount = useRef(currentStep.completed);
 
   useEffect(() => {
-    // Обновляем после рендера нового шага,
-    // чтобы при следующем входе реф уже отражал актуальное состояние
     wasCompletedOnMount.current = currentStep.completed;
   }, [currentStep.number]);
 

@@ -4,7 +4,7 @@ import {
   useSelectedOptions,
   useTestData,
 } from "./store";
-import { useIView } from "../../../hooks/useIView";
+// import { useIView } from "../../../hooks/useIView";
 import IViewOverlay from "../../../UI/IViewOverlay";
 
 export default function TestInfo({ completed }) {
@@ -12,7 +12,7 @@ export default function TestInfo({ completed }) {
   const selectedOptions = useSelectedOptions();
   const isInputsDisabled = useIsInputsDisabled();
   const { setSelectedOptions, setIsChecked } = useActions();
-  const { ref, iview, closeIView } = useIView<HTMLDivElement>();
+  // const { ref, iview, closeIView } = useIView<HTMLDivElement>();
 
   const { question, answer, options, image } = testData;
   const isMultipleChoice = answer && answer.length > 1;

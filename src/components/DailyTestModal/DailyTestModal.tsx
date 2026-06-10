@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { DailyTestData } from "../../types/dailyTest.types";
 import { dailyTestService } from "../../services/dailyTest.service";
-import { useIView } from "../../hooks/useIView";
+
 import IViewOverlay from "../../UI/IViewOverlay";
 import styles from "./styles.module.scss";
 
@@ -25,11 +25,17 @@ export default function DailyTestModal({
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [result, setResult] = useState<"correct" | "incorrect" | "timeout" | null>(null);
+  const [result, setResult] = useState<
+    "correct" | "incorrect" | "timeout" | null
+  >(null);
   const [isClosable, setIsClosable] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
 
-  const { ref: imgContainerRef, iview, closeIView } = useIView<HTMLDivElement>();
+  // const {
+  //   ref: imgContainerRef,
+  //   iview,
+  //   closeIView,
+  // } = useIView<HTMLDivElement>();
 
   const borderGreenRef = useRef<HTMLDivElement>(null);
   const borderRedRef = useRef<HTMLDivElement>(null);
@@ -42,7 +48,9 @@ export default function DailyTestModal({
   const timerPausedRef = useRef(false);
   const isRedRef = useRef(false);
   const isBlinkingRef = useRef(false);
-  const handleSubmitRef = useRef<(options: string[], isTimeout?: boolean) => void>(() => {});
+  const handleSubmitRef = useRef<
+    (options: string[], isTimeout?: boolean) => void
+  >(() => {});
 
   useEffect(() => {
     let cancelled = false;
@@ -74,7 +82,9 @@ export default function DailyTestModal({
         if (!cancelled) onClose();
       });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [contentUrl]);
 
   useEffect(() => {
@@ -161,7 +171,9 @@ export default function DailyTestModal({
   const handleOptionChange = (option: string, isMultiple: boolean) => {
     if (isMultiple) {
       setSelectedOptions((prev) =>
-        prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option]
+        prev.includes(option)
+          ? prev.filter((o) => o !== option)
+          : [...prev, option],
       );
     } else {
       setSelectedOptions([option]);
@@ -181,7 +193,8 @@ export default function DailyTestModal({
 
     if (!isTimeout) {
       isCorrect = isMultiple
-        ? JSON.stringify([...options].sort()) === JSON.stringify([...testData.answer].sort())
+        ? JSON.stringify([...options].sort()) ===
+          JSON.stringify([...testData.answer].sort())
         : options[0] === testData.answer[0];
     }
 
@@ -215,7 +228,11 @@ export default function DailyTestModal({
 
             {!isLoading && (
               <>
-                <div ref={borderGreenRef} className={styles.borderProgress} style={{ opacity: 1 }} />
+                <div
+                  ref={borderGreenRef}
+                  className={styles.borderProgress}
+                  style={{ opacity: 1 }}
+                />
                 <div
                   ref={borderRedRef}
                   className={`${styles.borderProgressRed} ${isBlinking ? styles.blink : ""}`}
@@ -241,12 +258,24 @@ export default function DailyTestModal({
 
               {isLoading && (
                 <div className={styles.skeleton}>
-                  <div className={`${styles.skeletonBlock} ${styles.skeletonTitle}`} />
-                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-                  <div className={`${styles.skeletonBlock} ${styles.skeletonBtn}`} />
+                  <div
+                    className={`${styles.skeletonBlock} ${styles.skeletonTitle}`}
+                  />
+                  <div
+                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
+                  />
+                  <div
+                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
+                  />
+                  <div
+                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
+                  />
+                  <div
+                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
+                  />
+                  <div
+                    className={`${styles.skeletonBlock} ${styles.skeletonBtn}`}
+                  />
                 </div>
               )}
 
@@ -273,7 +302,10 @@ export default function DailyTestModal({
                   )}
 
                   <p className={styles.hint}>
-                    Выберите {isMultiple ? "один или несколько вариантов" : "один вариант"}
+                    Выберите{" "}
+                    {isMultiple
+                      ? "один или несколько вариантов"
+                      : "один вариант"}
                   </p>
 
                   <div className={styles.options}>
@@ -284,7 +316,9 @@ export default function DailyTestModal({
                           name="daily-question"
                           value={option}
                           checked={selectedOptions.includes(option)}
-                          onChange={() => handleOptionChange(option, isMultiple)}
+                          onChange={() =>
+                            handleOptionChange(option, isMultiple)
+                          }
                           disabled={isSubmitting}
                         />
                         {option}
@@ -315,18 +349,30 @@ export default function DailyTestModal({
                 <div className={styles.result}>
                   {result === "correct" && (
                     <>
-                      <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                      >
                         <path
                           d="M9 0.25C7.26942 0.25 5.57769 0.763179 4.13876 1.72464C2.69983 2.6861 1.57832 4.05267 0.916058 5.65152C0.253791 7.25037 0.0805121 9.00971 0.418133 10.707C0.755753 12.4044 1.58911 13.9635 2.81282 15.1872C4.03653 16.4109 5.59563 17.2443 7.29296 17.5819C8.9903 17.9195 10.7496 17.7462 12.3485 17.0839C13.9473 16.4217 15.3139 15.3002 16.2754 13.8612C17.2368 12.4223 17.75 10.7306 17.75 9C17.75 6.67936 16.8281 4.45376 15.1872 2.81282C13.5462 1.17187 11.3206 0.25 9 0.25ZM7.75 12.4938L4.625 9.36875L5.61875 8.375L7.75 10.5062L12.3813 5.875L13.3788 6.86625L7.75 12.4938Z"
                           fill="#43A047"
                         />
                       </svg>
-                      <span style={{ color: "#43A047", fontWeight: 600 }}>Правильно!</span>
+                      <span style={{ color: "#43A047", fontWeight: 600 }}>
+                        Правильно!
+                      </span>
                     </>
                   )}
                   {(result === "incorrect" || result === "timeout") && (
                     <>
-                      <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                      >
                         <path
                           fillRule="evenodd"
                           clipRule="evenodd"

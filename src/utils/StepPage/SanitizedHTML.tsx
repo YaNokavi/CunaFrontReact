@@ -49,7 +49,9 @@ export default function SanitizedHTML({
   }, [content]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = (e.target as HTMLElement).closest("[data-iview]") as HTMLImageElement | null;
+    const target = (e.target as HTMLElement).closest(
+      "[data-iview]",
+    ) as HTMLImageElement | null;
     if (!target) return;
     if (target.getAttribute("data-iview") !== "enable") return;
     const src = target.src ?? "";
