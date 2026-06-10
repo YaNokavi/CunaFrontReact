@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import type { ReactElement } from "react";
-import { useIView, isLargeImage } from "../../hooks/useIView";
+import { isLargeImage } from "../../hooks/useIView";
 import IViewOverlay from "../../UI/IViewOverlay";
 
 export default function SanitizedHTML({
@@ -10,8 +10,8 @@ export default function SanitizedHTML({
 }: {
   content: string;
 }): ReactElement {
-  const { ref, iview, closeIView } = useIView<HTMLDivElement>();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [iview, setIView] = useState<{ src: string; alt: string } | null>(null);
 
   const cleanHTML = DOMPurify.sanitize(content);
 
@@ -22,20 +22,16 @@ export default function SanitizedHTML({
     const images = container.querySelectorAll<HTMLImageElement>("img");
 
     const applyStyles = (img: HTMLImageElement) => {
-      // Сбрасываем старые атрибуты от предыдущего рендера
       img.removeAttribute("data-iview");
       img.removeAttribute("data-src");
       img.style.cursor = "";
 
       if (isLargeImage(img)) {
-        // Крупное — открывается в просмотрщике
-        img.setAttribute("data-iview", "");
-        img.setAttribute("data-src", img.src);
+        img.setAttribute("data-iview", "enable");
         img.style.cursor = "zoom-in";
         img.style.alignSelf = "center";
         img.style.marginTop = "1em";
       } else {
-        // Стикер / инлайн-иконка — явно запрещаем iview
         img.setAttribute("data-iview", "disable");
         img.style.verticalAlign = "middle";
         img.style.margin = "0 5px";
@@ -52,18 +48,30 @@ export default function SanitizedHTML({
     });
   }, [content]);
 
-  const setRefs = (node: HTMLDivElement | null) => {
-    (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-    (ref as (n: HTMLDivElement | null) => void)(node);
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = (e.target as HTMLElement).closest("[data-iview]") as HTMLImageElement | null;
+    if (!target) return;
+    if (target.getAttribute("data-iview") !== "enable") return;
+    const src = target.src ?? "";
+    const alt = target.alt ?? "";
+    if (src) setIView({ src, alt });
   };
 
   return (
     <>
-      <div ref={setRefs} className="step-block-content-media">
+      <div
+        ref={containerRef}
+        className="step-block-content-media"
+        onClick={handleClick}
+      >
         {parse(cleanHTML)}
       </div>
       {iview && (
-        <IViewOverlay src={iview.src} alt={iview.alt} onClose={closeIView} />
+        <IViewOverlay
+          src={iview.src}
+          alt={iview.alt}
+          onClose={() => setIView(null)}
+        />
       )}
     </>
   );
