@@ -25,14 +25,25 @@ export default function DailyTestModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<"correct" | "incorrect" | "timeout" | null>(null);
   const [isClosable, setIsClosable] = useState(false);
-  const [progress, setProgress] = useState(0);
+
+  // Редко обновляемые через state — только для смены классов
+  const [isRed, setIsRed] = useState(false);
+  const [isBlinking, setIsBlinking] = useState(false);
   const [timeLeftSec, setTimeLeftSec] = useState(Math.ceil(TIMER_DURATION / 1000));
+
+  // DOM refs для прямой мутации без React
+  const borderGreenRef = useRef<HTMLDivElement>(null);
+  const borderRedRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<HTMLSpanElement>(null);
 
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const elapsedRef = useRef<number>(0);
   const hasTimedOut = useRef(false);
   const timerPausedRef = useRef(false);
+  const isRedRef = useRef(false);
+  const isBlinkingRef = useRef(false);
+  const handleSubmitRef = useRef<(options: string[], isTimeout?: boolean) => void>(() => {});
 
   // Загрузка теста
   useEffect(() => {
@@ -68,7 +79,7 @@ export default function DailyTestModal({
     return () => { cancelled = true; };
   }, [contentUrl]);
 
-  // Таймер через RAF
+  // Таймер через RAF — DOM мутация напрямую
   useEffect(() => {
     if (isLoading || result !== null) return;
 
@@ -82,15 +93,53 @@ export default function DailyTestModal({
       elapsedRef.current = now - startTimeRef.current;
       const left = Math.max(0, TIMER_DURATION - elapsedRef.current);
       const prog = Math.min(elapsedRef.current / TIMER_DURATION, 1);
+      const deg = prog * 360;
 
-      setProgress(prog);
-      setTimeLeftSec(Math.ceil(left / 1000));
+      // Прямая мутация DOM — без React re-render
+      if (borderGreenRef.current) {
+        if (!isRedRef.current) {
+          borderGreenRef.current.style.background = `conic-gradient(
+            from 0deg,
+            #4caf50 0deg,
+            #4caf50 ${deg}deg,
+            var(--theme-block-border-color) ${deg}deg,
+            var(--theme-block-border-color) 360deg
+          )`;
+        } else {
+          borderGreenRef.current.style.background = "none";
+        }
+      }
+
+      if (borderRedRef.current && isRedRef.current) {
+        borderRedRef.current.style.background = `conic-gradient(
+          from 0deg,
+          #f44336 0deg,
+          #f44336 ${deg}deg,
+          transparent ${deg}deg,
+          transparent 360deg
+        )`;
+      }
+
+      if (timerRef.current) {
+        timerRef.current.textContent = `${Math.max(0, Math.ceil(left / 1000))}с`;
+      }
+
+      // Редкие смены классов через state
+      if (prog > 0.6 && !isRedRef.current) {
+        isRedRef.current = true;
+        setIsRed(true);
+        if (borderRedRef.current) borderRedRef.current.style.opacity = "1";
+      }
+      if (prog > 0.8 && !isBlinkingRef.current) {
+        isBlinkingRef.current = true;
+        setIsBlinking(true);
+      }
 
       if (prog < 1) {
         rafRef.current = requestAnimationFrame(loop);
       } else if (!hasTimedOut.current) {
         hasTimedOut.current = true;
-        handleSubmit([], true);
+        handleSubmitRef.current([], true);
       }
     };
 
@@ -138,38 +187,11 @@ export default function DailyTestModal({
     }, 2500);
   };
 
+  // Храним handleSubmit в ref, чтобы RAF-луп не замыкал старый кложур
+  handleSubmitRef.current = handleSubmit;
+
   const isMultiple = testData ? testData.answer.length > 1 : false;
   const canSubmit = selectedOptions.length > 0 && !isSubmitting;
-  const isRed = progress > 0.6;
-  const isBlinking = progress > 0.8;
-  const progressDeg = progress * 360;
-
-  const borderStyle = isLoading
-    ? {}
-    : {
-        background: isRed
-          ? `conic-gradient(from 0deg, transparent 0deg, transparent 360deg)`
-          : `conic-gradient(
-              from 0deg,
-              #4caf50 0deg,
-              #4caf50 ${progressDeg}deg,
-              var(--theme-block-border-color) ${progressDeg}deg,
-              var(--theme-block-border-color) 360deg
-            )`,
-      };
-
-  const redBorderStyle = isRed
-    ? {
-        opacity: 1,
-        background: `conic-gradient(
-          from 0deg,
-          #f44336 0deg,
-          #f44336 ${progressDeg}deg,
-          transparent ${progressDeg}deg,
-          transparent 360deg
-        )`,
-      }
-    : { opacity: 0 };
 
   const modalRoot = document.getElementById("modal-root");
   if (!modalRoot) return null;
@@ -180,16 +202,14 @@ export default function DailyTestModal({
       onClick={isClosable ? onClose : undefined}
     >
       <div className={styles.modalBorder}>
-        {/* Цветная conic-gradient рамка */}
+        {/* Цветная conic-gradient рамка — мутируется напрямую через ref */}
         {!isLoading && (
           <>
+            <div ref={borderGreenRef} className={styles.borderProgress} />
             <div
-              className={styles.borderProgress}
-              style={borderStyle}
-            />
-            <div
+              ref={borderRedRef}
               className={`${styles.borderProgressRed} ${isBlinking ? styles.blink : ""}`}
-              style={redBorderStyle}
+              style={{ opacity: 0 }}
             />
           </>
         )}
@@ -203,9 +223,10 @@ export default function DailyTestModal({
             <div />
             <span className={styles.title}>Ежедневный тест!</span>
             <span
+              ref={timerRef}
               className={`${styles.timer} ${isBlinking ? styles.timerRed : ""}`}
             >
-              {!isLoading ? `${Math.max(0, timeLeftSec)}с` : ""}
+              {!isLoading ? `${Math.ceil(TIMER_DURATION / 1000)}с` : ""}
             </span>
           </div>
 
