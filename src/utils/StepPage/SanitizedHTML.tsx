@@ -15,9 +15,6 @@ export default function SanitizedHTML({
 
   const cleanHTML = DOMPurify.sanitize(content);
 
-  // После рендера: проходимся по всем img и применяем логику из step.js:
-  // большие → data-iview + cursor:zoom-in
-  // маленькие → verticalAlign:middle (стикеры)
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -25,30 +22,36 @@ export default function SanitizedHTML({
     const images = container.querySelectorAll<HTMLImageElement>("img");
 
     const applyStyles = (img: HTMLImageElement) => {
+      // Сбрасываем старые атрибуты от предыдущего рендера
+      img.removeAttribute("data-iview");
+      img.removeAttribute("data-src");
+      img.style.cursor = "";
+
       if (isLargeImage(img)) {
+        // Крупное — открывается в просмотрщике
         img.setAttribute("data-iview", "");
         img.setAttribute("data-src", img.src);
         img.style.cursor = "zoom-in";
         img.style.alignSelf = "center";
         img.style.marginTop = "1em";
       } else {
-        // Стикер / инлайн-иконка
+        // Стикер / инлайн-иконка — явно запрещаем iview
+        img.setAttribute("data-iview", "disable");
         img.style.verticalAlign = "middle";
         img.style.margin = "0 5px";
       }
     };
 
     images.forEach((img) => {
-      if (img.complete) {
+      if (img.complete && img.naturalWidth > 0) {
         applyStyles(img);
       } else {
         img.onload = () => applyStyles(img);
-        img.onerror = () => {};
+        img.onerror = () => img.setAttribute("data-iview", "disable");
       }
     });
   }, [content]);
 
-  // Объединяем ref-ам
   const setRefs = (node: HTMLDivElement | null) => {
     (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
     (ref as (n: HTMLDivElement | null) => void)(node);
