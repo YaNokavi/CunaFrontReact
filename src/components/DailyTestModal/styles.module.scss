@@ -10,7 +10,6 @@
   box-sizing: border-box;
 }
 
-/* Обёртка с conic-gradient рамкой */
 .modalBorder {
   position: relative;
   padding: 4px;
@@ -19,13 +18,12 @@
   width: 100%;
 }
 
-/* Зелёная часть рамки */
-.borderProgress {
+// Общие стили для всех трёх слоёв рамки
+%ring-layer {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  // transition убран — обновляется напрямую через RAF без задержки
 
   -webkit-mask: radial-gradient(
     farthest-side,
@@ -39,39 +37,37 @@
   );
 }
 
-/* Красная часть рамки */
-.borderProgressRed {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  // Быстрый fade-in при появлении, чтобы не было резкого скачка
-  transition: opacity 0.15s linear;
+// Постоянный серый трек — никогда не скрывается
+.borderTrack {
+  @extend %ring-layer;
+  background: conic-gradient(
+    from 0deg,
+    var(--theme-block-border-color) 0deg,
+    var(--theme-block-border-color) 360deg
+  );
+}
 
-  -webkit-mask: radial-gradient(
-    farthest-side,
-    transparent calc(100% - 60px),
-    #000 calc(100% - 40px)
-  );
-  mask: radial-gradient(
-    farthest-side,
-    transparent calc(100% - 60px),
-    #000 calc(100% - 40px)
-  );
+// Зелёная дуга — только цветной сегмент, всё остальное transparent
+.borderProgress {
+  @extend %ring-layer;
+}
+
+// Красная дуга — только цветной сегмент, всё остальное transparent
+.borderProgressRed {
+  @extend %ring-layer;
+  transition: opacity 0.15s linear;
 
   &.blink {
     animation: borderBlink 0.6s linear infinite;
   }
 }
 
-/* Сама модалка */
 .modalContent {
   position: relative;
   z-index: 2;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  // align-items: stretch — чтобы дочерние элементы с width:100% растягивались корректно
   align-items: stretch;
 
   background-color: var(--theme-bg-color);
@@ -92,7 +88,6 @@
   -webkit-touch-callout: none;
 }
 
-/* Шапка: сетка 1fr auto 1fr */
 .header {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -122,22 +117,22 @@
   animation: blink 0.6s ease-in-out infinite alternate;
 }
 
-// Скелетон
 .skeleton {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  // align-self: stretch гарантирует что скелетон занимает всю ширину
   align-self: stretch;
+  min-height: 220px;
 }
 
 .skeletonBlock {
+  // rgba — адаптивный контраст независимо от темы
   background: linear-gradient(
     90deg,
-    var(--theme-bg-step-color) 25%,
-    var(--theme-section-header-background) 50%,
-    var(--theme-bg-step-color) 75%
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.06) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
@@ -161,7 +156,6 @@
   margin-top: 8px;
 }
 
-// Контент теста
 .testContent {
   display: flex;
   flex-direction: column;
@@ -218,7 +212,6 @@
   margin-top: 8px;
 }
 
-// Результат
 .result {
   display: flex;
   align-items: center;

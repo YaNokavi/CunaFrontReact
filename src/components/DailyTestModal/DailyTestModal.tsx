@@ -25,11 +25,8 @@ export default function DailyTestModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<"correct" | "incorrect" | "timeout" | null>(null);
   const [isClosable, setIsClosable] = useState(false);
-
-  // Только для смены CSS-классов (2 события за весь тест)
   const [isBlinking, setIsBlinking] = useState(false);
 
-  // DOM refs для прямой мутации без React
   const borderGreenRef = useRef<HTMLDivElement>(null);
   const borderRedRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<HTMLSpanElement>(null);
@@ -43,7 +40,6 @@ export default function DailyTestModal({
   const isBlinkingRef = useRef(false);
   const handleSubmitRef = useRef<(options: string[], isTimeout?: boolean) => void>(() => {});
 
-  // Загрузка теста
   useEffect(() => {
     let cancelled = false;
     setIsLoading(true);
@@ -77,7 +73,6 @@ export default function DailyTestModal({
     return () => { cancelled = true; };
   }, [contentUrl]);
 
-  // Таймер через RAF — DOM мутация напрямую
   useEffect(() => {
     if (isLoading || result !== null) return;
 
@@ -97,18 +92,18 @@ export default function DailyTestModal({
       const red = borderRedRef.current;
 
       if (!isRedRef.current) {
-        // Зелёная фаза: обновляем зелёную дугу
+        // Зелёная дуга: только цветной сегмент, остальное transparent
         if (green) {
           green.style.background = `conic-gradient(
             from 0deg,
             #4caf50 0deg,
             #4caf50 ${deg}deg,
-            var(--theme-block-border-color) ${deg}deg,
-            var(--theme-block-border-color) 360deg
+            transparent ${deg}deg,
+            transparent 360deg
           )`;
         }
       } else {
-        // Красная фаза: обновляем красную дугу, зелёную скрываем синхронно
+        // Красная дуга: только цветной сегмент, остальное transparent
         if (red) {
           red.style.background = `conic-gradient(
             from 0deg,
@@ -124,10 +119,9 @@ export default function DailyTestModal({
         timerRef.current.textContent = `${Math.max(0, Math.ceil(left / 1000))}с`;
       }
 
-      // Переход зелёный → красный: синхронно в одном RAF-кадре
+      // Переход зелёный → красный: синхронно
       if (prog > 0.6 && !isRedRef.current) {
         isRedRef.current = true;
-        // Скрываем зелёную и показываем красную в одном кадре
         if (green) green.style.opacity = "0";
         if (red) {
           red.style.background = `conic-gradient(
@@ -137,7 +131,6 @@ export default function DailyTestModal({
             transparent ${deg}deg,
             transparent 360deg
           )`;
-          // Небольшой fade-in через CSS transition (уже установлен в SCSS)
           requestAnimationFrame(() => {
             if (red) red.style.opacity = "1";
           });
@@ -215,6 +208,10 @@ export default function DailyTestModal({
       onClick={isClosable ? onClose : undefined}
     >
       <div className={styles.modalBorder}>
+        {/* Постоянный серый трек — всегда виден, не скрывается */}
+        <div className={styles.borderTrack} />
+
+        {/* Цветные дуги — только после загрузки */}
         {!isLoading && (
           <>
             <div ref={borderGreenRef} className={styles.borderProgress} style={{ opacity: 1 }} />
@@ -230,7 +227,6 @@ export default function DailyTestModal({
           className={styles.modalContent}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Шапка: сетка 1fr auto 1fr */}
           <div className={styles.header}>
             <div />
             <span className={styles.title}>Ежедневный тест!</span>
@@ -242,7 +238,6 @@ export default function DailyTestModal({
             </span>
           </div>
 
-          {/* Скелетон */}
           {isLoading && (
             <div className={styles.skeleton}>
               <div className={`${styles.skeletonBlock} ${styles.skeletonTitle}`} />
@@ -254,7 +249,6 @@ export default function DailyTestModal({
             </div>
           )}
 
-          {/* Контент теста */}
           {!isLoading && testData && result === null && (
             <div className={styles.testContent}>
               <h2 className={styles.question}>{testData.question}</h2>
@@ -313,7 +307,6 @@ export default function DailyTestModal({
             </div>
           )}
 
-          {/* Результат */}
           {result !== null && (
             <div className={styles.result}>
               {result === "correct" && (
