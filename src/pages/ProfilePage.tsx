@@ -5,7 +5,7 @@ import SupportBlock from "../components/ProfilePage/SupportBlock/SupportBlock";
 import UserInfoBlock from "../components/ProfilePage/UserInfoBlock/UserInfoBlock";
 import useProfileData from "../hooks/queries/ProfilePage/useProfileData";
 
-export default function ProfilePage() {
+export default function ProfilePage(): any {
   const { userId } = useTelegramUser();
 
   const { userData, userLoading, tasksLoading, error } = useProfileData(userId);
