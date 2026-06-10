@@ -14,7 +14,6 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
   const [visible, setVisible] = useState(false);
 
   const dragRef = useRef<{ startX: number; startY: number; ox: number; oy: number } | null>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
 
   // Fade-in
   useEffect(() => {
@@ -22,25 +21,20 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  const close = () => {
-    setVisible(false);
-    setTimeout(onClose, 180);
-  };
+  // Закрытие без задержки — fade-out убран
+  const close = () => onClose();
 
-  // Закрытие по Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // Zoom колесом мыши
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     setScale((s) => Math.min(10, Math.max(1, s - e.deltaY * 0.001)));
   };
 
-  // Drag
   const handlePointerDown = (e: React.PointerEvent) => {
     if (scale <= 1) return;
     (e.target as Element).setPointerCapture(e.pointerId);
@@ -55,7 +49,6 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
   };
   const handlePointerUp = () => { dragRef.current = null; };
 
-  // Двойной тап — сброс масштаба
   const handleDoubleClick = () => {
     setScale(1);
     setOffset({ x: 0, y: 0 });
@@ -66,7 +59,6 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
 
   return createPortal(
     <div
-      ref={overlayRef}
       className={`${styles.overlay} ${visible ? styles.visible : ""}`}
       onClick={close}
     >

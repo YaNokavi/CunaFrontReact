@@ -30,12 +30,7 @@ export default function DailyTestModal({
   >(null);
   const [isClosable, setIsClosable] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
-
-  // const {
-  //   ref: imgContainerRef,
-  //   iview,
-  //   closeIView,
-  // } = useIView<HTMLDivElement>();
+  const [iview, setIView] = useState<{ src: string; alt: string } | null>(null);
 
   const borderGreenRef = useRef<HTMLDivElement>(null);
   const borderRedRef = useRef<HTMLDivElement>(null);
@@ -258,24 +253,12 @@ export default function DailyTestModal({
 
               {isLoading && (
                 <div className={styles.skeleton}>
-                  <div
-                    className={`${styles.skeletonBlock} ${styles.skeletonTitle}`}
-                  />
-                  <div
-                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
-                  />
-                  <div
-                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
-                  />
-                  <div
-                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
-                  />
-                  <div
-                    className={`${styles.skeletonBlock} ${styles.skeletonOption}`}
-                  />
-                  <div
-                    className={`${styles.skeletonBlock} ${styles.skeletonBtn}`}
-                  />
+                  <div className={`${styles.skeletonBlock} ${styles.skeletonTitle}`} />
+                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+                  <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+                  <div className={`${styles.skeletonBlock} ${styles.skeletonBtn}`} />
                 </div>
               )}
 
@@ -284,12 +267,10 @@ export default function DailyTestModal({
                   <h2 className={styles.question}>{testData.question}</h2>
 
                   {testData.image?.url && (
-                    <div ref={imgContainerRef} className={styles.imageWrapper}>
+                    <div className={styles.imageWrapper}>
                       <img
                         src={testData.image.url}
                         alt="Иллюстрация к вопросу"
-                        data-iview
-                        data-src={testData.image.url}
                         style={{
                           maxHeight: testData.image.height,
                           maxWidth: "100%",
@@ -297,6 +278,12 @@ export default function DailyTestModal({
                           cursor: "zoom-in",
                         }}
                         draggable={false}
+                        onClick={() =>
+                          setIView({
+                            src: testData.image!.url,
+                            alt: "Иллюстрация к вопросу",
+                          })
+                        }
                       />
                     </div>
                   )}
@@ -349,30 +336,18 @@ export default function DailyTestModal({
                 <div className={styles.result}>
                   {result === "correct" && (
                     <>
-                      <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 18 18"
-                        fill="none"
-                      >
+                      <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
                         <path
                           d="M9 0.25C7.26942 0.25 5.57769 0.763179 4.13876 1.72464C2.69983 2.6861 1.57832 4.05267 0.916058 5.65152C0.253791 7.25037 0.0805121 9.00971 0.418133 10.707C0.755753 12.4044 1.58911 13.9635 2.81282 15.1872C4.03653 16.4109 5.59563 17.2443 7.29296 17.5819C8.9903 17.9195 10.7496 17.7462 12.3485 17.0839C13.9473 16.4217 15.3139 15.3002 16.2754 13.8612C17.2368 12.4223 17.75 10.7306 17.75 9C17.75 6.67936 16.8281 4.45376 15.1872 2.81282C13.5462 1.17187 11.3206 0.25 9 0.25ZM7.75 12.4938L4.625 9.36875L5.61875 8.375L7.75 10.5062L12.3813 5.875L13.3788 6.86625L7.75 12.4938Z"
                           fill="#43A047"
                         />
                       </svg>
-                      <span style={{ color: "#43A047", fontWeight: 600 }}>
-                        Правильно!
-                      </span>
+                      <span style={{ color: "#43A047", fontWeight: 600 }}>Правильно!</span>
                     </>
                   )}
                   {(result === "incorrect" || result === "timeout") && (
                     <>
-                      <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 18 18"
-                        fill="none"
-                      >
+                      <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
                         <path
                           fillRule="evenodd"
                           clipRule="evenodd"
@@ -394,7 +369,7 @@ export default function DailyTestModal({
       )}
 
       {iview && (
-        <IViewOverlay src={iview.src} alt={iview.alt} onClose={closeIView} />
+        <IViewOverlay src={iview.src} alt={iview.alt} onClose={() => setIView(null)} />
       )}
     </>
   );
