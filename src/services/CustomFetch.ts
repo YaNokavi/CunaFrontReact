@@ -37,16 +37,21 @@ async function fetchData(
       return expectResponse ? await response.json() : response.status;
     } catch (error: unknown) {
       if (error instanceof HttpError) {
+        // 4xx — не ретраим, бросаем сразу
+        if (error.status >= 400 && error.status < 500) {
+          throw error;
+        }
+        // 5xx — ретраим, на последней попытке бросаем
         if (attempt === maxAttempts) {
           throw error;
         }
-
-        if (error.status >= 400 && error.status < 500) {
-          console.error("Ошибка при выполнении запроса:", error.status);
+        await new Promise((res) => setTimeout(res, 500 * attempt));
+      } else {
+        // Сетевая ошибка (нет интернета, таймаут и т.д.)
+        if (attempt === maxAttempts) {
           throw error;
-        } else {
-          await new Promise((res) => setTimeout(res, 500 * attempt));
         }
+        await new Promise((res) => setTimeout(res, 500 * attempt));
       }
     }
   }

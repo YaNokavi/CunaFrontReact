@@ -19,40 +19,30 @@ class FavoriteService {
   ): Promise<LoginAndDailyTestResponse | undefined> {
     const body = {
       username,
-      avatarUrl,
+      avatarUrl: avatarUrl || null,
       referrerId,
     };
 
-    try {
-      const response = await fetchData(
-        this.#URLLoginAndDailyTest,
-        "POST",
-        {
-          "X-User-Id": userId,
-          "X-User-Ip": "111",
-          "X-User-Device-Id": "111",
-        },
-        body,
-      );
+    const response = await fetchData(
+      this.#URLLoginAndDailyTest,
+      "POST",
+      {
+        "X-User-Id": userId,
+        "X-User-Ip": "111",
+        "X-User-Device-Id": "111",
+      },
+      body,
+    );
 
-      return response as LoginAndDailyTestResponse;
-    } catch (error) {
-      console.error("Не удалось получить информацию о пользователе", error);
-      alert("Не удалось получить информацию о пользователе, попробуйте позже");
-    }
+    return response as LoginAndDailyTestResponse;
   }
 
   async getAllCourses(userId: number) {
-    try {
-      const coursesData = await fetchData(this.#URLAllCourses, "GET", {
-        "X-User-Id": userId,
-      });
+    const coursesData = await fetchData(this.#URLAllCourses, "GET", {
+      "X-User-Id": userId,
+    });
 
-      return coursesData;
-    } catch (error) {
-      console.error("Не удалось получить информацию о курсах", error);
-      alert("Не удалось получить информацию о курсах, попробуйте позже");
-    }
+    return coursesData;
   }
 }
 
