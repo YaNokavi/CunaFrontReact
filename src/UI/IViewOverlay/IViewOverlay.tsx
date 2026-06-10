@@ -13,6 +13,8 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [visible, setVisible] = useState(false);
 
+  const imgRef = useRef<HTMLImageElement>(null);
+  const scaleRef = useRef(1);
   const dragRef = useRef<{ startX: number; startY: number; ox: number; oy: number } | null>(null);
 
   // Fade-in
@@ -21,22 +23,34 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  // Закрытие без задержки — fade-out убран
   const close = () => onClose();
 
+  // Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    setScale((s) => Math.min(10, Math.max(1, s - e.deltaY * 0.001)));
-  };
+  // Wheel — нативный листенер с passive:false, чтобы preventDefault работал в Chrome
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img) return;
 
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const next = Math.min(10, Math.max(1, scaleRef.current - e.deltaY * 0.001));
+      scaleRef.current = next;
+      setScale(next);
+    };
+
+    img.addEventListener("wheel", handler, { passive: false });
+    return () => img.removeEventListener("wheel", handler);
+  }, []);
+
+  // Drag
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (scale <= 1) return;
+    if (scaleRef.current <= 1) return;
     (e.target as Element).setPointerCapture(e.pointerId);
     dragRef.current = { startX: e.clientX, startY: e.clientY, ox: offset.x, oy: offset.y };
   };
@@ -49,7 +63,9 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
   };
   const handlePointerUp = () => { dragRef.current = null; };
 
+  // Двойной тап — сброс
   const handleDoubleClick = () => {
+    scaleRef.current = 1;
     setScale(1);
     setOffset({ x: 0, y: 0 });
   };
@@ -69,6 +85,7 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
       </button>
 
       <img
+        ref={imgRef}
         className={styles.image}
         src={src}
         alt={alt ?? ""}
@@ -78,7 +95,6 @@ export default function IViewOverlay({ src, alt, onClose }: Props) {
           cursor: scale > 1 ? "grab" : "zoom-in",
         }}
         onClick={(e) => e.stopPropagation()}
-        onWheel={handleWheel}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
