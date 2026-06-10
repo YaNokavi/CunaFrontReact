@@ -1489,9 +1489,10 @@ button.button-expand-description {
 .step-block-content {
   position: relative;
   flex-direction: column;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  /* overflow-x hidden предотвращает горизонтальный скролл от широких изображений,
+     overflow-y visible позволяет кнопкам оставаться в потоке документа */
+  overflow-x: hidden;
+  overflow-y: visible;
   gap: 0;
 }
 
@@ -1512,6 +1513,12 @@ button.button-expand-description {
   -moz-user-select: auto;
   -ms-user-select: auto;
   user-select: auto;
+}
+
+/* Изображения в контенте шага не выходят за ширину контейнера */
+.step-block-content-media img {
+  max-width: 100%;
+  height: auto;
 }
 
 .step-complete {
@@ -1556,6 +1563,8 @@ button.button-expand-description {
 
 #button-next-step {
   align-self: flex-end;
+  margin-top: 16px;
+  margin-bottom: 8px;
 }
 
 #retry-button {

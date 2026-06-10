@@ -1,7 +1,14 @@
 import { Link, matchPath, useLocation, useParams } from "react-router-dom";
 import { IconActive } from "./IconActive";
+import type { RefObject } from "react";
 
-export default function NavigationStepBar({ stepsData, navStepBlockView }) {
+interface Props {
+  stepsData: any;
+  navOpen: boolean;
+  navRef: RefObject<HTMLDivElement>;
+}
+
+export default function NavigationStepBar({ stepsData, navOpen, navRef }: Props) {
   const paths = ["/favorite", "/catalog"];
   const { pathname } = useLocation();
 
@@ -11,18 +18,19 @@ export default function NavigationStepBar({ stepsData, navStepBlockView }) {
     return matchPath({ path, end: false }, pathname);
   });
 
-  const getNavigationStepClass = (completed, number) => {
+  const getNavigationStepClass = (completed: boolean, number: number) => {
     let stepClass = "";
     if (completed) stepClass = "complete";
     if (number === +stepNumber) {
       stepClass += " active";
     }
-
-    return stepClass;
+    return stepClass.trim();
   };
 
+  const navClass = navOpen ? "move-right" : "disable";
+
   return (
-    <div className={`navigation-block ${navStepBlockView}`}>
+    <div ref={navRef} className={`navigation-block ${navClass}`}>
       <ul className="navigation-list">
         {stepsData.steps.map((step) => (
           <li key={step.id}>

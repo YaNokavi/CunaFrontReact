@@ -3,6 +3,8 @@
   inset: 0;
   z-index: 2000;
   background: rgba(0, 0, 0, 0);
+  transition: background 0.2s ease;
+  touch-action: none;
 
   &.visible {
     background: rgba(0, 0, 0, 0.82);
@@ -19,6 +21,7 @@
   border-radius: 8px;
   user-select: none;
   touch-action: none;
+  -webkit-user-drag: none;
 }
 
 .closer {

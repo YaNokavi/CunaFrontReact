@@ -1,21 +1,23 @@
 import { useParams } from "react-router-dom";
 import CatalogIcon from "@/assets/navigationIcons/catalog.svg?react";
+import type { RefObject } from "react";
 
-export default function StepsNumber({ stepsLength, setNavStepBlockView }) {
+interface Props {
+  stepsLength: number;
+  toggleRef: RefObject<HTMLButtonElement>;
+  navOpen: boolean;
+  setNavOpen: (open: boolean) => void;
+}
+
+export default function StepsNumber({ stepsLength, toggleRef, navOpen, setNavOpen }: Props) {
   const { stepNumber } = useParams();
-
-  const toggleNavClass = () => {
-    setNavStepBlockView((prev) =>
-      prev === "disable" ? "move-right" : "disable",
-    );
-  };
 
   return (
     <div className="steps-number">
-      {/* TODO сделать закрытие по нажатию вне блоков */}
       <button
+        ref={toggleRef}
         className="button-navigation-block activate-menu"
-        onClick={() => toggleNavClass()}
+        onClick={() => setNavOpen(!navOpen)}
       >
         <CatalogIcon
           style={{

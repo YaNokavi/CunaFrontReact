@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import NavigationStepBar from "./NavigationStepBar";
 import useStepButtonLink from "@/hooks/useStepButtonLink";
@@ -6,7 +6,10 @@ import StepsNumber from "./StepsNumber";
 import { IconArrow } from "./IconArrow";
 
 export default function StepSwitching({ stepsData }) {
-  const [navStepBlockView, setNavStepBlockView] = useState("disable");
+  const [navOpen, setNavOpen] = useState(false);
+
+  const navRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   const { backLink, nextLink } = useStepButtonLink(
     stepsData.steps.length,
@@ -14,11 +17,32 @@ export default function StepSwitching({ stepsData }) {
     stepsData.previousSubmoduleId,
   );
 
+  // Закрытие по клику вне панели навигации
+  useEffect(() => {
+    if (!navOpen) return;
+
+    const handlePointerDown = (e: MouseEvent | PointerEvent) => {
+      const target = e.target as Node;
+      if (
+        navRef.current &&
+        !navRef.current.contains(target) &&
+        toggleRef.current &&
+        !toggleRef.current.contains(target)
+      ) {
+        setNavOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [navOpen]);
+
   return (
     <>
       <NavigationStepBar
         stepsData={stepsData}
-        navStepBlockView={navStepBlockView}
+        navOpen={navOpen}
+        navRef={navRef}
       />
 
       <div className="block step-block-switching" id="switc">
@@ -34,7 +58,9 @@ export default function StepSwitching({ stepsData }) {
 
         <StepsNumber
           stepsLength={stepsData.steps.length}
-          setNavStepBlockView={setNavStepBlockView}
+          toggleRef={toggleRef}
+          navOpen={navOpen}
+          setNavOpen={setNavOpen}
         />
 
         <Link to={nextLink} className="button-navigation-block">
