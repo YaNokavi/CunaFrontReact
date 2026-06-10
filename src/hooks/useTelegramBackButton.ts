@@ -32,41 +32,9 @@ function getBackPath(pathname: string): string | null {
   return null;
 }
 
-// Полностью сбрасываем стек истории браузера и переходим на целевой путь
-function navigateClearHistory(
-  targetPath: string,
-  navigate: ReturnType<typeof useNavigate>,
-) {
-  const steps = window.history.length - 1;
-  if (steps <= 0) {
-    navigate(targetPath, { replace: true });
-    return;
-  }
-
-  // Сохраняем цель в sessionStorage
-  sessionStorage.setItem("__nav_target", targetPath);
-
-  // Идём назад на количество steps записей — это асинхронная операция,
-  // поэтому переход делаем в обработчике popstate
-  window.history.go(-steps);
-}
-
 export function useTelegramBackButton() {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Обрабатываем popstate: после того как history.go отработало — делаем replace
-  useEffect(() => {
-    const onPopState = () => {
-      const target = sessionStorage.getItem("__nav_target");
-      if (!target) return;
-      sessionStorage.removeItem("__nav_target");
-      navigate(target, { replace: true });
-    };
-
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, [navigate]);
 
   useEffect(() => {
     if (!isTelegram || !tg) return;
@@ -82,7 +50,7 @@ export function useTelegramBackButton() {
       hapticMedium();
       const backPath = getBackPath(location.pathname);
       if (backPath) {
-        navigateClearHistory(backPath, navigate);
+        navigate(backPath, { replace: true });
       } else {
         navigate(-1);
       }

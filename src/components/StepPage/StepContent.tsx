@@ -17,8 +17,6 @@ export default function StepContent({ stepsData, currentStep, stepContent }) {
 
   useSendProgressText(currentStep, userId, +submoduleId);
 
-  // useRef инициализируется безопасно — currentStep гарантированно не undefined,
-  // так как StepPage рендерит StepContent только когда currentStep найден
   const wasCompletedOnMount = useRef<boolean>(currentStep?.completed ?? false);
 
   useEffect(() => {
@@ -43,7 +41,7 @@ export default function StepContent({ stepsData, currentStep, stepContent }) {
         />
       )}
 
-      <Link to={nextLink} className="step-block-button" id="button-next-step">
+      <Link to={nextLink} replace className="step-block-button" id="button-next-step">
         Дальше
       </Link>
     </div>

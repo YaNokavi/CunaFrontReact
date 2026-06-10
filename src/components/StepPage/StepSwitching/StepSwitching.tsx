@@ -17,7 +17,6 @@ export default function StepSwitching({ stepsData }) {
     stepsData.previousSubmoduleId,
   );
 
-  // Закрытие по клику вне панели навигации
   useEffect(() => {
     if (!navOpen) return;
 
@@ -47,7 +46,7 @@ export default function StepSwitching({ stepsData }) {
 
       <div className="block step-block-switching" id="switc">
         {backLink ? (
-          <Link to={backLink} className="button-navigation-block">
+          <Link to={backLink} replace className="button-navigation-block">
             <IconArrow />
           </Link>
         ) : (
@@ -63,7 +62,7 @@ export default function StepSwitching({ stepsData }) {
           setNavOpen={setNavOpen}
         />
 
-        <Link to={nextLink} className="button-navigation-block">
+        <Link to={nextLink} replace className="button-navigation-block">
           <IconArrow isRotate={true} />
         </Link>
       </div>

@@ -20,34 +20,9 @@ function getBackPath(pathname: string): string | null {
   return null;
 }
 
-function navigateClearHistory(
-  targetPath: string,
-  navigate: ReturnType<typeof useNavigate>,
-) {
-  const steps = window.history.length - 1;
-  if (steps <= 0) {
-    navigate(targetPath, { replace: true });
-    return;
-  }
-  sessionStorage.setItem("__nav_target", targetPath);
-  window.history.go(-steps);
-}
-
 export function useTelegramSwipeBack() {
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    const onPopState = () => {
-      const target = sessionStorage.getItem("__nav_target");
-      if (!target) return;
-      sessionStorage.removeItem("__nav_target");
-      navigate(target, { replace: true });
-    };
-
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, [navigate]);
 
   useEffect(() => {
     if (!isMobile) return;
@@ -67,7 +42,7 @@ export function useTelegramSwipeBack() {
         triggered = true;
         const backPath = getBackPath(location.pathname);
         if (backPath) {
-          navigateClearHistory(backPath, navigate);
+          navigate(backPath, { replace: true });
         } else {
           navigate(-1);
         }
