@@ -1,0 +1,50 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.visible {
+    background: rgba(0, 0, 0, 0.82);
+  }
+}
+
+.image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 92vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 8px;
+  user-select: none;
+  touch-action: none;
+  will-change: transform;
+  transition: transform 0.08s linear;
+}
+
+.closer {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  z-index: 1;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+}
