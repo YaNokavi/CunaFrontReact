@@ -10,7 +10,7 @@ export default function IconToggle({ isOpen }: Props) {
       viewBox="0 0 17 11"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`"toggle-icon ${isOpen ? "rotated" : ""}`}
+      className={`toggle-icon ${isOpen ? "rotated" : ""}`}
     >
       <path
         fillRule="evenodd"
