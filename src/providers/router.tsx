@@ -24,7 +24,7 @@ export const router = createBrowserRouter(
       <Route path="favorite/:courseId/syllabus" element={<SyllabusPage />} />
       <Route
         path="favorite/:courseId/syllabus/:submoduleId/step/:stepNumber"
-        element={<StepPageWithKey />}
+        element={<StepPage />}
       />
 
       <Route path="profile" element={<ProfilePage />} />
@@ -32,10 +32,3 @@ export const router = createBrowserRouter(
   ),
   { basename: "/CunaFrontReact" },
 );
-
-// Обёртка чтобы передать key через useParams
-import { useParams } from "react-router-dom";
-function StepPageWithKey() {
-  const { stepNumber, submoduleId } = useParams();
-  return <StepPage key={`${submoduleId}-${stepNumber}`} />;
-}

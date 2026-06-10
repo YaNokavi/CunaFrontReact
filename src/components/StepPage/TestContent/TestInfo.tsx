@@ -1,10 +1,10 @@
+import { useState } from "react";
 import {
   useActions,
   useIsInputsDisabled,
   useSelectedOptions,
   useTestData,
 } from "./store";
-// import { useIView } from "../../../hooks/useIView";
 import IViewOverlay from "../../../UI/IViewOverlay";
 
 export default function TestInfo({ completed }) {
@@ -12,7 +12,8 @@ export default function TestInfo({ completed }) {
   const selectedOptions = useSelectedOptions();
   const isInputsDisabled = useIsInputsDisabled();
   const { setSelectedOptions, setIsChecked } = useActions();
-  // const { ref, iview, closeIView } = useIView<HTMLDivElement>();
+
+  const [iview, setIView] = useState<{ src: string; alt: string } | null>(null);
 
   const { question, answer, options, image } = testData;
   const isMultipleChoice = answer && answer.length > 1;
@@ -33,19 +34,29 @@ export default function TestInfo({ completed }) {
     setIsChecked(true);
   };
 
+  const handleImageClick = () => {
+    if (!image?.url) return;
+    setIView({ src: image.url, alt: "Иллюстрация к вопросу" });
+  };
+
   return (
     <>
-      <div ref={ref} className="step-block-content-media">
+      <div className="step-block-content-media">
         <h2 style={{ marginBottom: 10, lineHeight: "32px" }}>{question}</h2>
         {image && (
           <img
-            src={testData.image.url}
-            data-iview
-            data-src={testData.image.url}
-            height={testData.image.height}
-            width={testData.image.width}
+            src={image.url}
+            height={image.height}
+            width={image.width}
             alt="Иллюстрация к вопросу"
-            style={{ alignSelf: "center", cursor: "zoom-in" }}
+            onClick={handleImageClick}
+            style={{
+              display: "block",
+              margin: "1em auto",
+              maxWidth: "100%",
+              cursor: "zoom-in",
+              borderRadius: 8,
+            }}
           />
         )}
         <p style={{ marginBottom: 5 }}>
@@ -67,7 +78,11 @@ export default function TestInfo({ completed }) {
         ))}
       </div>
       {iview && (
-        <IViewOverlay src={iview.src} alt={iview.alt} onClose={closeIView} />
+        <IViewOverlay
+          src={iview.src}
+          alt={iview.alt}
+          onClose={() => setIView(null)}
+        />
       )}
     </>
   );
