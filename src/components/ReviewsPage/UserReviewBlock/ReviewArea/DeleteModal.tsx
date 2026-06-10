@@ -11,15 +11,15 @@ export default function DeleteModal({ reviewId }) {
   const { setIsWriting } = useActions();
 
   const { courseId } = useParams();
-
   const { userId } = useTelegramUser();
-
   const { mutate, isPending } = useDeleteReview();
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = () => {
     mutate({ reviewId, courseId, userId });
     setIsWriting(false);
+    setIsDeleteModalOpen(false);
   };
+
   return (
     <>
       <button
@@ -34,7 +34,7 @@ export default function DeleteModal({ reviewId }) {
       >
         <span>Вы уверены, что хотите удалить отзыв?</span>
         <footer>
-          <button onClick={handleConfirmDelete}>Да</button>
+          <button onClick={handleConfirmDelete} disabled={isPending}>Да</button>
           <button onClick={() => setIsDeleteModalOpen(false)}>Нет</button>
         </footer>
       </CustomModal>

@@ -858,12 +858,31 @@ textarea {
 .buttons-block-rating {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
+  align-items: center;
 }
 
 .buttons-block-rating .course-block-button {
   margin-left: auto;
+}
+
+/*** Ошибка в форме отзыва ***/
+.review-form-error {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: rgb(255 60 60 / 15%);
+  border: 1px solid rgb(255 60 60 / 35%);
+  border-radius: 10px;
+  font: 500 12px Inter, sans-serif;
+  color: #ff3c3c;
+  animation: ani 0.2s forwards;
+  order: -1;
+  flex-basis: 100%;
 }
 
 .rating-button-reverse {

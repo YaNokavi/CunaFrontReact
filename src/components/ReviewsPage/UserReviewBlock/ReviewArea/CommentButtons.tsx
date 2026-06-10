@@ -21,20 +21,18 @@ export default function CommentButtons({ currentUserReview }) {
   const mutationAdd = useAddReview();
   const mutationChange = useChangeReview();
 
-  const [ratingError, setRatingError] = useState("");
-  const [unchangedError, setUnchangedError] = useState("");
+  const [error, setError] = useState("");
 
   const handleSend = () => {
-    setRatingError("");
-    setUnchangedError("");
+    setError("");
 
     if (!userRating) {
-      setRatingError("Пожалуйста, выберите оценку");
+      setError("Пожалуйста, выберите оценку");
       return;
     }
 
     if (comment === message && rating === userRating) {
-      setUnchangedError("Ваш отзыв не изменился");
+      setError("Ваш отзыв не изменился");
       return;
     }
 
@@ -59,12 +57,7 @@ export default function CommentButtons({ currentUserReview }) {
 
   return (
     <div className="buttons-block-rating">
-      {ratingError && (
-        <span className="review-form-error">{ratingError}</span>
-      )}
-      {unchangedError && (
-        <span className="review-form-error">{unchangedError}</span>
-      )}
+      {error && <span className="review-form-error">{error}</span>}
       <button className="course-block-button" onClick={handleSend}>
         <span>Отправить</span>
       </button>
