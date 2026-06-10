@@ -1,23 +1,35 @@
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 
 export default function ModuleInfo({ module }) {
   const [open, setOpen] = useState(false);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
-    if (innerRef.current) {
-      setHeight(innerRef.current.scrollHeight);
+  const toggle = () => {
+    if (!wrapRef.current) return;
+
+    if (!open) {
+      // Открываем: снимаем ограничение высоты
+      wrapRef.current.style.maxHeight = "none";
+      setOpen(true);
+    } else {
+      // Закрываем: фиксируем текущую высоту в px, затем обнуляем
+      const current = wrapRef.current.scrollHeight;
+      wrapRef.current.style.maxHeight = current + "px";
+      // Следующий кадр — переход к 0 запустит CSS transition
+      requestAnimationFrame(() => {
+        if (wrapRef.current) wrapRef.current.style.maxHeight = "0px";
+      });
+      setOpen(false);
     }
-  }, [module]);
+  };
 
   return (
     <>
       <div
         className={`${styles.main} ${open ? styles.mainOpen : ""}`}
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggle}
       >
         <span>
           {module.number}. {module.name}
@@ -37,22 +49,21 @@ export default function ModuleInfo({ module }) {
         </svg>
       </div>
       <div
+        ref={wrapRef}
         className={styles.aditional}
         style={{
-          maxHeight: open ? height : 0,
+          maxHeight: 0,
           opacity: open ? 1 : 0,
         }}
       >
-        <div ref={innerRef}>
-          {module.submodules.map((submodule) => (
-            <Link key={submodule.id} to={`${submodule.id}/step/1`}>
-              {module.number}.{submodule.number} {submodule.name}
-              <span>
-                {submodule.completedStepsCount}/{submodule.totalStepsCount}
-              </span>
-            </Link>
-          ))}
-        </div>
+        {module.submodules.map((submodule) => (
+          <Link key={submodule.id} to={`${submodule.id}/step/1`}>
+            {module.number}.{submodule.number} {submodule.name}
+            <span>
+              {submodule.completedStepsCount}/{submodule.totalStepsCount}
+            </span>
+          </Link>
+        ))}
       </div>
     </>
   );
