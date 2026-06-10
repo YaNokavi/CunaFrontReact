@@ -36,9 +36,8 @@ export default function SanitizedHTML({
       if (isLargeImage(img)) {
         img.setAttribute("data-iview", "enable");
         img.style.cursor = "zoom-in";
-        img.style.display = "block";
-        img.style.margin = "1em auto";
-        img.style.maxWidth = "100%";
+        img.style.alignSelf = "center";
+        img.style.marginTop = "1em";
       } else {
         img.setAttribute("data-iview", "disable");
         img.style.verticalAlign = "middle";
