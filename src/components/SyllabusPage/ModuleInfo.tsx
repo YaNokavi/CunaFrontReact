@@ -31,7 +31,7 @@ export default function ModuleInfo({ module }) {
       <div className={`${styles.aditional} ${open ? styles.aditionalOpen : ""}`}>
         <div className={styles.aditionalInner}>
           {module.submodules.map((submodule) => (
-            <Link key={submodule.id} to={`${submodule.id}/step/1`}>
+            <Link key={submodule.id} to={`${submodule.id}/step/1`} replace>
               {module.number}.{submodule.number} {submodule.name}
               <span>
                 {submodule.completedStepsCount}/{submodule.totalStepsCount}

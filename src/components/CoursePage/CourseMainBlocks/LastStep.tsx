@@ -10,7 +10,7 @@ export default function LastStep({ lastCompletedStep }: Props) {
   return (
     <div className="block course-block">
       <div className="course-block-header">Последний шаг</div>
-      <Link to={`syllabus/${submoduleId}/step/${number}`} className="last-step">
+      <Link to={`syllabus/${submoduleId}/step/${number}`} replace className="last-step">
         {submoduleName} - {number} шаг
       </Link>
     </div>

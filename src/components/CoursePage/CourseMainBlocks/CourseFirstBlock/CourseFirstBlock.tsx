@@ -11,7 +11,7 @@ export default function CourseFirstBlock({ courseData }: Props) {
     <div className="block course-block">
       <CourseWelcomeInfoBlock courseData={courseData} />
       <div style={{ display: "flex", flexDirection: "row" }}>
-        <Link to="syllabus" className="course-block-button">
+        <Link to="syllabus" replace className="course-block-button">
           <span>Приступить к изучению</span>
         </Link>
       </div>
