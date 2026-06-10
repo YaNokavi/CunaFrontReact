@@ -25,14 +25,14 @@ export default function DailyTestModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<"correct" | "incorrect" | "timeout" | null>(null);
   const [isClosable, setIsClosable] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(TIMER_DURATION);
-  const [timerPaused, setTimerPaused] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [timeLeftSec, setTimeLeftSec] = useState(Math.ceil(TIMER_DURATION / 1000));
 
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const elapsedRef = useRef<number>(0);
   const hasTimedOut = useRef(false);
+  const timerPausedRef = useRef(false);
 
   // Загрузка теста
   useEffect(() => {
@@ -44,7 +44,6 @@ export default function DailyTestModal({
       .then(async (data: DailyTestData) => {
         if (cancelled) return;
 
-        // Предзагрузка картинки, если есть
         if (data.image?.url) {
           await new Promise<void>((resolve) => {
             const img = new Image();
@@ -54,7 +53,6 @@ export default function DailyTestModal({
           });
         }
 
-        // Минимальная задержка для плавности
         await new Promise((r) => setTimeout(r, 500));
 
         if (!cancelled) {
@@ -67,25 +65,26 @@ export default function DailyTestModal({
         if (!cancelled) onClose();
       });
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [contentUrl]);
 
   // Таймер через RAF
   useEffect(() => {
-    if (isLoading || timerPaused || result !== null) return;
+    if (isLoading || result !== null) return;
 
+    timerPausedRef.current = false;
     startTimeRef.current = performance.now() - elapsedRef.current;
 
     const loop = () => {
+      if (timerPausedRef.current) return;
+
       const now = performance.now();
       elapsedRef.current = now - startTimeRef.current;
       const left = Math.max(0, TIMER_DURATION - elapsedRef.current);
       const prog = Math.min(elapsedRef.current / TIMER_DURATION, 1);
 
-      setTimeLeft(left);
       setProgress(prog);
+      setTimeLeftSec(Math.ceil(left / 1000));
 
       if (prog < 1) {
         rafRef.current = requestAnimationFrame(loop);
@@ -100,7 +99,7 @@ export default function DailyTestModal({
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isLoading, timerPaused, result]);
+  }, [isLoading, result]);
 
   const handleOptionChange = (option: string, isMultiple: boolean) => {
     if (isMultiple) {
@@ -115,7 +114,7 @@ export default function DailyTestModal({
   const handleSubmit = async (options: string[], isTimeout = false) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-    setTimerPaused(true);
+    timerPausedRef.current = true;
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
     if (!testData) return;
@@ -141,132 +140,178 @@ export default function DailyTestModal({
 
   const isMultiple = testData ? testData.answer.length > 1 : false;
   const canSubmit = selectedOptions.length > 0 && !isSubmitting;
-  const seconds = Math.ceil(timeLeft / 1000);
+  const isRed = progress > 0.6;
   const isBlinking = progress > 0.8;
+  const progressDeg = progress * 360;
+
+  const borderStyle = isLoading
+    ? {}
+    : {
+        background: isRed
+          ? `conic-gradient(from 0deg, transparent 0deg, transparent 360deg)`
+          : `conic-gradient(
+              from 0deg,
+              #4caf50 0deg,
+              #4caf50 ${progressDeg}deg,
+              var(--theme-block-border-color) ${progressDeg}deg,
+              var(--theme-block-border-color) 360deg
+            )`,
+      };
+
+  const redBorderStyle = isRed
+    ? {
+        opacity: 1,
+        background: `conic-gradient(
+          from 0deg,
+          #f44336 0deg,
+          #f44336 ${progressDeg}deg,
+          transparent ${progressDeg}deg,
+          transparent 360deg
+        )`,
+      }
+    : { opacity: 0 };
 
   const modalRoot = document.getElementById("modal-root");
   if (!modalRoot) return null;
 
   return createPortal(
-    <div className={styles.overlay} onClick={isClosable ? onClose : undefined}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {/* Шапка */}
-        <div className={styles.header}>
-          <span className={styles.title}>Ежедневный тест!</span>
-          {!isLoading && (
-            <span className={`${styles.timer} ${isBlinking ? styles.blink : ""}`}>
-              {seconds}с
+    <div
+      className={styles.overlay}
+      onClick={isClosable ? onClose : undefined}
+    >
+      <div className={styles.modalBorder}>
+        {/* Цветная conic-gradient рамка */}
+        {!isLoading && (
+          <>
+            <div
+              className={styles.borderProgress}
+              style={borderStyle}
+            />
+            <div
+              className={`${styles.borderProgressRed} ${isBlinking ? styles.blink : ""}`}
+              style={redBorderStyle}
+            />
+          </>
+        )}
+
+        <div
+          className={styles.modalContent}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Шапка: сетка 1fr auto 1fr */}
+          <div className={styles.header}>
+            <div />
+            <span className={styles.title}>Ежедневный тест!</span>
+            <span
+              className={`${styles.timer} ${isBlinking ? styles.timerRed : ""}`}
+            >
+              {!isLoading ? `${Math.max(0, timeLeftSec)}с` : ""}
             </span>
+          </div>
+
+          {/* Скелетон */}
+          {isLoading && (
+            <div className={styles.skeleton}>
+              <div className={`${styles.skeletonBlock} ${styles.skeletonTitle}`} />
+              <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+              <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+              <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+              <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
+              <div className={`${styles.skeletonBlock} ${styles.skeletonBtn}`} />
+            </div>
+          )}
+
+          {/* Контент теста */}
+          {!isLoading && testData && result === null && (
+            <div className={styles.testContent}>
+              <h2 className={styles.question}>{testData.question}</h2>
+
+              {testData.image?.url && (
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={testData.image.url}
+                    alt="Иллюстрация к вопросу"
+                    style={{
+                      maxHeight: testData.image.height,
+                      maxWidth: "100%",
+                      objectFit: "contain",
+                    }}
+                    draggable={false}
+                  />
+                </div>
+              )}
+
+              <p className={styles.hint}>
+                Выберите {isMultiple ? "один или несколько вариантов" : "один вариант"}
+              </p>
+
+              <div className={styles.options}>
+                {testData.options.map((option) => (
+                  <label key={option} className={styles.option}>
+                    <input
+                      type={isMultiple ? "checkbox" : "radio"}
+                      name="daily-question"
+                      value={option}
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionChange(option, isMultiple)}
+                      disabled={isSubmitting}
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+
+              <div className={styles.submitRow}>
+                <button
+                  className={`step-block-button${!canSubmit ? " disabled" : ""}`}
+                  disabled={!canSubmit}
+                  onClick={() => handleSubmit(selectedOptions)}
+                >
+                  {isSubmitting ? (
+                    <div
+                      className="load-task-animation"
+                      style={{ width: 20, height: 20, borderWidth: 3 }}
+                    />
+                  ) : (
+                    "Ответить"
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Результат */}
+          {result !== null && (
+            <div className={styles.result}>
+              {result === "correct" && (
+                <>
+                  <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M9 0.25C7.26942 0.25 5.57769 0.763179 4.13876 1.72464C2.69983 2.6861 1.57832 4.05267 0.916058 5.65152C0.253791 7.25037 0.0805121 9.00971 0.418133 10.707C0.755753 12.4044 1.58911 13.9635 2.81282 15.1872C4.03653 16.4109 5.59563 17.2443 7.29296 17.5819C8.9903 17.9195 10.7496 17.7462 12.3485 17.0839C13.9473 16.4217 15.3139 15.3002 16.2754 13.8612C17.2368 12.4223 17.75 10.7306 17.75 9C17.75 6.67936 16.8281 4.45376 15.1872 2.81282C13.5462 1.17187 11.3206 0.25 9 0.25ZM7.75 12.4938L4.625 9.36875L5.61875 8.375L7.75 10.5062L12.3813 5.875L13.3788 6.86625L7.75 12.4938Z"
+                      fill="#43A047"
+                    />
+                  </svg>
+                  <span style={{ color: "#43A047", fontWeight: 600 }}>Правильно!</span>
+                </>
+              )}
+              {(result === "incorrect" || result === "timeout") && (
+                <>
+                  <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M2.63604 2.63604C0.948212 4.32387 0 6.61305 0 9C0 11.3869 0.948212 13.6761 2.63604 15.364C4.32387 17.0518 6.61305 18 9 18C11.3869 18 13.6761 17.0518 15.364 15.364C17.0518 13.6761 18 11.3869 18 9C18 6.61305 17.0518 4.32387 15.364 2.63604C13.6761 0.948212 11.3869 0 9 0C6.61305 0 4.32387 0.948212 2.63604 2.63604ZM12.1989 5.80115C12.0713 5.67357 11.8982 5.60189 11.7178 5.60189C11.5374 5.60189 11.3643 5.67357 11.2368 5.80115L9 8.03926L6.76325 5.80115C6.63567 5.67357 6.46263 5.60189 6.2822 5.60189C6.10177 5.60189 5.92873 5.67357 5.80115 5.80115C5.67357 5.92873 5.60189 6.10177 5.60189 6.2822C5.60189 6.46263 5.67357 6.63567 5.80115 6.76325L8.03926 9L5.80115 11.2368C5.67357 11.3643 5.60189 11.5374 5.60189 11.7178C5.60189 11.8982 5.67357 12.0713 5.80115 12.1989C5.92873 12.3264 6.10177 12.3981 6.2822 12.3981C6.46263 12.3981 6.63567 12.3264 6.76325 12.1989L9 9.96074L11.2368 12.1989C11.3643 12.3264 11.5374 12.3981 11.7178 12.3981C11.8982 12.3981 12.0713 12.3264 12.1989 12.1989C12.3264 12.0713 12.3981 11.8982 12.3981 11.7178C12.3981 11.5374 12.3264 11.3643 12.1989 11.2368L9.96074 9L12.1989 6.76325C12.3264 6.63567 12.3981 6.46263 12.3981 6.2822C12.3981 6.10177 12.3264 5.92873 12.1989 5.80115Z"
+                      fill="#E53232"
+                    />
+                  </svg>
+                  <span style={{ color: "#E53232", fontWeight: 600 }}>
+                    {result === "timeout" ? "Время вышло" : "Неправильно!"}
+                  </span>
+                </>
+              )}
+            </div>
           )}
         </div>
-
-        {/* Прогресс-бар таймера */}
-        {!isLoading && (
-          <div className={styles.progressBar}>
-            <div
-              className={`${styles.progressFill} ${progress > 0.6 ? styles.danger : ""} ${isBlinking ? styles.blink : ""}`}
-              style={{ width: `${(1 - progress) * 100}%` }}
-            />
-          </div>
-        )}
-
-        {/* Скелетон */}
-        {isLoading && (
-          <div className={styles.skeleton}>
-            <div className={`${styles.skeletonBlock} ${styles.skeletonTitle}`} />
-            <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-            <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-            <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-            <div className={`${styles.skeletonBlock} ${styles.skeletonOption}`} />
-            <div className={`${styles.skeletonBlock} ${styles.skeletonBtn}`} />
-          </div>
-        )}
-
-        {/* Контент теста */}
-        {!isLoading && testData && result === null && (
-          <div className={styles.testContent}>
-            <h2 className={styles.question}>{testData.question}</h2>
-
-            {testData.image?.url && (
-              <div className={styles.imageWrapper}>
-                <img
-                  src={testData.image.url}
-                  alt="Иллюстрация к вопросу"
-                  style={{
-                    maxHeight: testData.image.height,
-                    maxWidth: "100%",
-                    objectFit: "contain",
-                  }}
-                  draggable={false}
-                />
-              </div>
-            )}
-
-            <p className={styles.hint}>
-              Выберите {isMultiple ? "один или несколько вариантов" : "один вариант"}
-            </p>
-
-            <div className={styles.options}>
-              {testData.options.map((option) => (
-                <label key={option} className={styles.option}>
-                  <input
-                    type={isMultiple ? "checkbox" : "radio"}
-                    name="daily-question"
-                    value={option}
-                    checked={selectedOptions.includes(option)}
-                    onChange={() => handleOptionChange(option, isMultiple)}
-                    disabled={isSubmitting}
-                  />
-                  {option}
-                </label>
-              ))}
-            </div>
-
-            <div className={styles.submitRow}>
-              <button
-                className={`step-block-button${!canSubmit ? " disabled" : ""}`}
-                disabled={!canSubmit}
-                onClick={() => handleSubmit(selectedOptions)}
-              >
-                {isSubmitting ? (
-                  <div className="load-task-animation" style={{ width: 20, height: 20, borderWidth: 3 }} />
-                ) : (
-                  "Ответить"
-                )}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Результат */}
-        {result !== null && (
-          <div className={styles.result}>
-            {result === "correct" && (
-              <>
-                <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
-                  <path d="M9 0.25C7.26942 0.25 5.57769 0.763179 4.13876 1.72464C2.69983 2.6861 1.57832 4.05267 0.916058 5.65152C0.253791 7.25037 0.0805121 9.00971 0.418133 10.707C0.755753 12.4044 1.58911 13.9635 2.81282 15.1872C4.03653 16.4109 5.59563 17.2443 7.29296 17.5819C8.9903 17.9195 10.7496 17.7462 12.3485 17.0839C13.9473 16.4217 15.3139 15.3002 16.2754 13.8612C17.2368 12.4223 17.75 10.7306 17.75 9C17.75 6.67936 16.8281 4.45376 15.1872 2.81282C13.5462 1.17187 11.3206 0.25 9 0.25ZM7.75 12.4938L4.625 9.36875L5.61875 8.375L7.75 10.5062L12.3813 5.875L13.3788 6.86625L7.75 12.4938Z" fill="#43A047"/>
-                </svg>
-                <span style={{ color: "#43A047", fontWeight: 600 }}>Правильно!</span>
-              </>
-            )}
-            {result === "incorrect" && (
-              <>
-                <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M2.63604 2.63604C0.948212 4.32387 0 6.61305 0 9C0 11.3869 0.948212 13.6761 2.63604 15.364C4.32387 17.0518 6.61305 18 9 18C11.3869 18 13.6761 17.0518 15.364 15.364C17.0518 13.6761 18 11.3869 18 9C18 6.61305 17.0518 4.32387 15.364 2.63604C13.6761 0.948212 11.3869 0 9 0C6.61305 0 4.32387 0.948212 2.63604 2.63604ZM12.1989 5.80115C12.0713 5.67357 11.8982 5.60189 11.7178 5.60189C11.5374 5.60189 11.3643 5.67357 11.2368 5.80115L9 8.03926L6.76325 5.80115C6.63567 5.67357 6.46263 5.60189 6.2822 5.60189C6.10177 5.60189 5.92873 5.67357 5.80115 5.80115C5.67357 5.92873 5.60189 6.10177 5.60189 6.2822C5.60189 6.46263 5.67357 6.63567 5.80115 6.76325L8.03926 9L5.80115 11.2368C5.67357 11.3643 5.60189 11.5374 5.60189 11.7178C5.60189 11.8982 5.67357 12.0713 5.80115 12.1989C5.92873 12.3264 6.10177 12.3981 6.2822 12.3981C6.46263 12.3981 6.63567 12.3264 6.76325 12.1989L9 9.96074L11.2368 12.1989C11.3643 12.3264 11.5374 12.3981 11.7178 12.3981C11.8982 12.3981 12.0713 12.3264 12.1989 12.1989C12.3264 12.0713 12.3981 11.8982 12.3981 11.7178C12.3981 11.5374 12.3264 11.3643 12.1989 11.2368L9.96074 9L12.1989 6.76325C12.3264 6.63567 12.3981 6.46263 12.3981 6.2822C12.3981 6.10177 12.3264 5.92873 12.1989 5.80115Z" fill="#E53232"/>
-                </svg>
-                <span style={{ color: "#E53232", fontWeight: 600 }}>Неправильно!</span>
-              </>
-            )}
-            {result === "timeout" && (
-              <>
-                <svg width="32" height="32" viewBox="0 0 18 18" fill="none">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M2.63604 2.63604C0.948212 4.32387 0 6.61305 0 9C0 11.3869 0.948212 13.6761 2.63604 15.364C4.32387 17.0518 6.61305 18 9 18C11.3869 18 13.6761 17.0518 15.364 15.364C17.0518 13.6761 18 11.3869 18 9C18 6.61305 17.0518 4.32387 15.364 2.63604C13.6761 0.948212 11.3869 0 9 0C6.61305 0 4.32387 0.948212 2.63604 2.63604ZM12.1989 5.80115C12.0713 5.67357 11.8982 5.60189 11.7178 5.60189C11.5374 5.60189 11.3643 5.67357 11.2368 5.80115L9 8.03926L6.76325 5.80115C6.63567 5.67357 6.46263 5.60189 6.2822 5.60189C6.10177 5.60189 5.92873 5.67357 5.80115 5.80115C5.67357 5.92873 5.60189 6.10177 5.60189 6.2822C5.60189 6.46263 5.67357 6.63567 5.80115 6.76325L8.03926 9L5.80115 11.2368C5.67357 11.3643 5.60189 11.5374 5.60189 11.7178C5.60189 11.8982 5.67357 12.0713 5.80115 12.1989C5.92873 12.3264 6.10177 12.3981 6.2822 12.3981C6.46263 12.3981 6.63567 12.3264 6.76325 12.1989L9 9.96074L11.2368 12.1989C11.3643 12.3264 11.5374 12.3981 11.7178 12.3981C11.8982 12.3981 12.0713 12.3264 12.1989 12.1989C12.3264 12.0713 12.3981 11.8982 12.3981 11.7178C12.3981 11.5374 12.3264 11.3643 12.1989 11.2368L9.96074 9L12.1989 6.76325C12.3264 6.63567 12.3981 6.46263 12.3981 6.2822C12.3981 6.10177 12.3264 5.92873 12.1989 5.80115Z" fill="#E53232"/>
-                </svg>
-                <span style={{ color: "#E53232", fontWeight: 600 }}>Время вышло</span>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </div>,
     modalRoot,
