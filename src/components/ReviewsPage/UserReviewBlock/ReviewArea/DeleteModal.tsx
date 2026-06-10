@@ -17,7 +17,6 @@ export default function DeleteModal({ reviewId }) {
   const { mutate, isPending } = useDeleteReview();
 
   const handleConfirmDelete = async () => {
-    console.log(isPending);
     mutate({ reviewId, courseId, userId });
     setIsWriting(false);
   };
