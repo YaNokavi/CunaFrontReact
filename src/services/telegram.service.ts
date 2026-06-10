@@ -89,11 +89,11 @@ export function initTelegram() {
       tg.requestFullscreen();
     }
     root.style.setProperty("--tab-bar-height", "70px");
-    root.style.setProperty("--tab-bar-padding", "12px");
+    // root.style.setProperty("--tab-bar-padding", "12px");
     root.style.setProperty("--inset-top-navigation", "90px");
   } else {
     root.style.setProperty("--tab-bar-height", "55px");
-    root.style.setProperty("--tab-bar-padding", "9px");
+    // root.style.setProperty("--tab-bar-padding", "9px");
   }
 
   tg.lockOrientation?.();

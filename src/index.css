@@ -1,8 +1,8 @@
 :root {
-  --inset-top: 0px;
+  --inset-top: var(--tg-safe-area-inset-top, 0px);
   --inset-top-navigation: 0px;
   --tab-bar-height: 55px;
-  --tab-bar-padding: 9px;
+  --tab-bar-padding: 0px;
 
   /* Тёмная тема (по умолчанию) */
   --theme-bg-color: #131313;
@@ -52,9 +52,7 @@
   --theme-bg-step-color: rgba(211, 211, 211, 0.7);
   --theme-step-text-color: #4f4e4e;
   --theme-loader-wallet-color:
-    rgba(205, 205, 205) 25%,
-    rgba(225, 225, 225) 50%,
-    rgba(205, 205, 205) 75%;
+    rgba(205, 205, 205) 25%, rgba(225, 225, 225) 50%, rgba(205, 205, 205) 75%;
 }
 
 #root {

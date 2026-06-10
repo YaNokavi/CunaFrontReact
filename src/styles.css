@@ -1500,6 +1500,7 @@ button.button-expand-description {
   flex-direction: column;
   width: auto;
   height: auto;
+  overflow-y: auto;
   font:
     400 16px Inter,
     sans-serif;
