@@ -19,7 +19,7 @@ class FavoriteService {
   ): Promise<LoginAndDailyTestResponse | undefined> {
     const body = {
       username,
-      avatarUrl,
+      avatarUrl: avatarUrl || null,
       referrerId,
     };
 
