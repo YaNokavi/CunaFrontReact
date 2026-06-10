@@ -12,6 +12,15 @@ interface DailyTestState {
   testStartDate: string;
 }
 
+function safeJsonParse<T>(value: string | null, fallback: T): T {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value) as T;
+  } catch {
+    return fallback;
+  }
+}
+
 export default function FavoritePage() {
   const { userId } = useTelegramUser();
   const { username, userAvatarUrl } = useContext(TelegramUserContext);
@@ -21,17 +30,18 @@ export default function FavoritePage() {
 
   const { mutate: sendUserInfo, isPending: isSending } = useSendUserInfo();
 
-  // Проверяем flagFirstJoin при монтировании
   useEffect(() => {
     if (!userId) return;
 
-    const flagFirstJoin = JSON.parse(
-      localStorage.getItem("flagFirstJoin") ?? "false",
+    const flagFirstJoin = safeJsonParse<boolean>(
+      localStorage.getItem("flagFirstJoin"),
+      false,
     );
 
     if (flagFirstJoin) {
-      const referrerId = JSON.parse(
-        localStorage.getItem("referallId") ?? "null",
+      const referrerId = safeJsonParse<number | null>(
+        localStorage.getItem("referallId"),
+        null,
       );
       const safeReferrerId =
         referrerId && referrerId !== userId ? referrerId : null;
