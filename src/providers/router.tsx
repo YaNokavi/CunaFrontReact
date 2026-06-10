@@ -30,4 +30,5 @@ export const router = createBrowserRouter(
       <Route path="profile" element={<ProfilePage />} />
     </Route>,
   ),
+  { basename: "/CunaFrontReact" },
 );
