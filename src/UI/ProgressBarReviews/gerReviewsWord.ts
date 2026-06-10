@@ -1,4 +1,4 @@
-export default function getReviewsWord(count) {
+export default function getReviewsWord(count: number): string {
   count = Math.abs(count) % 100;
   const lastDigit = count % 10;
 

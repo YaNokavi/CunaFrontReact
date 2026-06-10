@@ -5,7 +5,6 @@ import SupportBlock from "../components/ProfilePage/SupportBlock/SupportBlock";
 import UserInfoBlock from "../components/ProfilePage/UserInfoBlock/UserInfoBlock";
 import useProfileData from "../hooks/queries/ProfilePage/useProfileData";
 
-//TODO Notification top side
 export default function ProfilePage() {
   const { userId } = useTelegramUser();
 
@@ -17,7 +16,7 @@ export default function ProfilePage() {
       {(userLoading || tasksLoading) && <Loader />}
       {!userLoading && !tasksLoading && userData && (
         <>
-          <UserInfoBlock cunaTokenBalance={userData.cunaTokenBalance} />
+          <UserInfoBlock />
 
           <ProgressBlock coursesProgress={userData.coursesProgress} />
 
