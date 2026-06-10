@@ -28,7 +28,7 @@ export default function StepPage() {
     currentStep ? currentStep.id : null
   );
 
-  if (isPending) return <Loader />;
+  if (!stepsData || isPending) return <Loader />;
   if (stepsError || contentError) return <div>Ошибка загрузки данных</div>;
   if (!currentStep) return <div>Шаг не найден</div>;
 
