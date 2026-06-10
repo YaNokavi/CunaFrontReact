@@ -4,25 +4,35 @@ import { isTelegram, hapticMedium } from "../services/telegram.service";
 
 const tg = window.Telegram?.WebApp;
 
-// Роуты где BackButton должен быть виден
 const ROUTES_WITH_BACK = [
-  /^\/favorite\/[^/]+$/,                              // /favorite/:courseId
-  /^\/favorite\/[^/]+\/rating$/,                      // /favorite/:courseId/rating
-  /^\/favorite\/[^/]+\/syllabus$/,                    // /favorite/:courseId/syllabus
-  /^\/favorite\/[^/]+\/syllabus\/[^/]+\/step\/\d+$/, // /favorite/:courseId/syllabus/:submoduleId/step/:stepNumber
+  /^\/favorite\/[^/]+$/,
+  /^\/favorite\/[^/]+\/rating$/,
+  /^\/favorite\/[^/]+\/syllabus$/,
+  /^\/favorite\/[^/]+\/syllabus\/[^/]+\/step\/\d+$/,
 ];
 
 function shouldShowBack(pathname: string): boolean {
   return ROUTES_WITH_BACK.some((re) => re.test(pathname));
 }
 
-const STEP_ROUTE = "/favorite/:courseId/syllabus/:submoduleId/step/:stepNumber";
+const STEP_ROUTE =
+  "/favorite/:courseId/syllabus/:submoduleId/step/:stepNumber";
+const SYLLABUS_ROUTE = "/favorite/:courseId/syllabus";
 
-function getStepBackPath(pathname: string): string | null {
-  const match = matchPath(STEP_ROUTE, pathname);
-  if (!match) return null;
-  const { courseId } = match.params as { courseId: string };
-  return `/favorite/${courseId}/syllabus`;
+function getBackPath(pathname: string): string | null {
+  // С шага — всегда на syllabus, заменяя всю накопленную историю шагов
+  const stepMatch = matchPath(STEP_ROUTE, pathname);
+  if (stepMatch) {
+    const { courseId } = stepMatch.params as { courseId: string };
+    return `/favorite/${courseId}/syllabus`;
+  }
+  // С syllabus — на страницу курса
+  const syllabusMatch = matchPath(SYLLABUS_ROUTE, pathname);
+  if (syllabusMatch) {
+    const { courseId } = syllabusMatch.params as { courseId: string };
+    return `/favorite/${courseId}`;
+  }
+  return null;
 }
 
 export function useTelegramBackButton() {
@@ -33,7 +43,6 @@ export function useTelegramBackButton() {
     if (!isTelegram || !tg) return;
 
     const show = shouldShowBack(location.pathname);
-
     if (show) {
       tg.BackButton.show();
     } else {
@@ -42,8 +51,9 @@ export function useTelegramBackButton() {
 
     const handler = () => {
       hapticMedium();
-      const backPath = getStepBackPath(location.pathname);
+      const backPath = getBackPath(location.pathname);
       if (backPath) {
+        // replace: true — заменяем текущую запись, чтобы не накапливать историю
         navigate(backPath, { replace: true });
       } else {
         navigate(-1);

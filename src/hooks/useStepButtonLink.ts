@@ -7,10 +7,17 @@ export default function useStepButtonLink(
 ) {
   const { courseId, submoduleId, stepNumber } = useParams();
 
-  // Назад всегда ведёт в содержание (syllabus), а не на предыдущий шаг
+  // Назад: предыдущий шаг, предыдущий сабмодуль (последний шаг), или null (кнопка задизейблена)
   const backLink = (): string | null => {
     if (!courseId) return null;
-    return `/favorite/${courseId}/syllabus`;
+    const step = Number(stepNumber);
+    if (step > 1) {
+      return `/favorite/${courseId}/syllabus/${submoduleId}/step/${step - 1}`;
+    }
+    if (prevSub) {
+      return `/favorite/${courseId}/syllabus/${prevSub}/step/1`;
+    }
+    return null;
   };
 
   const nextLink = (): string => {

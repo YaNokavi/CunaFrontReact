@@ -3,16 +3,24 @@ import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import { isMobile } from "../services/telegram.service";
 
 const SWIPE_DISTANCE = 100;
-const STEP_ROUTE = "/favorite/:courseId/syllabus/:submoduleId/step/:stepNumber";
+const STEP_ROUTE =
+  "/favorite/:courseId/syllabus/:submoduleId/step/:stepNumber";
+const SYLLABUS_ROUTE = "/favorite/:courseId/syllabus";
 
-function getStepBackPath(pathname: string): string | null {
-  const match = matchPath(STEP_ROUTE, pathname);
-  if (!match) return null;
-  const { courseId } = match.params as { courseId: string };
-  return `/favorite/${courseId}/syllabus`;
+function getBackPath(pathname: string): string | null {
+  const stepMatch = matchPath(STEP_ROUTE, pathname);
+  if (stepMatch) {
+    const { courseId } = stepMatch.params as { courseId: string };
+    return `/favorite/${courseId}/syllabus`;
+  }
+  const syllabusMatch = matchPath(SYLLABUS_ROUTE, pathname);
+  if (syllabusMatch) {
+    const { courseId } = syllabusMatch.params as { courseId: string };
+    return `/favorite/${courseId}`;
+  }
+  return null;
 }
 
-// Свайп назад с левого края (как в iOS)
 export function useTelegramSwipeBack() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,7 +41,7 @@ export function useTelegramSwipeBack() {
       const moveX = e.touches[0].clientX;
       if (startX <= 15 && moveX - startX > SWIPE_DISTANCE) {
         triggered = true;
-        const backPath = getStepBackPath(location.pathname);
+        const backPath = getBackPath(location.pathname);
         if (backPath) {
           navigate(backPath, { replace: true });
         } else {
