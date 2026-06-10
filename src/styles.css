@@ -26,7 +26,9 @@
 .profile-userid {
   display: flex;
   height: auto;
-  font: 400 10px Inter, sans-serif;
+  font:
+    400 10px Inter,
+    sans-serif;
   color: var(--theme-text-hint-color);
 }
 
@@ -43,7 +45,9 @@
 .profile-nickname {
   display: block;
   text-align: left;
-  font: 700 30px Inter, sans-serif;
+  font:
+    700 30px Inter,
+    sans-serif;
   color: var(--theme-text-color);
   white-space: nowrap;
   overflow: hidden;
@@ -115,7 +119,9 @@
 .popup-text {
   align-content: center;
   width: 205px;
-  font: 600 9px Inter, sans-serif;
+  font:
+    600 9px Inter,
+    sans-serif;
   color: var(--theme-button-color);
 }
 
@@ -142,7 +148,9 @@
 
 .wallet-header-name {
   width: auto;
-  font: 600 24px Inter, sans-serif;
+  font:
+    600 24px Inter,
+    sans-serif;
   text-align: left;
   justify-self: start;
   color: var(--theme-text-color);
@@ -166,7 +174,9 @@
 }
 
 .wallet-connect-button span {
-  font: 600 14px Inter, sans-serif;
+  font:
+    600 14px Inter,
+    sans-serif;
   text-align: center;
   color: var(--theme-text-color);
 }
@@ -224,7 +234,9 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font: 600 12px Inter, sans-serif;
+  font:
+    600 12px Inter,
+    sans-serif;
   text-align: center;
   color: var(--theme-button-icon-text-color);
   width: 100%;
@@ -250,7 +262,9 @@
 }
 
 .wallet-address-block span {
-  font: 600 12px Inter, sans-serif;
+  font:
+    600 12px Inter,
+    sans-serif;
   text-align: center;
   color: var(--theme-button-icon-text-color);
   width: 100%;
@@ -294,8 +308,9 @@
 }
 
 .wallet-button-menu svg path {
-  transition: stroke-dasharray var(--dash-duration, var(--duration))
-      var(--easing, ease) var(--dash-delay, 0s),
+  transition:
+    stroke-dasharray var(--dash-duration, var(--duration)) var(--easing, ease)
+      var(--dash-delay, 0s),
     stroke-dashoffset var(--dash-duration, var(--duration)) var(--easing, ease)
       var(--dash-delay, 0s),
     transform var(--transform-duration, 0s) var(--transform-easing, ease)
@@ -350,7 +365,9 @@
 
 .wallet-balance {
   display: none;
-  font: 500 30px Inter, sans-serif;
+  font:
+    500 30px Inter,
+    sans-serif;
   line-height: 30px;
   color: var(--theme-text-color);
 }
@@ -370,7 +387,9 @@
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.75s ease, opacity 0.35s ease 0.1s,
+  transition:
+    max-height 0.75s ease,
+    opacity 0.35s ease 0.1s,
     margin-top 0.75s ease;
 }
 
@@ -423,7 +442,9 @@
 }
 
 .wallet-button span {
-  font: 600 12px Inter, sans-serif;
+  font:
+    600 12px Inter,
+    sans-serif;
   color: var(--theme-text-color);
 }
 
@@ -494,7 +515,9 @@
 }
 
 .token-block-text .name {
-  font: 600 18px Inter, sans-serif;
+  font:
+    600 18px Inter,
+    sans-serif;
   color: var(--theme-text-color);
 }
 
@@ -504,7 +527,9 @@
 }
 
 .token-block-text .balance {
-  font: 600 12px Inter, sans-serif;
+  font:
+    600 12px Inter,
+    sans-serif;
   color: var(--theme-text-hint-color);
 }
 
@@ -515,7 +540,9 @@
 
 .token-block .total-balance {
   margin-left: auto;
-  font: 600 18px Inter, sans-serif;
+  font:
+    600 18px Inter,
+    sans-serif;
   color: var(--theme-text-color);
 }
 
@@ -566,7 +593,9 @@
 .support-block-header {
   align-self: flex-start;
   width: auto;
-  font: 600 24px Inter, sans-serif;
+  font:
+    600 24px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
 }
@@ -575,7 +604,9 @@
   display: flex;
   width: auto;
   height: auto;
-  font: 400 16px Inter, sans-serif;
+  font:
+    400 16px Inter,
+    sans-serif;
   text-align: center;
   color: var(--theme-text-color);
 }
@@ -612,7 +643,9 @@
 
 .course-block-header {
   width: auto;
-  font: 600 24px Inter, sans-serif;
+  font:
+    600 24px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
 }
@@ -640,7 +673,9 @@
 }
 
 .course-block-button span {
-  font: 600 16px Inter, sans-serif;
+  font:
+    600 16px Inter,
+    sans-serif;
   text-decoration: none;
   color: var(--theme-button-icon-text-color);
 }
@@ -742,13 +777,17 @@ a.course-block-button {
   text-align: center;
   padding: 0;
   gap: 2px;
-  font: 500 22px Inter, sans-serif;
+  font:
+    500 22px Inter,
+    sans-serif;
   line-height: 22px;
   color: var(--theme-text-color);
 }
 
 .mark-text-amount-comments {
-  font: 400 14px Inter, sans-serif;
+  font:
+    400 14px Inter,
+    sans-serif;
   color: var(--theme-text-hint-color);
 }
 
@@ -811,7 +850,9 @@ textarea {
   border: none;
   padding: 5px 10px;
   width: 100%;
-  font: 400 12px Inter, sans-serif;
+  font:
+    400 12px Inter,
+    sans-serif;
   line-height: 16px;
   color: var(--theme-text-color);
   outline: none;
@@ -828,7 +869,9 @@ textarea {
   align-items: center;
   padding: 0;
   gap: 10px;
-  font: 500 18px Inter, sans-serif;
+  font:
+    500 18px Inter,
+    sans-serif;
   line-height: 16px;
   color: var(--theme-text-color);
 }
@@ -871,18 +914,21 @@ textarea {
 /*** Ошибка в форме отзыва ***/
 .review-form-error {
   display: flex;
-  width: 100%;
+  width: auto;
+  margin-right: auto;
+  margin-left: auto;
+
   justify-content: center;
   align-items: center;
   padding: 6px 12px;
   background: rgb(255 60 60 / 15%);
   border: 1px solid rgb(255 60 60 / 35%);
-  border-radius: 10px;
-  font: 500 12px Inter, sans-serif;
+  border-radius: 15px;
+  font:
+    500 12px Inter,
+    sans-serif;
   color: #ff3c3c;
   animation: ani 0.2s forwards;
-  order: -1;
-  flex-basis: 100%;
 }
 
 .rating-button-reverse {
@@ -901,7 +947,9 @@ textarea {
 }
 
 .rating-button-reverse span {
-  font: 600 16px Inter, sans-serif;
+  font:
+    600 16px Inter,
+    sans-serif;
   text-decoration: none;
   color: var(--theme-button-icon-text-color);
 }
@@ -1038,7 +1086,9 @@ textarea {
 
 .comment-username {
   display: flex;
-  font: 700 15px Inter, sans-serif;
+  font:
+    700 15px Inter,
+    sans-serif;
   color: var(--theme-text-color);
 }
 
@@ -1051,14 +1101,18 @@ textarea {
 }
 
 .comment-date {
-  font: 400 12px Inter, sans-serif;
+  font:
+    400 12px Inter,
+    sans-serif;
   color: var(--theme-step-text-color);
   text-align: left;
   width: 110px;
 }
 
 .comment-description {
-  font: 400 13px Inter, sans-serif;
+  font:
+    400 13px Inter,
+    sans-serif;
   line-height: 18px;
   text-align: left;
   display: -webkit-box;
@@ -1086,7 +1140,9 @@ textarea {
 .comment-mark-rating {
   display: flex;
   align-items: center;
-  font: 400 13px Inter, sans-serif;
+  font:
+    400 13px Inter,
+    sans-serif;
   gap: 1px;
   color: var(--theme-text-color);
 }
@@ -1109,7 +1165,9 @@ button.button-expand-description {
   gap: 5px;
   align-items: center;
   color: var(--theme-text-color);
-  font: 400 12px Inter, sans-serif;
+  font:
+    400 12px Inter,
+    sans-serif;
   transition: transform 0.3s ease;
   cursor: pointer;
   background: none;
@@ -1134,7 +1192,9 @@ button.button-expand-description {
   flex-direction: row;
   align-items: center;
   gap: 2px;
-  font: 400 14px Inter, sans-serif;
+  font:
+    400 14px Inter,
+    sans-serif;
   color: var(--theme-text-color);
 }
 
@@ -1165,7 +1225,9 @@ button.button-expand-description {
   width: auto;
   height: auto;
   margin-left: 10px;
-  font: 400 16px Inter, sans-serif;
+  font:
+    400 16px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
   text-decoration: underline;
@@ -1183,7 +1245,9 @@ button.button-expand-description {
   padding-left: 25px;
   margin: 0;
   box-sizing: border-box;
-  font: 400 16px Inter, sans-serif;
+  font:
+    400 16px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
 }
@@ -1228,7 +1292,9 @@ button.button-expand-description {
   width: auto;
   height: auto;
   margin: 0 10px;
-  font: 400 18px Inter, sans-serif;
+  font:
+    400 18px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
   cursor: pointer;
@@ -1243,7 +1309,9 @@ button.button-expand-description {
   width: auto;
   height: auto;
   margin-left: 20px;
-  font: 400 16px Inter, sans-serif;
+  font:
+    400 16px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
 }
@@ -1279,7 +1347,9 @@ button.button-expand-description {
 }
 
 .syllabus-text {
-  font: 500 24px Inter, sans-serif;
+  font:
+    500 24px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
 }
@@ -1335,7 +1405,9 @@ button.button-expand-description {
   height: auto;
   margin-top: 10px;
   margin-bottom: 10px;
-  font: 500 22px Inter, sans-serif;
+  font:
+    500 22px Inter,
+    sans-serif;
   display: flex;
   flex-direction: column;
   place-items: center;
@@ -1428,7 +1500,9 @@ button.button-expand-description {
   flex-direction: column;
   width: auto;
   height: auto;
-  font: 400 16px Inter, sans-serif;
+  font:
+    400 16px Inter,
+    sans-serif;
   line-height: 24px;
   margin-bottom: 10px;
   text-align: left;
@@ -1467,7 +1541,9 @@ button.button-expand-description {
   border-radius: 15px;
   border: 0;
   text-align: center;
-  font: 600 14px Inter, sans-serif;
+  font:
+    600 14px Inter,
+    sans-serif;
   text-decoration: none;
   color: var(--theme-button-icon-text-color);
 }
@@ -1494,7 +1570,9 @@ button.button-expand-description {
   text-align: center;
   height: 20px;
   margin-top: 10px;
-  font: 600 14px Inter, sans-serif;
+  font:
+    600 14px Inter,
+    sans-serif;
   text-decoration: none;
   color: var(--theme-text-color);
 }
@@ -1594,7 +1672,9 @@ main::-webkit-scrollbar {
 }
 
 .friends-block-button-text {
-  font: 600 17px Inter, sans-serif;
+  font:
+    600 17px Inter,
+    sans-serif;
   text-decoration: none;
   color: var(--theme-button-icon-text-color);
 }
@@ -1685,7 +1765,9 @@ main::-webkit-scrollbar {
 .list-user-rating {
   display: flex;
   flex-direction: column;
-  font: 700 12px Inter, sans-serif;
+  font:
+    700 12px Inter,
+    sans-serif;
   gap: 5px;
   color: var(--theme-text-color);
 }
@@ -1715,7 +1797,9 @@ main::-webkit-scrollbar {
 }
 
 .list-user-place {
-  font: 600 16px Inter, sans-serif;
+  font:
+    600 16px Inter,
+    sans-serif;
   width: 20px;
   color: var(--theme-text-hint-color);
 }
@@ -1745,7 +1829,9 @@ main::-webkit-scrollbar {
 
 .list-user-reward {
   display: flex;
-  font: 700 16px Inter, sans-serif;
+  font:
+    700 16px Inter,
+    sans-serif;
   align-items: center;
   color: var(--theme-text-color);
 }
@@ -1759,7 +1845,9 @@ main::-webkit-scrollbar {
 
   align-items: center;
   justify-content: center;
-  font: 500 20px/1 Inter, sans-serif;
+  font:
+    500 20px/1 Inter,
+    sans-serif;
   color: #ffffff;
 }
 
@@ -1981,13 +2069,17 @@ main::-webkit-scrollbar {
   height: 100%;
   background: transparent;
   border-radius: 15px;
-  font: 600 14px Inter, sans-serif;
+  font:
+    600 14px Inter,
+    sans-serif;
   color: var(--theme-text-hint-color);
   text-decoration: none;
   cursor: pointer;
   z-index: 1;
   -webkit-tap-highlight-color: transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .widget-button.active {

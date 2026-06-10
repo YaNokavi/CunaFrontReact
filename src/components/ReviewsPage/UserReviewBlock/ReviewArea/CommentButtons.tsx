@@ -56,13 +56,15 @@ export default function CommentButtons({ currentUserReview }) {
   };
 
   return (
-    <div className="buttons-block-rating">
+    <>
       {error && <span className="review-form-error">{error}</span>}
-      <button className="course-block-button" onClick={handleSend}>
-        <span>Отправить</span>
-      </button>
-      <CancelModal currentUserReview={currentUserReview} />
-      {currentUserReview && <DeleteModal reviewId={reviewId} />}
-    </div>
+      <div className="buttons-block-rating">
+        <button className="course-block-button" onClick={handleSend}>
+          <span>Отправить</span>
+        </button>
+        <CancelModal currentUserReview={currentUserReview} />
+        {currentUserReview && <DeleteModal reviewId={reviewId} />}
+      </div>
+    </>
   );
 }
