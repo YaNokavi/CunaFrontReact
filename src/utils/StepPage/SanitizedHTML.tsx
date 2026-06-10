@@ -29,6 +29,11 @@ export default function SanitizedHTML({
     const applyStyles = (img: HTMLImageElement) => {
       if (cancelled) return;
 
+      // Всегда ограничиваем ширину — HTML-атрибут width из контента сервера
+      // может быть шире контейнера и вызывать горизонтальный скролл
+      img.style.maxWidth = "100%";
+      img.style.height = "auto";
+
       img.removeAttribute("data-iview");
       img.removeAttribute("data-src");
       img.style.cursor = "";
