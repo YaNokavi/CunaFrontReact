@@ -16,12 +16,19 @@ export default function SanitizedHTML({
   const cleanHTML = DOMPurify.sanitize(content);
 
   useEffect(() => {
+    // Сбрасываем iview при смене шага
+    setIView(null);
+
     const container = containerRef.current;
     if (!container) return;
+
+    let cancelled = false;
 
     const images = container.querySelectorAll<HTMLImageElement>("img");
 
     const applyStyles = (img: HTMLImageElement) => {
+      if (cancelled) return;
+
       img.removeAttribute("data-iview");
       img.removeAttribute("data-src");
       img.style.cursor = "";
@@ -29,8 +36,9 @@ export default function SanitizedHTML({
       if (isLargeImage(img)) {
         img.setAttribute("data-iview", "enable");
         img.style.cursor = "zoom-in";
-        img.style.alignSelf = "center";
-        img.style.marginTop = "1em";
+        img.style.display = "block";
+        img.style.margin = "1em auto";
+        img.style.maxWidth = "100%";
       } else {
         img.setAttribute("data-iview", "disable");
         img.style.verticalAlign = "middle";
@@ -43,9 +51,15 @@ export default function SanitizedHTML({
         applyStyles(img);
       } else {
         img.onload = () => applyStyles(img);
-        img.onerror = () => img.setAttribute("data-iview", "disable");
+        img.onerror = () => {
+          if (!cancelled) img.setAttribute("data-iview", "disable");
+        };
       }
     });
+
+    return () => {
+      cancelled = true;
+    };
   }, [content]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
