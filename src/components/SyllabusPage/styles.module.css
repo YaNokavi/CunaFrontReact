@@ -10,15 +10,17 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  transition: border-radius 0.3s ease;
+  transition: border-radius 0.1s ease;
 }
 
 .mainOpen {
-  border-radius: 12px 12px 0 0;
+  border-radius: 12px 12px 0 12px;
 }
 
 .main > span {
-  font: 500 20px Inter, sans-serif;
+  font:
+    500 20px Inter,
+    sans-serif;
   text-align: left;
   color: var(--theme-text-color);
 }
@@ -45,9 +47,10 @@
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.25s ease;
-  margin-bottom: 0;
+  transition:
+    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s ease;
+  margin-bottom: 10px;
 }
 
 .aditional > div > a {
@@ -55,7 +58,9 @@
   padding: 15px;
   justify-self: center;
   justify-content: space-between;
-  font: 400 16px Inter, sans-serif;
+  font:
+    400 16px Inter,
+    sans-serif;
   text-align: left;
   line-height: 22px;
   gap: 10px;
@@ -64,7 +69,6 @@
   text-decoration-color: var(--theme-block-border-color);
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
-  border-bottom: 1px solid var(--theme-block-border-color);
 }
 
 .aditional > div > a:last-child {
