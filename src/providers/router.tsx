@@ -1,5 +1,5 @@
 import {
-  createHashRouter,
+  createBrowserRouter,
   createRoutesFromElements,
   Navigate,
   Route,
@@ -14,7 +14,7 @@ import StepPage from "../pages/StepPage";
 import ProfilePage from "../pages/ProfilePage";
 
 //TODO подумать над replace и посмотреть почему не стоит использовать вложенный роутинг
-export const router = createHashRouter(
+export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route index element={<Navigate to="/favorite" replace />} />
