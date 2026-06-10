@@ -18,9 +18,7 @@
 }
 
 .main > span {
-  font:
-    500 20px Inter,
-    sans-serif;
+  font: 500 20px Inter, sans-serif;
   text-align: left;
   color: var(--theme-text-color);
 }
@@ -56,11 +54,8 @@
 .aditional > div > a {
   display: flex;
   padding: 15px;
-  justify-self: center;
   justify-content: space-between;
-  font:
-    400 16px Inter,
-    sans-serif;
+  font: 400 16px Inter, sans-serif;
   text-align: left;
   line-height: 22px;
   gap: 10px;
@@ -69,6 +64,7 @@
   text-decoration-color: var(--theme-block-border-color);
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
+  border-bottom: 1px solid var(--theme-block-border-color);
 }
 
 .aditional > div > a:last-child {

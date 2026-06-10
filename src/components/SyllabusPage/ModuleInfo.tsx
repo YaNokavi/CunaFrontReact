@@ -8,16 +8,23 @@ export default function ModuleInfo({ module }) {
 
   const toggle = () => {
     if (!wrapRef.current) return;
+    const el = wrapRef.current;
 
     if (!open) {
-      // Открываем: снимаем ограничение высоты
-      wrapRef.current.style.maxHeight = "none";
+      // Измеряем полную высоту и анимируем к ней
+      const target = el.scrollHeight;
+      el.style.maxHeight = target + "px";
+      // После окончания transition снимаем ограничение
+      const onEnd = () => {
+        el.style.maxHeight = "none";
+        el.removeEventListener("transitionend", onEnd);
+      };
+      el.addEventListener("transitionend", onEnd);
       setOpen(true);
     } else {
-      // Закрываем: фиксируем текущую высоту в px, затем обнуляем
-      const current = wrapRef.current.scrollHeight;
-      wrapRef.current.style.maxHeight = current + "px";
-      // Следующий кадр — переход к 0 запустит CSS transition
+      // Фиксируем текущую высоту в px, затем анимируем к 0
+      const current = el.scrollHeight;
+      el.style.maxHeight = current + "px";
       requestAnimationFrame(() => {
         if (wrapRef.current) wrapRef.current.style.maxHeight = "0px";
       });
@@ -48,22 +55,17 @@ export default function ModuleInfo({ module }) {
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </div>
-      <div
-        ref={wrapRef}
-        className={styles.aditional}
-        style={{
-          maxHeight: 0,
-          opacity: open ? 1 : 0,
-        }}
-      >
-        {module.submodules.map((submodule) => (
-          <Link key={submodule.id} to={`${submodule.id}/step/1`}>
-            {module.number}.{submodule.number} {submodule.name}
-            <span>
-              {submodule.completedStepsCount}/{submodule.totalStepsCount}
-            </span>
-          </Link>
-        ))}
+      <div ref={wrapRef} className={styles.aditional} style={{ opacity: open ? 1 : 0 }}>
+        <div>
+          {module.submodules.map((submodule) => (
+            <Link key={submodule.id} to={`${submodule.id}/step/1`}>
+              {module.number}.{submodule.number} {submodule.name}
+              <span>
+                {submodule.completedStepsCount}/{submodule.totalStepsCount}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </>
   );
