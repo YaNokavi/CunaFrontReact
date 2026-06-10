@@ -26,6 +26,12 @@ export function TelegramUserContextProvider({
       return;
     }
     tg.ready();
+
+    // Устанавливаем flagFirstJoin и referallId при каждом запуске из Telegram
+    const startParam = tg.initDataUnsafe?.start_param ?? null;
+    localStorage.setItem("flagFirstJoin", "true");
+    localStorage.setItem("referallId", JSON.stringify(startParam));
+
     if (tg.initDataUnsafe?.user) {
       setUserAvatarUrl(tg.initDataUnsafe.user.photo_url || "");
       setUserId(tg.initDataUnsafe.user.id || 0);
