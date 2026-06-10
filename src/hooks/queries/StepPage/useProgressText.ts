@@ -27,7 +27,7 @@ export default function useProgressText() {
         return {
           ...old,
           steps: old.steps.map((s) =>
-            s.id === stepId ? { ...s, completed: true } : s
+            s.id === stepId ? { ...s, completed: true } : s,
           ),
         };
       });
@@ -39,18 +39,8 @@ export default function useProgressText() {
       if (!context?.skipUpdate) {
         queryClient.setQueryData(
           ["steps", variables.submoduleId, variables.userId],
-          context.previousSteps
+          context.previousSteps,
         );
-      }
-    },
-
-    onSettled: (_data, _error, variables, context) => {
-      if (!context?.skipUpdate) {
-        queryClient.invalidateQueries([
-          "steps",
-          variables.submoduleId,
-          variables.userId,
-        ]);
       }
     },
   });
