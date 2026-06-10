@@ -15,18 +15,15 @@ function shouldShowBack(pathname: string): boolean {
   return ROUTES_WITH_BACK.some((re) => re.test(pathname));
 }
 
-const STEP_ROUTE =
-  "/favorite/:courseId/syllabus/:submoduleId/step/:stepNumber";
+const STEP_ROUTE = "/favorite/:courseId/syllabus/:submoduleId/step/:stepNumber";
 const SYLLABUS_ROUTE = "/favorite/:courseId/syllabus";
 
 function getBackPath(pathname: string): string | null {
-  // С шага — всегда на syllabus, заменяя всю накопленную историю шагов
   const stepMatch = matchPath(STEP_ROUTE, pathname);
   if (stepMatch) {
     const { courseId } = stepMatch.params as { courseId: string };
     return `/favorite/${courseId}/syllabus`;
   }
-  // С syllabus — на страницу курса
   const syllabusMatch = matchPath(SYLLABUS_ROUTE, pathname);
   if (syllabusMatch) {
     const { courseId } = syllabusMatch.params as { courseId: string };
@@ -35,9 +32,41 @@ function getBackPath(pathname: string): string | null {
   return null;
 }
 
+// Полностью сбрасываем стек истории браузера и переходим на целевой путь
+function navigateClearHistory(
+  targetPath: string,
+  navigate: ReturnType<typeof useNavigate>,
+) {
+  const steps = window.history.length - 1;
+  if (steps <= 0) {
+    navigate(targetPath, { replace: true });
+    return;
+  }
+
+  // Сохраняем цель в sessionStorage
+  sessionStorage.setItem("__nav_target", targetPath);
+
+  // Идём назад на количество steps записей — это асинхронная операция,
+  // поэтому переход делаем в обработчике popstate
+  window.history.go(-steps);
+}
+
 export function useTelegramBackButton() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Обрабатываем popstate: после того как history.go отработало — делаем replace
+  useEffect(() => {
+    const onPopState = () => {
+      const target = sessionStorage.getItem("__nav_target");
+      if (!target) return;
+      sessionStorage.removeItem("__nav_target");
+      navigate(target, { replace: true });
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [navigate]);
 
   useEffect(() => {
     if (!isTelegram || !tg) return;
@@ -53,16 +82,13 @@ export function useTelegramBackButton() {
       hapticMedium();
       const backPath = getBackPath(location.pathname);
       if (backPath) {
-        // replace: true — заменяем текущую запись, чтобы не накапливать историю
-        navigate(backPath, { replace: true });
+        navigateClearHistory(backPath, navigate);
       } else {
         navigate(-1);
       }
     };
 
     tg.BackButton.onClick(handler);
-    return () => {
-      tg.BackButton.offClick(handler);
-    };
+    return () => tg.BackButton.offClick(handler);
   }, [location.pathname]);
 }
