@@ -17,11 +17,16 @@ export default function StepContent({ stepsData, currentStep, stepContent }) {
 
   useSendProgressText(currentStep, userId, +submoduleId);
 
-  const wasCompletedOnMount = useRef(currentStep.completed);
+  // useRef инициализируется безопасно — currentStep гарантированно не undefined,
+  // так как StepPage рендерит StepContent только когда currentStep найден
+  const wasCompletedOnMount = useRef<boolean>(currentStep?.completed ?? false);
 
   useEffect(() => {
+    if (currentStep == null) return;
     wasCompletedOnMount.current = currentStep.completed;
-  }, [currentStep.number]);
+  }, [currentStep?.number]);
+
+  if (!currentStep) return null;
 
   return (
     <div className="block step-block-content">
