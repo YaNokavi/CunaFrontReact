@@ -6,7 +6,7 @@ export default function useSendProgressText(currentStep, userId, submoduleId) {
   const [hasSentProgress, setHasSentProgress] = useState(false);
 
   // Храним номер шага в ref, чтобы избежать optional chaining в deps
-  const stepNumber = currentStep?.number ?? null;
+  const stepNumber = useRef(currentStep?.number ?? null);
 
   useEffect(() => {
     setHasSentProgress(false);
