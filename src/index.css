@@ -3,29 +3,32 @@
   --inset-top-navigation: 0px;
   --tab-bar-height: 55px;
   --tab-bar-padding: 9px;
-  --theme-bg-color: #131313;
-  --theme-bg-modals-color: rgb(255 255 255 / 40%);
-  --theme-bg-hint-color: rgb(203 202 198 / 10%);
-  --theme-header-tab-color: #191919;
-  --theme-header-text-color: #cbcac6;
-  --theme-tab-icon-text-color: #707070;
-  --theme-block-color: #1a1a1a;
-  --theme-block-border-color: rgb(255 255 255 / 10%);
-  --theme-text-color: #cbcac6;
-  --theme-text-hint-color: #9e9e9e;
-  --theme-icon-color: #cbcac6;
-  --theme-button-color: #cbcac6;
-  --theme-button-icon-text-color: #000;
-  --theme-button-hint-color: rgb(203 202 198 / 10%);
-  --theme-button-hint-icon-text-color: #cbcac6;
-  --theme-progress-bg-color: rgb(255 255 255 / 15%);
-  --theme-progress-color: #cbcac6;
-  --theme-bg-notification-color: #2c2c2b;
-  --theme-bg-step-color: rgb(114 114 114 / 70%);
-  --theme-step-text-color: #b0b0b0;
+
+  /* Светлая тема */
+  --theme-bg-color: #efeff4;
+  --theme-bg-modals-color: rgba(0, 0, 0, 0.4);
+  --theme-bg-hint-color: rgba(20, 104, 177, 0.15);
+  --theme-header-tab-color: #1468b1;
+  --theme-header-text-color: #ffffff;
+  --theme-tab-icon-text-color: #9bb1c5;
+  --theme-block-color: #ffffff;
+  --theme-block-border-color: rgba(0, 0, 0, 0.1);
+  --theme-text-color: #000000;
+  --theme-text-hint-color: #a6a6a6;
+  --theme-icon-color: #ffffff;
+  --theme-button-color: #1468b1;
+  --theme-button-icon-text-color: #ffffff;
+  --theme-button-hint-color: rgba(20, 104, 177, 0.15);
+  --theme-button-hint-icon-text-color: #1468b1;
+  --theme-progress-bg-color: #efeff4;
+  --theme-progress-color: #1468b1;
+  --theme-bg-notification-color: #dce8f3;
+  --theme-bg-step-color: rgba(211, 211, 211, 0.7);
+  --theme-step-text-color: #4f4e4e;
   --theme-loader-wallet-color:
-    rgb(100 100 100 / 100%) 25%, rgb(125 125 125 / 100%) 50%,
-    rgb(100 100 100 / 100%) 75%;
+    rgba(205, 205, 205) 25%,
+    rgba(225, 225, 225) 50%,
+    rgba(205, 205, 205) 75%;
 }
 
 #root {
