@@ -26,10 +26,8 @@ export default function DailyTestModal({
   const [result, setResult] = useState<"correct" | "incorrect" | "timeout" | null>(null);
   const [isClosable, setIsClosable] = useState(false);
 
-  // Редко обновляемые через state — только для смены классов
-  const [isRed, setIsRed] = useState(false);
+  // Только для смены CSS-классов (2 события за весь тест)
   const [isBlinking, setIsBlinking] = useState(false);
-  const [timeLeftSec, setTimeLeftSec] = useState(Math.ceil(TIMER_DURATION / 1000));
 
   // DOM refs для прямой мутации без React
   const borderGreenRef = useRef<HTMLDivElement>(null);
@@ -95,41 +93,57 @@ export default function DailyTestModal({
       const prog = Math.min(elapsedRef.current / TIMER_DURATION, 1);
       const deg = prog * 360;
 
-      // Прямая мутация DOM — без React re-render
-      if (borderGreenRef.current) {
-        if (!isRedRef.current) {
-          borderGreenRef.current.style.background = `conic-gradient(
+      const green = borderGreenRef.current;
+      const red = borderRedRef.current;
+
+      if (!isRedRef.current) {
+        // Зелёная фаза: обновляем зелёную дугу
+        if (green) {
+          green.style.background = `conic-gradient(
             from 0deg,
             #4caf50 0deg,
             #4caf50 ${deg}deg,
             var(--theme-block-border-color) ${deg}deg,
             var(--theme-block-border-color) 360deg
           )`;
-        } else {
-          borderGreenRef.current.style.background = "none";
         }
-      }
-
-      if (borderRedRef.current && isRedRef.current) {
-        borderRedRef.current.style.background = `conic-gradient(
-          from 0deg,
-          #f44336 0deg,
-          #f44336 ${deg}deg,
-          transparent ${deg}deg,
-          transparent 360deg
-        )`;
+      } else {
+        // Красная фаза: обновляем красную дугу, зелёную скрываем синхронно
+        if (red) {
+          red.style.background = `conic-gradient(
+            from 0deg,
+            #f44336 0deg,
+            #f44336 ${deg}deg,
+            transparent ${deg}deg,
+            transparent 360deg
+          )`;
+        }
       }
 
       if (timerRef.current) {
         timerRef.current.textContent = `${Math.max(0, Math.ceil(left / 1000))}с`;
       }
 
-      // Редкие смены классов через state
+      // Переход зелёный → красный: синхронно в одном RAF-кадре
       if (prog > 0.6 && !isRedRef.current) {
         isRedRef.current = true;
-        setIsRed(true);
-        if (borderRedRef.current) borderRedRef.current.style.opacity = "1";
+        // Скрываем зелёную и показываем красную в одном кадре
+        if (green) green.style.opacity = "0";
+        if (red) {
+          red.style.background = `conic-gradient(
+            from 0deg,
+            #f44336 0deg,
+            #f44336 ${deg}deg,
+            transparent ${deg}deg,
+            transparent 360deg
+          )`;
+          // Небольшой fade-in через CSS transition (уже установлен в SCSS)
+          requestAnimationFrame(() => {
+            if (red) red.style.opacity = "1";
+          });
+        }
       }
+
       if (prog > 0.8 && !isBlinkingRef.current) {
         isBlinkingRef.current = true;
         setIsBlinking(true);
@@ -187,7 +201,6 @@ export default function DailyTestModal({
     }, 2500);
   };
 
-  // Храним handleSubmit в ref, чтобы RAF-луп не замыкал старый кложур
   handleSubmitRef.current = handleSubmit;
 
   const isMultiple = testData ? testData.answer.length > 1 : false;
@@ -202,10 +215,9 @@ export default function DailyTestModal({
       onClick={isClosable ? onClose : undefined}
     >
       <div className={styles.modalBorder}>
-        {/* Цветная conic-gradient рамка — мутируется напрямую через ref */}
         {!isLoading && (
           <>
-            <div ref={borderGreenRef} className={styles.borderProgress} />
+            <div ref={borderGreenRef} className={styles.borderProgress} style={{ opacity: 1 }} />
             <div
               ref={borderRedRef}
               className={`${styles.borderProgressRed} ${isBlinking ? styles.blink : ""}`}
