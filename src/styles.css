@@ -1491,8 +1491,8 @@ button.button-expand-description {
   flex-direction: column;
   /* overflow-x hidden предотвращает горизонтальный скролл от широких изображений,
      overflow-y visible позволяет кнопкам оставаться в потоке документа */
-  overflow-x: hidden;
-  overflow-y: visible;
+  /* overflow-x: hidden;
+  overflow-y: visible; */
   gap: 0;
 }
 
