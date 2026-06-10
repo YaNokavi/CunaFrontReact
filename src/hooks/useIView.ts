@@ -6,14 +6,21 @@ interface IViewState {
 }
 
 /**
+ * Пороговые размеры изображения, ниже которых оно считается стикером/инлайном элементом.
+ * Совпадает с логикой старой реализации (step.js — StepImageController.fixImages):
+ *   height >= 55 || width >= 100  →  крупное изображение, добавить iview
+ *   иначе                           →  стикер, verticalAlign middle, без iview
+ */
+export const IVIEW_MIN_HEIGHT = 55;
+export const IVIEW_MIN_WIDTH = 100;
+
+export function isLargeImage(img: HTMLImageElement): boolean {
+  return img.naturalHeight >= IVIEW_MIN_HEIGHT || img.naturalWidth >= IVIEW_MIN_WIDTH;
+}
+
+/**
  * Делегированный обработчик клика по [data-iview] внутри контейнера.
- * Возвращает { ref, iview, closeIView } — навешивай ref на контейнер,
- * рендери <IViewOverlay> когда iview !== null.
- *
- * Пример:
- *   const { ref, iview, closeIView } = useIView<HTMLDivElement>();
- *   <div ref={ref}>...html с <img data-iview ...>...</div>
- *   {iview && <IViewOverlay src={iview.src} alt={iview.alt} onClose={closeIView} />}
+ * Возвращает { ref, iview, closeIView }.
  */
 export function useIView<T extends HTMLElement = HTMLElement>() {
   const [iview, setIView] = useState<IViewState | null>(null);
@@ -28,7 +35,6 @@ export function useIView<T extends HTMLElement = HTMLElement>() {
       if (src) setIView({ src, alt });
     };
     node.addEventListener("click", handler);
-    // cleanup через WeakMap не нужен — компонент дестроится вместе с node
   }, []);
 
   const closeIView = useCallback(() => setIView(null), []);

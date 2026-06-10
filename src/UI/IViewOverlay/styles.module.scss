@@ -4,9 +4,6 @@
   z-index: 2000;
   background: rgba(0, 0, 0, 0);
   transition: background 0.18s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &.visible {
     background: rgba(0, 0, 0, 0.82);
@@ -29,7 +26,8 @@
 
 .closer {
   position: absolute;
-  top: 16px;
+  /* Отступ от саф хедера Telegram */
+  top: calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 48px);
   right: 16px;
   width: 36px;
   height: 36px;
