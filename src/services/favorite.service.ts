@@ -19,7 +19,7 @@ class FavoriteService {
   ): Promise<LoginAndDailyTestResponse | undefined> {
     const body = {
       username,
-      avatarUrl: avatarUrl || null,
+      avatarUrl,
       referrerId,
     };
 
@@ -37,10 +37,7 @@ class FavoriteService {
 
       return response as LoginAndDailyTestResponse;
     } catch (error) {
-      console.error(
-        "Не удалось получить информацию о пользователе",
-        error,
-      );
+      console.error("Не удалось получить информацию о пользователе", error);
       alert("Не удалось получить информацию о пользователе, попробуйте позже");
     }
   }
@@ -53,10 +50,7 @@ class FavoriteService {
 
       return coursesData;
     } catch (error) {
-      console.error(
-        "Не удалось получить информацию о курсах",
-        error,
-      );
+      console.error("Не удалось получить информацию о курсах", error);
       alert("Не удалось получить информацию о курсах, попробуйте позже");
     }
   }

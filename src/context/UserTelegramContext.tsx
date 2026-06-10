@@ -15,13 +15,13 @@ export function TelegramUserContextProvider({
   const [userId, setUserId] = useState(535799793);
   // const [userId, setUserId] = useState(2);
   const [username, setUsername] = useState("Yan_Miracles");
-  const [userAvatarUrl, setUserAvatarUrl] = useState("");
+  const [userAvatarUrl, setUserAvatarUrl] = useState("none");
 
   useEffect(() => {
     const tg = window?.Telegram?.WebApp;
     if (!tg) {
       // локальная разработка без Telegram
-      setUserId(535799793);
+      setUserId(535799);
       setUsername("DevUser");
       localStorage.setItem("flagFirstJoin", "true");
       const queryString = window.location.search;
