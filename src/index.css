@@ -4,7 +4,33 @@
   --tab-bar-height: 55px;
   --tab-bar-padding: 9px;
 
-  /* Светлая тема */
+  /* Тёмная тема (по умолчанию) */
+  --theme-bg-color: #131313;
+  --theme-bg-modals-color: rgb(255 255 255 / 40%);
+  --theme-bg-hint-color: rgb(203 202 198 / 10%);
+  --theme-header-tab-color: #191919;
+  --theme-header-text-color: #cbcac6;
+  --theme-tab-icon-text-color: #707070;
+  --theme-block-color: #1a1a1a;
+  --theme-block-border-color: rgb(255 255 255 / 10%);
+  --theme-text-color: #cbcac6;
+  --theme-text-hint-color: #9e9e9e;
+  --theme-icon-color: #cbcac6;
+  --theme-button-color: #cbcac6;
+  --theme-button-icon-text-color: #000;
+  --theme-button-hint-color: rgb(203 202 198 / 10%);
+  --theme-button-hint-icon-text-color: #cbcac6;
+  --theme-progress-bg-color: rgb(255 255 255 / 15%);
+  --theme-progress-color: #cbcac6;
+  --theme-bg-notification-color: #2c2c2b;
+  --theme-bg-step-color: rgb(114 114 114 / 70%);
+  --theme-step-text-color: #b0b0b0;
+  --theme-loader-wallet-color:
+    rgb(100 100 100 / 100%) 25%, rgb(125 125 125 / 100%) 50%,
+    rgb(100 100 100 / 100%) 75%;
+}
+
+[data-theme="light"] {
   --theme-bg-color: #efeff4;
   --theme-bg-modals-color: rgba(0, 0, 0, 0.4);
   --theme-bg-hint-color: rgba(20, 104, 177, 0.15);
@@ -51,8 +77,8 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE и Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   font-family: Inter, sans-serif;
   font-style: normal;
 }
