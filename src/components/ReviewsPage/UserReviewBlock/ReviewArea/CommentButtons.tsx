@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import useTelegramUser from "@/hooks/useTelegramUser";
 import DOMPurify from "dompurify";
@@ -9,7 +10,6 @@ import useAddReview from "../../../../hooks/queries/ReviewsPage/UserReview/useAd
 
 export default function CommentButtons({ currentUserReview }) {
   const { courseId } = useParams();
-
   const { userId } = useTelegramUser();
 
   const comment = useComment();
@@ -21,14 +21,24 @@ export default function CommentButtons({ currentUserReview }) {
   const mutationAdd = useAddReview();
   const mutationChange = useChangeReview();
 
-  const handleSend = async () => {
+  const [ratingError, setRatingError] = useState("");
+  const [unchangedError, setUnchangedError] = useState("");
+
+  const handleSend = () => {
+    setRatingError("");
+    setUnchangedError("");
+
+    if (!userRating) {
+      setRatingError("Пожалуйста, выберите оценку");
+      return;
+    }
+
     if (comment === message && rating === userRating) {
-      alert("Ваш отзыв не изменился");
+      setUnchangedError("Ваш отзыв не изменился");
       return;
     }
 
     if (!reviewId) {
-      //TODO загрузки
       mutationAdd.mutate({
         comment: DOMPurify.sanitize(comment),
         userRating,
@@ -49,6 +59,12 @@ export default function CommentButtons({ currentUserReview }) {
 
   return (
     <div className="buttons-block-rating">
+      {ratingError && (
+        <span className="review-form-error">{ratingError}</span>
+      )}
+      {unchangedError && (
+        <span className="review-form-error">{unchangedError}</span>
+      )}
       <button className="course-block-button" onClick={handleSend}>
         <span>Отправить</span>
       </button>
