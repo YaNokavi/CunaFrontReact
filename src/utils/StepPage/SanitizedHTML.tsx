@@ -29,11 +29,6 @@ export default function SanitizedHTML({
     const applyStyles = (img: HTMLImageElement) => {
       if (cancelled) return;
 
-      // Всегда ограничиваем ширину — HTML-атрибут width из контента сервера
-      // может быть шире контейнера и вызывать горизонтальный скролл
-      img.style.maxWidth = "100%";
-      img.style.height = "auto";
-
       img.removeAttribute("data-iview");
       img.removeAttribute("data-src");
       img.style.cursor = "";
@@ -41,8 +36,15 @@ export default function SanitizedHTML({
       if (isLargeImage(img)) {
         img.setAttribute("data-iview", "enable");
         img.style.cursor = "zoom-in";
+        img.style.display = "block";
         img.style.alignSelf = "center";
         img.style.marginTop = "1em";
+
+        if (img.parentNode.tagName === "P") {
+          img.parentNode.replaceWith(img);
+        } else {
+          img.replaceWith(img);
+        }
       } else {
         img.setAttribute("data-iview", "disable");
         img.style.verticalAlign = "middle";
