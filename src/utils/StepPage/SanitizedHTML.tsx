@@ -16,7 +16,6 @@ export default function SanitizedHTML({
   const cleanHTML = DOMPurify.sanitize(content);
 
   useEffect(() => {
-    // Сбрасываем iview при смене шага
     setIView(null);
 
     const container = containerRef.current;
@@ -36,14 +35,11 @@ export default function SanitizedHTML({
       if (isLargeImage(img)) {
         img.setAttribute("data-iview", "enable");
         img.style.cursor = "zoom-in";
-        img.style.display = "block";
         img.style.alignSelf = "center";
         img.style.marginTop = "1em";
 
         if (img.parentNode.tagName === "P") {
           img.parentNode.replaceWith(img);
-        } else {
-          img.replaceWith(img);
         }
       } else {
         img.setAttribute("data-iview", "disable");
